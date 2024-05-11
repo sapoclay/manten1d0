@@ -1,3 +1,29 @@
+"""
+Docstring para la clase `LimpiadorNavegadores` y los módulos asociados para la limpieza de caché y historial de navegadores.
+
+Imports:
+    - subprocess: Para ejecutar procesos del sistema.
+    - os: Para realizar operaciones relacionadas con el sistema operativo.
+    - threading: Para ejecutar operaciones en segundo plano.
+    - messagebox desde tkinter: Para mostrar mensajes de alerta.
+
+Clase:
+    - LimpiadorNavegadores: Clase estática que proporciona métodos para limpiar la caché y el historial de navegadores web.
+
+Métodos Estáticos:
+    - limpiar_cache_chrome(window, boton, callback=None): Limpia la caché de Google Chrome.
+    - limpiar_cache_firefox(window, boton, callback=None): Limpia la caché de Mozilla Firefox.
+    - limpiar_cache_edge(window, boton, callback=None): Limpia la caché de Microsoft Edge.
+    - _limpiar_cache(window, boton, executable, argument, callback=None): Método privado para realizar la limpieza de caché.
+    - limpiar_historial_chrome(): Limpia el historial de Google Chrome.
+    - limpiar_historial_firefox(): Limpia el historial de Mozilla Firefox.
+    - limpiar_historial_edge(): Limpia el historial de Microsoft Edge.
+
+Raises:
+    - FileNotFoundError: Si el ejecutable del navegador no se encuentra en la ruta por defecto.
+    - subprocess.CalledProcessError: Si ocurre un error al ejecutar el comando para limpiar la caché o el historial.
+"""
+
 import subprocess
 import os
 import threading

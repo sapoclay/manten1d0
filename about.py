@@ -1,16 +1,24 @@
+"""
+Docstring para la función 'mostrar_about'.
+
+Imports:
+    - tkinter as tk: Para la creación de interfaces gráficas.
+    - os: Para realizar operaciones relacionadas con el sistema operativo.
+    - preferencias: Para ajustar las preferencias de la interfaz.
+
+Function:
+    - mostrar_about(): Abre una ventana que muestra información sobre el programa. La ventana incluye un logotipo, la versión del programa y un mensaje informativo. Además, si se ha seleccionado un tema oscuro en las preferencias, aplica el tema oscuro a la ventana.
+
+Raises:
+    - No hay excepciones especificadas en la función.
+"""
+
 import tkinter as tk
 import os
 import preferencias
 
 def mostrar_about():
-    """
-    Abre una ventana que muestra información sobre el programa.
-
-    La ventana incluye un logotipo, la versión del programa y un mensaje informativo.
-
-    Además, si se ha seleccionado un tema oscuro en las preferencias, aplica el tema oscuro a la ventana.
-
-    """
+    
     about_window = tk.Toplevel()
     about_window.title("Acerca de")
     about_window.geometry("400x250")

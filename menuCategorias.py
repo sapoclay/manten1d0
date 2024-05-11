@@ -20,6 +20,28 @@ import preferencias
 
 
 def informacion_cat(self, mensaje_personalizado):
+    """
+Docstring para la función informacion_cat.
+
+Esta función se encarga de mostrar información en el área central de la interfaz gráfica.
+
+Args:
+    self: La instancia de la clase que llama a la función.
+    mensaje_personalizado (str): Mensaje opcional que se mostrará en la interfaz.
+
+Returns:
+    No retorna ningún valor.
+
+Steps:
+    - Oculta todos los elementos en el área central.
+    - Muestra el contenedor de texto para mostrar información.
+    - Aplica el tema seleccionado a la nueva ventana si no es "Claro".
+    - Actualiza el mensaje personalizado si existe, mostrándolo en un label.
+    - Agrega una línea horizontal debajo del mensaje personalizado.
+    - Muestra la información del sistema llamando a la función mostrar_informacion_sistema().
+    - Empaqueta el contenedor de texto en el área central de la interfaz.
+"""
+
     # Ocultar todos los elementos en el área central
     for widget in self.area_central.winfo_children():
         widget.pack_forget()
@@ -51,6 +73,26 @@ def informacion_cat(self, mensaje_personalizado):
     
 # Función para mostrar la pantalla de la categoría DICCIONARIO
 def diccionario_cat(self, mensaje_personalizado):
+    """
+Docstring para la función diccionario_cat.
+
+Esta función se encarga de mostrar la pantalla de la categoría DICCIONARIO en la interfaz gráfica.
+
+Args:
+    self: La instancia de la clase que llama a la función.
+    mensaje_personalizado (str): Mensaje opcional que se mostrará en la interfaz.
+
+Returns:
+    No retorna ningún valor.
+
+Steps:
+    - Oculta todos los elementos en el área central.
+    - Actualiza el mensaje personalizado si existe, mostrándolo en un label y aplicando el tema seleccionado.
+    - Actualiza la interfaz gráfica antes de abrir la ventana del diccionario.
+    - Carga el contenido HTML para el diccionario.
+    - Abre la ventana del diccionario después de actualizar la interfaz.
+"""
+
     # Ocultar todos los elementos en el área central
     self.contenedor_texto.pack_forget()
     for widget in self.area_central.winfo_children():
@@ -74,6 +116,25 @@ def diccionario_cat(self, mensaje_personalizado):
 
 # Función para realizar tareas en el SISTEMA
 def sistema_cat(self, mensaje_personalizado):
+    
+    """
+Docstring para la función sistema_cat.
+
+Esta función se encarga de realizar diversas tareas en el sistema operativo a través de la interfaz gráfica.
+
+Args:
+    self: La instancia de la clase que llama a la función.
+    mensaje_personalizado (str): Mensaje opcional que se mostrará en la interfaz.
+
+Returns:
+    No retorna ningún valor.
+
+Steps:
+    - Oculta el contenedor de texto y destruye los elementos en el área central.
+    - Crea un label con el mensaje personalizado o uno predeterminado si no se proporciona.
+    - Crea botones para realizar distintas tareas como actualizar el sistema, limpiar la caché, abrir el gestor de software, gestionar aplicaciones de inicio, eliminar archivos, vaciar la papelera, administrar procesos, buscar archivos duplicados, gestionar repositorios y monitorizar el sistema.
+    - Cada botón tiene asociada una función para ejecutar la tarea correspondiente.
+"""
     
     self.contenedor_texto.pack_forget()
     # Ocultar la etiqueta en la que se muestra la información del sistema
@@ -168,6 +229,29 @@ def sistema_cat(self, mensaje_personalizado):
     
 # Función para mostrar la categoría INTERNET
 def internet_cat(self, mensaje_personalizado, entry_url=None):
+    
+    """
+Docstring para la función internet_cat.
+
+Esta función se encarga de mostrar la categoría "Internet" en la interfaz gráfica, permitiendo al usuario realizar acciones relacionadas con la configuración de redes y la conectividad a internet.
+
+Args:
+    self: La instancia de la clase que llama a la función.
+    mensaje_personalizado (str): Mensaje opcional que se mostrará en la interfaz.
+    entry_url (tk.Entry, opcional): Objeto Entry para la entrada de la URL a la que hacer ping.
+
+Returns:
+    No retorna ningún valor.
+
+Steps:
+    - Oculta el contenedor de texto y destruye los elementos en el área central.
+    - Crea un label con el mensaje personalizado o uno predeterminado si no se proporciona.
+    - Obtiene las interfaces de red disponibles y muestra un Combobox para seleccionar una.
+    - Crea un botón para reiniciar la tarjeta de red seleccionada.
+    - Crea una caja de texto para escribir una URL y un botón para hacer ping a dicha URL.
+    - Todos los botones tienen asociadas funciones para ejecutar las tareas correspondientes.
+"""
+    
     self.contenedor_texto.pack_forget()
     # Ocultar la etiqueta en la que se muestra la información del sistema
     for widget in self.area_central.winfo_children():
@@ -241,6 +325,26 @@ def internet_cat(self, mensaje_personalizado, entry_url=None):
 
 # Función para mostrar la pantalla de la categoría RED LOCAL
 def red_local_cat(self, mensaje_personalizado):
+    
+    """
+Docstring para la función red_local_cat.
+
+Esta función muestra la pantalla de la categoría "Red Local" en la interfaz gráfica, permitiendo al usuario buscar dispositivos en la red local y establecer conexiones con ellos, en caso de ser posible.
+
+Args:
+    self: La instancia de la clase que llama a la función.
+    mensaje_personalizado (str): Mensaje opcional que se mostrará en la interfaz.
+
+Returns:
+    No retorna ningún valor.
+
+Steps:
+    - Limpia el área central de la interfaz gráfica.
+    - Crea un label con el mensaje personalizado o uno predeterminado si no se proporciona.
+    - Define una función interna para buscar equipos en la red local al hacer clic en un botón.
+    - Al hacer clic en el botón, se muestra un mensaje temporal de búsqueda y luego se muestran los dispositivos encontrados en la red local.
+    - Los dispositivos encontrados se muestran en una lista, permitiendo al usuario seleccionarlos para establecer conexiones.
+"""
 
     # Limpiar el área central
     self.contenedor_texto.pack_forget()
@@ -333,6 +437,28 @@ def red_local_cat(self, mensaje_personalizado):
 
 # Define la función para mostrar la pantalla de la categoría NAVEGADORES
 def navegadores_cat(self, mensaje_personalizado):
+    
+    """
+Docstring para la función navegadores_cat.
+
+Esta función muestra la pantalla de la categoría "Navegadores" en la interfaz gráfica, proporcionando opciones para limpiar la caché y el historial de los navegadores instalados.
+
+Args:
+    self: La instancia de la clase que llama a la función.
+    mensaje_personalizado (str): Mensaje opcional que se mostrará en la interfaz.
+
+Returns:
+    No retorna ningún valor.
+
+Steps:
+    - Limpia el área central de la interfaz gráfica.
+    - Crea un label con el mensaje personalizado o uno predeterminado si no se proporciona, seguido de una línea horizontal.
+    - Crea un contenedor Frame para organizar los botones de limpieza de caché.
+    - Crea botones para limpiar la caché de los navegadores Chrome, Firefox y Edge, si están instalados.
+    - Crea un nuevo contenedor Frame para organizar los botones de limpieza de historial.
+    - Crea botones para limpiar el historial de los navegadores Chrome, Firefox y Edge, si están instalados.
+"""
+    
     # Limpiar el área central
     self.contenedor_texto.pack_forget()
     for widget in self.area_central.winfo_children():

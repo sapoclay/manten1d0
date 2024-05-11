@@ -1,3 +1,36 @@
+"""
+Docstring para las funciones y módulos relacionados con la gestión de contraseñas y seguridad.
+
+Imports:
+    - tkinter as tk: Para la interfaz gráfica.
+    - messagebox desde tkinter: Para mostrar mensajes de alerta.
+    - os: Para operaciones de sistema como manipulación de archivos.
+    - Fernet desde cryptography.fernet: Para el cifrado de contraseñas.
+    - threading: Para ejecutar operaciones en segundo plano.
+    - Popen, PIPE desde subprocess: Para ejecutar comandos en el sistema operativo.
+    - sys: Para interactuar con el sistema.
+    - subprocess: Para ejecutar comandos del sistema operativo.
+
+Variables Globales:
+    - CLAVE_ARCHIVO (str): Nombre del archivo que almacena la clave de cifrado.
+    - CONFIG_FILE (str): Nombre del archivo que guarda la contraseña cifrada.
+
+Funciones:
+    - generar_clave(): Genera una clave de cifrado.
+    - almacenar_clave(clave, nombre_archivo="clave.key"): Almacena la clave en un archivo.
+    - cargar_clave(nombre_archivo="clave.key"): Carga la clave desde un archivo.
+    - cifrar_contrasena(contrasena, clave): Cifra una contraseña utilizando una clave.
+    - descifrar_contrasena(contra_cifrada, clave): Descifra una contraseña utilizando una clave.
+    - obtener_contrasena(): Obtiene la contraseña del usuario, solicitándola si no está almacenada.
+    - limpiar_archivos_configuracion(): Elimina los archivos de configuración.
+    - almacenar_contrasena(contrasena): Almacena la contraseña cifrada en el archivo de configuración.
+    - verificar_contrasena_sudo(contrasena): Verifica si la contraseña proporcionada es válida para utilizar sudo.
+    - solicitar_contrasena_y_ejecutar(funcion, mostrar_output=True): Solicita la contraseña al usuario y ejecuta una función con ella, mostrando el progreso.
+
+Raises:
+    - Excepciones generales si ocurre algún error durante la ejecución.
+"""
+
 import tkinter as tk
 from tkinter import messagebox
 import os

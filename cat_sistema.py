@@ -20,6 +20,24 @@ from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 
 # Clase para generar la ventana de barra de progreso
 class ProgresoVentana(tk.Toplevel):
+    """
+Docstring para la clase 'ProgresoVentana'.
+
+Class:
+    - ProgresoVentana(tk.Toplevel): Clase para generar la ventana de barra de progreso.
+
+Attributes:
+    - master: El widget principal al que pertenece la ventana.
+    - accion: La acción que se está realizando y se muestra en la ventana.
+
+Methods:
+    - __init__(self, master, accion): Constructor de la clase. Inicializa la ventana de progreso con una barra de progreso indeterminada y un mensaje indicando la acción en curso.
+        - master: El widget principal al que pertenece la ventana.
+        - accion: La acción que se está realizando y se muestra en la ventana.
+
+Raises:
+    - No hay excepciones especificadas en la clase.
+"""
     def __init__(self, master, accion):
         super().__init__(master)
         self.title("Progreso")
@@ -114,6 +132,28 @@ class Limpieza:
 
 # Clase para crear la ventana y gestionar la aplicaciones al Inicio
 class AplicacionesAutostart:
+    
+    """
+Docstring para la clase 'AplicacionesAutostart'.
+
+Class:
+    - AplicacionesAutostart: Clase para crear la ventana y gestionar las aplicaciones al Inicio.
+
+Attributes:
+    - master: El widget principal al que pertenece la ventana.
+
+Methods:
+    - __init__(self, master): Constructor de la clase. Inicializa la ventana y sus componentes.
+        - master: El widget principal al que pertenece la ventana.
+    - actualizar_lista_aplicaciones(self): Actualiza la lista de aplicaciones de autostart en el Treeview.
+    - obtener_aplicaciones_autostart(self): Obtiene la lista de aplicaciones de autostart.
+    - agregar_aplicacion(self): Permite al usuario seleccionar y agregar una aplicación al autostart.
+    - eliminar_aplicacion(self): Elimina una aplicación seleccionada del autostart.
+    - abrir_ventana_aplicaciones_autostart(self): Abre una nueva ventana para la configuración de aplicaciones de autostart.
+
+Raises:
+    - No hay excepciones especificadas en la clase.
+"""
 
     def __init__(self, master):
         self.master = master
@@ -189,6 +229,39 @@ class AplicacionesAutostart:
 
 
 class AdministrarProcesos:
+    
+    """
+Docstring para la clase 'AdministrarProcesos'.
+
+Class:
+    - AdministrarProcesos: Clase para crear y gestionar la ventana de administración de procesos.
+
+Attributes:
+    - root: El widget principal al que pertenece la ventana.
+
+Methods:
+    - __init__(self, root): Constructor de la clase. Inicializa la ventana y sus componentes.
+        - root: El widget principal al que pertenece la ventana.
+    - on_entry_focus_in(self, event): Método para manejar el evento de enfoque en la entrada de búsqueda.
+        - event: El evento que desencadena la función.
+    - on_entry_focus_out(self, event): Método para manejar el evento de desenfoque en la entrada de búsqueda.
+        - event: El evento que desencadena la función.
+    - load_processes(self): Carga la lista de procesos en el Treeview.
+    - close_process(self): Cierra el proceso seleccionado después de la confirmación del usuario.
+    - filter_processes(self, event): Filtra los procesos en función de la entrada de búsqueda.
+        - event: El evento que desencadena la función.
+    - sort_column(self, column): Ordena los elementos en función de la columna seleccionada.
+        - column: La columna seleccionada para ordenar.
+    - update_cpu_usage_single(self, pid): Actualiza el uso de CPU para un proceso específico.
+        - pid: El PID del proceso para el que se actualizará el uso de la CPU.
+    - update_tree(self, pid, cpu_percent): Actualiza el Treeview con el uso de CPU actualizado para un proceso específico.
+        - pid: El PID del proceso.
+        - cpu_percent: El uso de CPU actualizado para el proceso.
+
+Raises:
+    - No hay excepciones especificadas en la clase.
+"""
+    
     def __init__(self, root):
         self.root = root
         self.root.title("Administrar Procesos")
@@ -312,6 +385,42 @@ class AdministrarProcesos:
 
 # Categoría para buscar archivos duplicados en el sistema
 class AplicacionBuscadorDuplicados:
+    
+    """
+Docstring para la clase 'AplicacionBuscadorDuplicados'.
+
+Class:
+    - AplicacionBuscadorDuplicados: Clase para buscar archivos duplicados en el sistema.
+
+Attributes:
+    - root: El widget principal al que pertenece la ventana.
+    - carpeta_seleccionada: La carpeta seleccionada por el usuario para buscar archivos duplicados.
+    - archivos_duplicados: Un diccionario que contiene los archivos duplicados encontrados.
+
+Methods:
+    - __init__(self, root): Constructor de la clase. Inicializa la ventana y sus componentes.
+        - root: El widget principal al que pertenece la ventana.
+    - abrir_ventana_carpeta(self): Abre una ventana para que el usuario seleccione una carpeta para buscar archivos duplicados.
+    - mostrar_progreso(self): Muestra la barra de progreso y el mensaje de progreso.
+    - buscar_archivos_duplicados(self, carpeta): Busca archivos duplicados en la carpeta especificada.
+        - carpeta: La carpeta en la que se buscarán archivos duplicados.
+    - mostrar_duplicados(self): Muestra los archivos duplicados encontrados en el Treeview.
+    - calcular_hash(self, ruta_archivo): Calcula el hash SHA256 de un archivo dado.
+        - ruta_archivo: La ruta completa del archivo.
+    - obtener_fecha_creacion(self, archivo): Obtiene la fecha de creación de un archivo.
+        - archivo: El archivo del que se obtendrá la fecha de creación.
+    - seleccionar_todo(self): Selecciona o deselecciona todos los archivos en el Treeview.
+    - confirmar_eliminar_seleccionados(self): Muestra un cuadro de diálogo de confirmación antes de eliminar los archivos seleccionados.
+    - eliminar_seleccionados(self): Elimina los archivos seleccionados del sistema y del Treeview.
+    - configurar_tamano_filas(self, event=None): Ajusta el ancho de las columnas del Treeview para que se adapten al tamaño de la ventana.
+        - event: El evento que desencadena la función (por defecto es None).
+    - abrir_ubicacion_archivo(self, event): Abre la ubicación del archivo seleccionado en el gestor de archivos por defecto.
+        - event: El evento que desencadena la función.
+
+Raises:
+    - No se especifican excepciones en la clase.
+"""
+    
     def __init__(self, root):
         self.root = root
         self.root.title("Buscar Archivos Duplicados")
@@ -507,6 +616,45 @@ class AplicacionBuscadorDuplicados:
                 messagebox.showerror("Error", "El archivo ya no existe en la ubicación: {}".format(ruta_archivo))
                 
 class Repositorios:
+    
+    """
+Docstring para la clase 'Repositorios'.
+
+Class:
+    - Repositorios: Clase para gestionar los repositorios del sistema.
+
+Attributes:
+    - master: El widget principal al que pertenece la ventana.
+
+Methods:
+    - __init__(self, master): Constructor de la clase. Inicializa la ventana y sus componentes.
+        - master: El widget principal al que pertenece la ventana.
+    - hacer_backup_sources_list(self): Realiza una copia de seguridad del archivo sources.list.
+    - restaurar_backup(self): Restaura la copia de seguridad del archivo sources.list.
+    - agregar_repositorio(self): Abre una ventana para que el usuario agregue un nuevo repositorio.
+    - mostrar_repositorios(self): Muestra la lista de repositorios instalados.
+    - seleccionar_repositorio(self, listbox): Maneja la selección de un repositorio en la lista.
+        - listbox: El Listbox que contiene la lista de repositorios.
+    - mostrar_ventana_accion_repo(self, repo_seleccionado): Muestra una ventana de diálogo para editar o eliminar un repositorio seleccionado.
+        - repo_seleccionado: El repositorio seleccionado.
+    - eliminar_repo(self, repo_a_eliminar, ventana_dialogo): Elimina un repositorio seleccionado.
+        - repo_a_eliminar: El repositorio a eliminar.
+        - ventana_dialogo: La ventana de diálogo asociada.
+    - editar_repositorio(self, repo_original, repo_nuevo, ventana_dialogo): Edita un repositorio existente con una nueva URL.
+        - repo_original: La URL del repositorio original.
+        - repo_nuevo: La nueva URL del repositorio.
+        - ventana_dialogo: La ventana de diálogo asociada.
+    - obtener_repositorios_instalados(self): Obtiene la lista de repositorios instalados en el sistema.
+    - mostrar_advertencia_copia_seguridad(self): Muestra una advertencia sobre la copia de seguridad del archivo sources.list.
+    - actualizar_repositorios(self): Actualiza la lista de repositorios mostrada en la interfaz de usuario.
+
+Functions:
+    - abrir_administrador_repositorios(): Abre una ventana para administrar los repositorios del sistema.
+
+Raises:
+    - No se especifican excepciones en la clase.
+"""
+    
     def __init__(self, master):
         self.master = master
         master.title("Gestor de Repositorios")
@@ -745,6 +893,25 @@ if __name__ == "__main__":
     ventana_principal.mainloop()
     
 class MonitorizarSistema:
+    
+    """
+Docstring para la clase 'MonitorizarSistema'.
+
+Class:
+    - MonitorizarSistema: Clase para monitorizar el sistema y visualizar estadísticas en una ventana emergente.
+
+Attributes:
+    - master: El widget principal al que pertenece la ventana.
+
+Methods:
+    - __init__(self, master): Constructor de la clase. Inicializa el widget principal al que pertenece la ventana.
+        - master: El widget principal al que pertenece la ventana.
+    - monitorizar_sistema(self): Método para monitorizar el sistema y visualizar estadísticas en una ventana emergente.
+
+Raises:
+    - No se especifican excepciones en la clase.
+"""
+    
     def __init__(self, master):
         self.master = master
 

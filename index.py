@@ -1,3 +1,36 @@
+"""
+Docstring para el módulo que incluye varias importaciones y definiciones de funciones y clases relacionadas con la interfaz de usuario y la funcionalidad principal del programa.
+
+Imports:
+    - tkinter as tk: Biblioteca para la creación de interfaces gráficas.
+    - from tkinter import ttk: Módulo que contiene widgets temáticamente diferentes que extienden los widgets de Tkinter estándar.
+    - from tkinter import messagebox: Módulo para mostrar ventanas emergentes de mensajes.
+    - from tooltip import ToolTip: Módulo para mostrar información emergente sobre widgets.
+    - import webbrowser: Módulo para abrir y mostrar páginas web.
+    - import time: Módulo para la manipulación del tiempo.
+    - from about import mostrar_about: Función para mostrar información sobre el programa.
+    - from cat_informacion import Informacion: Clase para obtener información del sistema.
+    - from password import obtener_contrasena, limpiar_archivos_configuracion: Funciones relacionadas con la gestión de contraseñas.
+    - from dependencias import verificar_dependencias, instalar_dependencias: Funciones para verificar e instalar dependencias del programa.
+    - from menuCategorias import informacion_cat, diccionario_cat, sistema_cat, internet_cat, red_local_cat, navegadores_cat: Funciones para manejar diferentes categorías del menú.
+    - import preferencias: Módulo para manejar preferencias y temas de la interfaz de usuario.
+
+Functions:
+    - instalar_dependencias_con_progreso(): Función para instalar dependencias con una barra de progreso.
+    - main(): Función principal que inicia la aplicación y comprueba las dependencias.
+    - update_progress(root, progress_bar, label): Función para simular la comprobación de dependencias con una barra de progreso.
+    - verificar_dependencias_con_progreso(root, progress_bar, label): Función para verificar las dependencias con una barra de progreso.
+    - close_progress(root, progress_bar, label): Función para cerrar la barra de progreso después de verificar las dependencias.
+    - class VentanaPrincipal: Clase para la ventana principal de la aplicación.
+        - __init__(self, root): Constructor de la clase VentanaPrincipal.
+        - mostrar_subcategorias(self, categoria): Método para mostrar subcategorías según la categoría seleccionada.
+        - mostrar_informacion_sistema(self): Método para mostrar la información del sistema en la categoría Información.
+        - cerrar_ventana_principal(self): Método para cerrar la ventana principal de la aplicación.
+
+Attributes:
+    - No se especifican atributos en el módulo.
+"""
+
 import tkinter as tk
 from tkinter import ttk
 from tkinter import messagebox

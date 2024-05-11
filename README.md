@@ -96,6 +96,7 @@ Estas dependencias las comprobará e instalará el programa una vez se ejecute s
 - tabulate -> pip3 install tabulate
 - opencv-python-headless -> pip3 install opencv-python-headless
 - wget -> pip3 install wget
+- Tooltip -> pip3 install Tooltip
 
 
 ## Instalación del paquete .DEB

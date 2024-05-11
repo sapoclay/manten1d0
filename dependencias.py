@@ -1,3 +1,18 @@
+"""
+Módulo para gestionar la ejecución de procesos externos.
+
+Este módulo proporciona funciones para ejecutar procesos externos, como la verificación de dependencias del sistema y la instalación de paquetes, así como la ejecución de comandos en la terminal.
+
+Attributes:
+    DEPENDENCIAS (dict): Diccionario que contiene las dependencias del sistema junto con los métodos de instalación necesarios.
+
+Functions:
+    verificar_dependencias(): Verifica si todas las dependencias del sistema están instaladas correctamente.
+    instalar_dependencias(progress_bar=None): Instala las dependencias del sistema utilizando sudo o pip3, mostrando un indicador de progreso opcional.
+    iniciar_programa(): Muestra un mensaje de información cuando todas las dependencias están instaladas correctamente y el programa puede iniciarse.
+    main(): Función principal que gestiona el flujo del programa.
+"""
+
 import subprocess
 import tkinter as tk
 import subprocess
@@ -30,6 +45,12 @@ DEPENDENCIAS = {
 
 
 def verificar_dependencias():
+    """
+    Verifica si todas las dependencias del sistema están instaladas correctamente.
+
+    Returns:
+        bool: True si todas las dependencias están instaladas, False si falta al menos una.
+    """
     dependencias_faltantes = []
     for dependencia, instalacion in DEPENDENCIAS.items():
         # Verificar si la dependencia está instalada utilizando apt
@@ -59,6 +80,15 @@ def verificar_dependencias():
 
 
 def instalar_dependencias(progress_bar=None):
+    """
+    Instala las dependencias del sistema utilizando sudo o pip3.
+
+    Args:
+        progress_bar (ttk.Progressbar, optional): Indicador de progreso para mostrar durante la instalación. Defaults to None.
+
+    Returns:
+        bool: True si la instalación se realiza correctamente, False si hay algún error.
+    """
     total_dependencias = len(DEPENDENCIAS)
     progreso_actual = 0
 
@@ -103,9 +133,15 @@ def instalar_dependencias(progress_bar=None):
 
 
 def iniciar_programa():
+    """
+    Muestra un mensaje de información cuando todas las dependencias están instaladas correctamente y el programa puede iniciarse.
+    """
     messagebox.showinfo("¡Todas las dependencias están instaladas! Iniciando el programa...")
 
 def main():
+    """
+    Función principal que gestiona el flujo del programa.
+    """
     if not verificar_dependencias():
         if messagebox.askyesno("Instalación de dependencias", "Algunas dependencias necesarias no están instaladas. ¿Desea instalarlas ahora?"):
             root = tk.Tk()

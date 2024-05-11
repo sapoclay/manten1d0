@@ -1,3 +1,25 @@
+"""
+Docstring para el script de actualización de programas a través de GitHub.
+
+Imports:
+    - tkinter as tk: Para la creación de interfaces gráficas.
+    - requests: Para realizar solicitudes HTTP.
+    - wget: Para descargar archivos de la web.
+    - subprocess: Para ejecutar procesos del sistema.
+    - obtener_contrasena desde password: Para obtener la contraseña de sudo.
+    - messagebox desde tkinter: Para mostrar mensajes de alerta.
+    - os: Para realizar operaciones relacionadas con el sistema operativo.
+    - sys: Para interactuar con el intérprete de Python.
+    - preferencias: Para ajustar las preferencias de la interfaz.
+
+Functions:
+    - instalar_paquete_deb(archivo_deb): Instala un paquete .deb en el sistema.
+    - mostrar_ventana_actualizaciones(): Muestra una ventana para buscar actualizaciones del programa.
+
+Raises:
+    - Exception: Captura errores generales y los muestra en una ventana emergente.
+"""
+
 import tkinter as tk
 import requests
 import wget
