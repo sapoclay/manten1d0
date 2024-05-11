@@ -139,29 +139,32 @@ class Informacion:
     
     @staticmethod
     def obtener_servidores_dns():
-        dns_local = ""
-        dns_publico = ""
+        dns_local = []
+        dns_publico = []
 
         try:
-            # Eliminamos el uso de sudo y la función obtener_contrasena
+            # Obtener DNS locales del archivo /etc/resolv.conf
             with open('/etc/resolv.conf', 'r') as f:
                 for line in f:
-                    if line.startswith('nameserver'):
-                        if not dns_local:
-                            dns_local = line.split()[1]
-                        else:
-                            break
+                    match = re.match(r'\s*nameserver\s+(\S+)', line)
+                    if match:
+                        dns_local.append(match.group(1))
 
-            # Cambiamos a un enfoque que no requiere sudo para obtener servidores DNS públicos
-            with urllib.request.urlopen('https://dns.google.com/resolve?name=example.com') as response:
-                data = response.read().decode('utf-8')
-                dns_publico = re.search(r'"([^"]*)"', data).group(1)
+            # Obtener DNS públicos utilizando el comando nmcli
+            output = subprocess.check_output(["nmcli", "dev", "show"])
+            output = output.decode('utf-8').split('\n')
+            for line in output:
+                match = re.match(r'\s*IP4\.DNS\[[0-9]+\]:\s+(\S+)', line)
+                if match:
+                    dns_publico.append(match.group(1))
 
             return {"dns_local": dns_local, "dns_publico": dns_publico}
 
         except Exception as e:
             error_message = f"Error al obtener los servidores DNS: {e}"
             return {"dns_local": error_message, "dns_publico": error_message}
+
+
     
     @staticmethod
     def get_tiempo_actividad():
@@ -275,8 +278,12 @@ class Informacion:
         info["Versión de Ubuntu"] = info_sistema["Versión de Ubuntu"]
         # Obtener la información de los dns
         info_dns = Informacion.obtener_servidores_dns()
-        info["dns local"] = info_dns["dns_local"]
-        info["dns publico"] = info_dns["dns_publico"]
+        dns_local = ", ".join(info_dns["dns_local"])
+        dns_local = dns_local.replace("[", "").replace("]", "").replace("'", "")
+        info["dns local"] = dns_local
+        dns_publico = ", ".join(info_dns["dns_publico"])
+        dns_publico = dns_publico.replace("[", "").replace("]", "").replace("'", "")
+        info["dns publico"] = dns_publico
         # Obtener el resto de la información
         info["Tipo de Escritorio"] = Informacion.obtener_tipo_escritorio()
         info["Interfaces de Red"] = Informacion.obtener_interfaces_red()
