@@ -115,6 +115,10 @@ Tras la instalación deberías poder ver ya el lanzador del programa en el menú
 
 ## Desinstalación
 
-- En una terminal (Ctrl+Alt+T):
+- Eliminaremos el programa escribiendo en una terminal (Ctrl+Alt+T):
 
 ``` sudo apt remove manten1d0 ```
+
+- Para no dejar rastro alguno del programa en tu equipo, en la misma terminal será necesario escribir:
+  
+``` sudo rm -rf /usr/share/Manten1d0/ ```

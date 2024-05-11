@@ -25,7 +25,6 @@ from password import obtener_contrasena
 DEPENDENCIAS = {
     "samba": ["sudo", "apt", "install", "-y", "samba"],
     "nmap": ["sudo", "apt", "install", "-y", "python3-nmap"],
-    "python3-tk": ["sudo", "apt", "install", "-y", "python3-tk"],
     "net-tools": ["sudo", "apt", "install", "-y", "net-tools"],
     "ethtool": ["sudo", "apt", "install", "-y", "ethtool"],
     "gnome-terminal": ["sudo", "apt", "install", "-y", "gnome-terminal"],
