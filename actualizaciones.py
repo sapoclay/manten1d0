@@ -53,7 +53,7 @@ def mostrar_ventana_actualizaciones():
     etiqueta_estado.pack()
 
     # Obtener la versión actual del programa
-    version_actual = "0.5.1"  # Versión actual del programa
+    version_actual = "0.5.3"  # Versión actual del programa
 
     # Mostrar la versión actual instalada
     version_instalada_label.config(text=f"Versión instalada: {version_actual}")
@@ -63,7 +63,7 @@ def mostrar_ventana_actualizaciones():
         try:
             # 'usuario' y 'repositorio' del repositorio en GitHub
             usuario = 'sapoclay'
-            repositorio = 'mantenimiento-sistema-basico'
+            repositorio = 'manten1d0'
             url_repositorio = f'https://api.github.com/repos/{usuario}/{repositorio}/releases/latest'
             
             # Realizar la solicitud a la API de GitHub
@@ -72,7 +72,7 @@ def mostrar_ventana_actualizaciones():
 
             # Obtener la versión más reciente del repositorio
             version_mas_reciente = respuesta_json['tag_name']
-            version_actual = "0.5.1"  # Versión actual del programa
+            version_actual = "0.5.3"  # Versión actual del programa
 
             mensaje_resultado = f"Versión actual instalada: {version_actual}\nLa versión más reciente disponible es: {version_mas_reciente}"
 

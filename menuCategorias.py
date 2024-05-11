@@ -163,7 +163,7 @@ def sistema_cat(self, mensaje_personalizado):
 
     boton_monitorizar = tk.Button(contenedor_botones, text="Monitorizar", command=abrir_ventana_monitorizar_sistema)
     boton_monitorizar.grid(row=3, column=0, padx=10, pady=10)
-
+    ToolTip(boton_gestion_repositorios, "Genera un gráfico de los recursos del sistema en el momento actual")
 
     
 # Función para mostrar la categoría INTERNET

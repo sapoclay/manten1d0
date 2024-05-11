@@ -11,6 +11,8 @@ class ToolTip:
         self.tooltip = None
         self.widget.bind("<Enter>", self.show_tooltip)
         self.widget.bind("<Leave>", self.hide_tooltip)
+        # Vincula evento de clic del ratón para ocultar el tooltip al hacer clic en el botón
+        self.widget.bind("<Button-1>", self.hide_tooltip)
 
     def show_tooltip(self, event=None):
         x, y, _, _ = self.widget.bbox("insert")

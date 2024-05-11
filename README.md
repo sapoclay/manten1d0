@@ -64,6 +64,7 @@
 - Ahora dispone de opciones para cambiar el tema del programa entre un tema claro y otro oscuro. También permite cambiar el tamaño de la fuente de todo el programa.
 - Añadida la opción Abrir URL en el Navegador en la opción Archivo del menú superior del programa.
 - Se ha añadido la opción de monitorizar el sistema. Esta se presenta con un grafico de la monitorización del momento en el que se presiona el botón.
+- He corregido el tooltip. Ahora cuando el usuario hace clic en un botón, el tooltip desaparece de manera correcta.
   
 ## Dependencias Imprescindibles 
 
