@@ -1,6 +1,7 @@
 import subprocess
 import os
 import threading
+from tkinter import messagebox
 
 # Clase para realizar la limpieza de la caché de los navegadores
 class LimpiadorNavegadores:
@@ -88,6 +89,32 @@ class LimpiadorNavegadores:
             mensaje = f"Error al limpiar la caché: {e}"
             if callback:
                 callback(mensaje)
+    
+    @staticmethod
+    def limpiar_historial_chrome():
+        try:
+            # Comando para limpiar el historial de Chrome en Linux
+            subprocess.run(["google-chrome", "--delete-history"], check=True)
+            messagebox.showinfo("Éxito", "Historial de Chrome limpiado con éxito.")
+        except (subprocess.CalledProcessError, FileNotFoundError):
+            messagebox.showerror("Error", "No se pudo limpiar el historial de Chrome. Asegúrate de tener Google Chrome instalado.")
 
+    @staticmethod
+    def limpiar_historial_firefox():
+        try:
+            # Comando para limpiar el historial de Firefox en Linux
+            subprocess.run(["firefox", "--delete-history"], check=True)
+            messagebox.showinfo("Éxito", "Historial de Firefox limpiado con éxito.")
+        except (subprocess.CalledProcessError, FileNotFoundError):
+            messagebox.showerror("Error", "No se pudo limpiar el historial de Firefox. Asegúrate de tener Mozilla Firefox instalado.")
+
+    @staticmethod
+    def limpiar_historial_edge():
+        try:
+            # Comando para limpiar el historial de Edge en Linux
+            subprocess.run(["microsoft-edge", "--delete-history"], check=True)
+            messagebox.showinfo("Éxito", "Historial de Edge limpiado con éxito.")
+        except (subprocess.CalledProcessError, FileNotFoundError):
+            messagebox.showerror("Error", "No se pudo limpiar el historial de Edge. Asegúrate de tener Microsoft Edge instalado.")
 
 

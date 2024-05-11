@@ -356,27 +356,33 @@ def navegadores_cat(self, mensaje_personalizado):
     frame_botones = tk.Frame(self.area_central)
     frame_botones.pack()
 
-    
-    # Botón para limpiar la caché de Chrome
+    # Botones para limpiar la caché
     boton_chrome = tk.Button(frame_botones, text="Limpiar Caché Chrome", command=lambda: LimpiadorNavegadores.limpiar_cache_chrome(self, boton_chrome, lambda mensaje: messagebox.showinfo("Resultado", mensaje)))
-    boton_chrome.pack(side="left", padx=5)
+    boton_chrome.pack(side="left", padx=5, pady=10)
     ToolTip(boton_chrome, "Limpia la caché de Chrome (si está instalado)")
 
-
-    # Botón para limpiar la caché de Firefox
     boton_firefox = tk.Button(frame_botones, text="Limpiar Caché Firefox", command=lambda: LimpiadorNavegadores.limpiar_cache_firefox(self, boton_firefox, lambda mensaje: messagebox.showinfo("Resultado", mensaje)))
-    boton_firefox.pack(side="left", padx=5)
+    boton_firefox.pack(side="left", padx=5, pady=10)
     ToolTip(boton_firefox, "Limpia la caché de Firefox (si está instalado)")
 
-    # Botón para limpiar la caché de Edge
     boton_edge = tk.Button(frame_botones, text="Limpiar Caché Edge", command=lambda: LimpiadorNavegadores.limpiar_cache_edge(self, boton_edge, lambda mensaje: messagebox.showinfo("Resultado", mensaje)))
-    boton_edge.pack(side="left", padx=5)
+    boton_edge.pack(side="left", padx=5, pady=10)
     ToolTip(boton_edge, "Limpia la caché de Edge (si está instalado)")
 
-    # Agregar una línea horizontal debajo del botón
-    separador = ttk.Separator(self.area_central, orient="horizontal")
-    separador.pack(fill="x", pady=10, padx=40) 
-    
+    # Crear una nueva fila para los botones de limpiar historial
+    frame_botones_historial = tk.Frame(self.area_central)
+    frame_botones_historial.pack()
 
+    # Botones para limpiar el historial
+    boton_chrome_historial = tk.Button(frame_botones_historial, text="Limpiar Historial Chrome", command=LimpiadorNavegadores.limpiar_historial_chrome)
+    boton_chrome_historial.pack(side="left", padx=5, pady=10)
+    ToolTip(boton_chrome_historial, "Limpia el historial de Chrome (si está instalado)")
 
+    boton_firefox_historial = tk.Button(frame_botones_historial, text="Limpiar Historial Firefox", command=LimpiadorNavegadores.limpiar_historial_firefox)
+    boton_firefox_historial.pack(side="left", padx=5, pady=10)
+    ToolTip(boton_firefox_historial, "Limpia el historial de Firefox (si está instalado)")
+
+    boton_edge_historial = tk.Button(frame_botones_historial, text="Limpiar Historial Edge", command=LimpiadorNavegadores.limpiar_historial_edge)
+    boton_edge_historial.pack(side="left", padx=5, pady=10)
+    ToolTip(boton_edge_historial, "Limpia el historial de Edge (si está instalado)")
     
