@@ -102,7 +102,7 @@ Estas dependencias las comprobará e instalará el programa una vez se ejecute s
 
 - En una terminal (Ctrl+Alt+T):
 
-  ``` sudo dpkg -i mantenimientobasico.deb ```
+  ``` sudo dpkg -i Manten1d0.deb ```
 
 Tras la instalación deberías poder ver ya el lanzador del programa en el menú de Actividades.
 
@@ -112,4 +112,4 @@ Tras la instalación deberías poder ver ya el lanzador del programa en el menú
 
 - En una terminal (Ctrl+Alt+T):
 
-``` sudo apt remove mantenimientobasico ```
+``` sudo apt remove manten1d0 ```
