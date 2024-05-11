@@ -9,6 +9,13 @@ import sys
 import preferencias
 
 def instalar_paquete_deb(archivo_deb):
+    """
+    Instala un paquete .deb en el sistema utilizando el comando 'apt install'.
+
+    Parameters:
+        archivo_deb (str): La ruta al archivo .deb que se va a instalar.
+
+    """
     contrasena_sudo = obtener_contrasena()  # Obtener la contraseña de sudo
 
     # Obtener la ruta absoluta del archivo .deb
@@ -34,6 +41,12 @@ def instalar_paquete_deb(archivo_deb):
         messagebox.showerror("Error de instalación", f"Error durante la actualización del programa:\n{error}")
 
 def mostrar_ventana_actualizaciones():
+    """
+    Muestra una ventana para buscar actualizaciones del programa.
+
+    La ventana muestra la versión instalada y la versión disponible, y permite al usuario buscar e instalar actualizaciones de forma automática.
+
+    """
     # Crear la ventana de actualizaciones con un tamaño más grande
     ventana_actualizaciones = tk.Toplevel()
     ventana_actualizaciones.title("Buscar Actualizaciones")

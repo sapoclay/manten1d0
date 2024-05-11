@@ -33,7 +33,7 @@ def informacion_cat(self, mensaje_personalizado):
 
     # Actualizar el mensaje personalizado si existe
     if mensaje_personalizado:
-        label_subcategorias = tk.Label(self.area_central, text=mensaje_personalizado, font=("Arial", 16, "bold"), bg="lightgrey", padx=10, pady=20)
+        label_subcategorias = tk.Label(self.area_central, text=mensaje_personalizado, font=("Arial", 16, "bold"), bg="lightgrey", padx=10, pady=10)
         
         if preferencias.tema_seleccionado != "Claro":
             # Aplicar el tema seleccionado al mensaje personalizado

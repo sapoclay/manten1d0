@@ -10,8 +10,27 @@ url = "https://raw.githubusercontent.com/sapoclay/diccionario/main/diccionario.m
 
 
 class VentanaDiccionario(QMainWindow):
+    
+    """
+    Clase que define una ventana de visualización de un diccionario.
+
+    Esta ventana permite cargar contenido desde un archivo markdown o una URL, realizar búsquedas en el contenido y abrir una terminal desde la aplicación.
+
+    Attributes:
+        closed (pyqtSignal): Señal para indicar que la ventana se ha cerrado.
+    """
+    
     closed = pyqtSignal()  # Señal para indicar que la ventana se ha cerrado
+    
     def __init__(self, contenido_html):
+        
+        """
+        Inicializa una instancia de VentanaDiccionario.
+
+        Parameters:
+            contenido_html (str): Contenido HTML a mostrar en la ventana.
+        """
+        
         super().__init__()
         self.setWindowTitle("Diccionario")
         self.resize(800, 600)  # Establecer un tamaño inicial más grande
@@ -21,6 +40,14 @@ class VentanaDiccionario(QMainWindow):
         self.crear_menu()
 
     def cargar_contenido(self, contenido_html):
+        
+        """
+        Carga el contenido HTML en la ventana.
+
+        Parameters:
+            contenido_html (str): Contenido HTML a cargar en la ventana.
+        """
+        
         self.browser = QTextBrowser()
         self.browser.setHtml(contenido_html)
         
@@ -37,6 +64,11 @@ class VentanaDiccionario(QMainWindow):
         self.setCentralWidget(widget)
 
     def buscar(self):
+        
+        """
+        Filtra el contenido HTML según el término de búsqueda ingresado en el campo de búsqueda.
+        """
+        
         search_term = self.search_input.text().lower()
         if search_term:
             filtered_html = self.filter_html(search_term)
@@ -109,6 +141,14 @@ class VentanaDiccionario(QMainWindow):
 
 
 def abrir_ventana_diccionario(contenido_html):
+    
+    """
+    Función para abrir una ventana de visualización del diccionario.
+
+    Parameters:
+        contenido_html (str): Contenido HTML a mostrar en la ventana del diccionario.
+    """
+    
     app = QApplication(sys.argv)
     ventana = VentanaDiccionario(contenido_html)
     ventana.show()
@@ -117,6 +157,14 @@ def abrir_ventana_diccionario(contenido_html):
     app.exec_()
 
 def cargar_contenido_html():
+    
+    """
+    Carga el contenido HTML del diccionario desde una URL.
+
+    Returns:
+        str: Contenido HTML del diccionario.
+    """
+    
     contenido_md = requests.get(url).text
     contenido_html = markdown2.markdown(contenido_md)
     return contenido_html

@@ -3,6 +3,14 @@ import os
 import preferencias
 
 def mostrar_about():
+    """
+    Abre una ventana que muestra información sobre el programa.
+
+    La ventana incluye un logotipo, la versión del programa y un mensaje informativo.
+
+    Además, si se ha seleccionado un tema oscuro en las preferencias, aplica el tema oscuro a la ventana.
+
+    """
     about_window = tk.Toplevel()
     about_window.title("Acerca de")
     about_window.geometry("400x250")

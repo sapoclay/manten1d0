@@ -1,3 +1,17 @@
+"""
+Funciones y utilidades para la personalización de la interfaz gráfica de usuario.
+
+Este módulo proporciona funciones y herramientas para cambiar el tema de la interfaz gráfica de usuario (GUI) de tkinter, así como para abrir una ventana de configuración para ajustar diferentes aspectos de la apariencia de la GUI.
+
+Attributos:
+    tema_seleccionado (str): Tema actualmente seleccionado para la GUI, que puede ser "Claro" o "Oscuro".
+    ventanas_secundarias (list): Lista global para almacenar todas las ventanas secundarias abiertas.
+
+Funciones:
+    cambiar_tema(ventana, tema_seleccionado): Cambia el tema de la ventana y todos sus elementos hijos.
+    abrir_ventana_configuracion(root): Abre una ventana de configuración para ajustar diferentes aspectos de la apariencia de la GUI.
+"""
+
 import tkinter as tk
 from tkinter import ttk
 from tkinter import messagebox
@@ -9,6 +23,13 @@ from tooltip import ToolTip
 tema_seleccionado = "Claro"  # Tema predeterminado
 
 def cambiar_tema(ventana, tema_seleccionado):
+    """
+    Cambia el tema de la ventana y todos sus elementos hijos.
+
+    Args:
+        ventana (tk.Tk or tk.Toplevel): Ventana a la que se aplicará el cambio de tema.
+        tema_seleccionado (str): Tema seleccionado para aplicar a la ventana. Puede ser "Claro" o "Oscuro".
+    """
     if tema_seleccionado == "Claro":
         bg_color = "lightgrey"
         fg_color = "black"
@@ -40,6 +61,12 @@ def cambiar_tema(ventana, tema_seleccionado):
 ventanas_secundarias = []
 
 def abrir_ventana_configuracion(root):
+    """
+    Abre una ventana de configuración para ajustar diferentes aspectos de la apariencia de la GUI.
+
+    Args:
+        root (tk.Tk): Ventana principal a la que está asociada la ventana de configuración.
+    """
     def actualizar_tamanio_texto():
         size = int(size_spinner.get())
         size_label.config(text=f"Tamaño del Texto: {size}")

@@ -1,11 +1,32 @@
 import tkinter as tk
 from tkinter import ttk
 
-# Clase para generar el tooltip en los botones creados 
-# Ejemplo: ToolTip(nombre_del_boton, "Texto del tooltip")
-
 class ToolTip:
+    """
+    Clase para generar un tooltip en los botones creados.
+
+    Uso:
+        tooltip = ToolTip(widget, texto)
+
+    Parámetros:
+        widget (tkinter.Widget): El widget al que se asociará el tooltip.
+        text (str): El texto que se mostrará en el tooltip.
+
+    Métodos:
+        show_tooltip(event=None):
+            Muestra el tooltip cuando el cursor entra en el widget.
+        hide_tooltip(event=None):
+            Oculta el tooltip cuando el cursor sale del widget o se hace clic en él.
+    """
+
     def __init__(self, widget, text):
+        """
+        Inicializa un tooltip para el widget especificado con el texto dado.
+
+        Args:
+            widget (tkinter.Widget): El widget al que se asociará el tooltip.
+            text (str): El texto que se mostrará en el tooltip.
+        """
         self.widget = widget
         self.text = text
         self.tooltip = None
@@ -15,6 +36,12 @@ class ToolTip:
         self.widget.bind("<Button-1>", self.hide_tooltip)
 
     def show_tooltip(self, event=None):
+        """
+        Muestra el tooltip cuando el cursor entra en el widget.
+
+        Args:
+            event: El evento que desencadena la función (opcional).
+        """
         x, y, _, _ = self.widget.bbox("insert")
         x += self.widget.winfo_rootx() + 25
         y += self.widget.winfo_rooty() + 25
@@ -27,6 +54,12 @@ class ToolTip:
         label.pack(ipadx=5)
 
     def hide_tooltip(self, event=None):
+        """
+        Oculta el tooltip cuando el cursor sale del widget o se hace clic en él.
+
+        Args:
+            event: El evento que desencadena la función (opcional).
+        """
         if self.tooltip:
             self.tooltip.destroy()
             self.tooltip = None
