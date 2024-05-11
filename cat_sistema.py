@@ -15,6 +15,8 @@ from datetime import datetime, timezone
 import platform
 from tooltip import ToolTip    
 import subprocess
+import matplotlib.pyplot as plt
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 
 # Clase para generar la ventana de barra de progreso
 class ProgresoVentana(tk.Toplevel):
@@ -741,3 +743,55 @@ if __name__ == "__main__":
     boton_admin_repos = tk.Button(ventana_principal, text="Administrar Repositorios", command=abrir_administrador_repositorios)
     boton_admin_repos.pack()
     ventana_principal.mainloop()
+    
+class MonitorizarSistema:
+    def __init__(self, master):
+        self.master = master
+
+    def monitorizar_sistema(self):
+        # Ocultar la ventana principal temporalmente
+        self.master.withdraw()
+
+        # Obtener los datos del sistema
+        cpu_percent = psutil.cpu_percent()
+        mem_percent = psutil.virtual_memory().percent
+        disk_percent = psutil.disk_usage('/').percent
+        # Obtener los datos de red
+        red_info = psutil.net_io_counters(pernic=False)
+        red_envio = red_info.bytes_sent
+        red_recepcion = red_info.bytes_recv
+        temperatura_cpu = psutil.sensors_temperatures().get('cpu_thermal', [None])[0].current if 'cpu_thermal' in psutil.sensors_temperatures() else None
+        carga_sistema = psutil.getloadavg()[0]
+
+        # Crear listas de nombres, valores y colores para los datos
+        nombres = ['CPU', 'Memoria', 'Disco', 'Red (enviado)', 'Red (recibido)', 'Temperatura CPU', 'Carga del sistema']
+        valores = [cpu_percent, mem_percent, disk_percent, red_envio / 1024 / 1024, red_recepcion / 1024 / 1024, temperatura_cpu, carga_sistema]
+        colores = ['blue', 'green', 'red', 'orange', 'purple', 'cyan', 'magenta']
+
+        # Filtrar los datos que no están disponibles y actualizar las listas
+        nombres = [n for n, v in zip(nombres, valores) if v is not None]
+        valores = [v for v in valores if v is not None]
+        colores = colores[:len(valores)]
+
+        # Crear una nueva ventana de Tkinter
+        ventana_grafico = tk.Toplevel(self.master)
+        ventana_grafico.title("Estadísticas")
+
+        # Crear una figura de Matplotlib
+        fig, ax = plt.subplots(figsize=(12, 8))
+
+        # Visualizar los datos en un gráfico de barras
+        ax.bar(nombres, valores, color=colores)
+        ax.set_xlabel('Recursos del Sistema')
+        ax.set_ylabel('Porcentaje de Uso / Valor')
+        ax.set_title('Monitorización del Sistema')
+        ax.grid(True)
+
+        # Crear un lienzo de Matplotlib para integrarlo en la ventana de Tkinter
+        canvas = FigureCanvasTkAgg(fig, master=ventana_grafico)
+        canvas.draw()
+        canvas.get_tk_widget().pack()
+
+        # Vincular el evento de cierre de la ventana a una función que solo destruya la ventana de gráficos
+        ventana_grafico.protocol("WM_DELETE_WINDOW", ventana_grafico.destroy)
+        ventana_grafico.mainloop()

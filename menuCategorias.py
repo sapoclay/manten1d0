@@ -11,6 +11,7 @@ from cat_sistema import AdministrarProcesos
 from cat_sistema import AplicacionBuscadorDuplicados
 from cat_sistema import Limpieza 
 from cat_sistema import Repositorios
+from cat_sistema import MonitorizarSistema
 from cat_informacion import Informacion
 from cat_redLocal import encontrar_dispositivos_en_red, doble_clic
 from cat_navegadores import LimpiadorNavegadores
@@ -104,6 +105,8 @@ def sistema_cat(self, mensaje_personalizado):
     boton_abrir_software = tk.Button(contenedor_botones, text="Abrir Gestor Software", command=abrir_gestor_software)
     boton_abrir_software.grid(row=0, column=2, padx=10, pady=10)
     ToolTip(boton_abrir_software, "Instala o desinstala paquetes snap desde el gestor de software de Ubuntu")
+    
+    
 
     def abrir_ventana_aplicaciones_autostart():
         if self.area_central.winfo_exists():
@@ -151,6 +154,16 @@ def sistema_cat(self, mensaje_personalizado):
     boton_gestion_repositorios.grid(row=2, column=2, padx=10, pady=10)
     ToolTip(boton_gestion_repositorios, "Gestiona los repositorios del sistema")
     
+
+    # Llamada a la función
+    def abrir_ventana_monitorizar_sistema():
+        ventana_monitorizar = tk.Toplevel(self.area_central)
+        monitorizacion = MonitorizarSistema(ventana_monitorizar)
+        monitorizacion.monitorizar_sistema()
+
+    boton_monitorizar = tk.Button(contenedor_botones, text="Monitorizar", command=abrir_ventana_monitorizar_sistema)
+    boton_monitorizar.grid(row=3, column=0, padx=10, pady=10)
+
 
     
 # Función para mostrar la categoría INTERNET
