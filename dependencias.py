@@ -28,8 +28,9 @@ DEPENDENCIAS = {
     "python3-tk": ["sudo", "apt", "install", "-y", "python3-tk"],
     "net-tools": ["sudo", "apt", "install", "-y", "net-tools"],
     "ethtool": ["sudo", "apt", "install", "-y", "ethtool"],
-    "python3-pyqt5": ["sudo", "apt", "install", "-y", "python3-pyqt5"],
     "gnome-terminal": ["sudo", "apt", "install", "-y", "gnome-terminal"],
+    "python3-psutil": ["sudo", "apt", "install", "-y", "python3-psutil"],
+    "smartmontools": ["sudo", "apt", "install", "-y", "smartmontools"],
     "matplotlib": ["pip3", "install", "matplotlib"],
     "pillow": ["pip3", "install", "--upgrade", "pillow"],
     "cryptography": ["pip3", "install", "cryptography"],
@@ -40,7 +41,8 @@ DEPENDENCIAS = {
     "tabulate": ["pip3", "install", "tabulate"],
     "opencv-python-headless": ["pip3", "install", "opencv-python-headless"],
     "wget": ["pip3", "install", "wget"],
-    "Tooltip": ["pip3", "install", "Tooltip"]
+    "Tooltip": ["pip3", "install", "Tooltip"],
+    "pySMART": ["pip3", "install", "pySMART"]
 }
 
 

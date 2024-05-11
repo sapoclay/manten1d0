@@ -31,18 +31,40 @@ Attributes:
     - No se especifican atributos en el módulo.
 """
 
-import tkinter as tk
-from tkinter import ttk
-from tkinter import messagebox
-from tooltip import ToolTip  
-import webbrowser
-import time
-from about import mostrar_about
-from cat_informacion import Informacion
-from password import obtener_contrasena, limpiar_archivos_configuracion
-from dependencias import verificar_dependencias, instalar_dependencias
-from menuCategorias import informacion_cat, diccionario_cat, sistema_cat, internet_cat, red_local_cat, navegadores_cat
-import preferencias  # Importar el módulo de preferencias para manejar el cambio de tema
+import subprocess
+
+try:
+    import tkinter as tk
+    from tkinter import ttk
+    from tkinter import messagebox
+    from about import mostrar_about
+    from cat_informacion import Informacion
+    from password import obtener_contrasena, limpiar_archivos_configuracion
+    from dependencias import verificar_dependencias, instalar_dependencias
+    from menuCategorias import informacion_cat, diccionario_cat, sistema_cat, internet_cat, red_local_cat, navegadores_cat
+    import preferencias  # Importar el módulo de preferencias para manejar el cambio de tema
+except ImportError:
+    # Instalar python3-tk automáticamente sin mostrar mensaje al usuario
+    proceso_instalacion = subprocess.Popen(["sudo", "apt", "install", "-y", "python3-tk"], stdin=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
+    proceso_instalacion.communicate(input="\n")
+
+    # Verificar si ocurrieron errores durante la instalación
+    if proceso_instalacion.returncode == 0:
+        # Intentar importar las bibliotecas de tkinter nuevamente
+        import tkinter as tk
+        from tkinter import ttk
+        from tkinter import messagebox
+        from about import mostrar_about
+        from cat_informacion import Informacion
+        from password import obtener_contrasena, limpiar_archivos_configuracion
+        from dependencias import verificar_dependencias, instalar_dependencias
+        from menuCategorias import informacion_cat, diccionario_cat, sistema_cat, internet_cat, red_local_cat, navegadores_cat
+        import preferencias  # Importar el módulo de preferencias para manejar el cambio de tema
+    else:
+        # Salir del programa con código de error 1 si la instalación falla
+        exit(1)
+
+
 
 def instalar_dependencias_con_progreso():
     root = tk.Tk()    
@@ -82,6 +104,7 @@ def main():
     root.mainloop()
 
 def update_progress(root, progress_bar, label):
+    import time
     # Simular la comprobación de dependencias durante 5 segundos
     for i in range(101):
         progress_bar["value"] = i
@@ -122,6 +145,7 @@ def close_progress(root, progress_bar, label):
 
 class VentanaPrincipal:
     def __init__(self, root):
+        from tooltip import ToolTip  
         
         self.root = root
         self.root.title("Manten1-d0")
@@ -148,6 +172,7 @@ class VentanaPrincipal:
             preferencias.cambiar_tema(self.area_central, preferencias.tema_seleccionado)
             
         def abrir_url():
+            import webbrowser
             url = tk.simpledialog.askstring("Abrir URL", "Ingrese la URL que desea abrir:")
             if url:
                 webbrowser.open_new(url)
@@ -280,9 +305,18 @@ class VentanaPrincipal:
             self.label_subcategorias.pack()  # Mostrar la etiqueta de subcategorías
             # Aplicar el tema seleccionado a la nueva ventana
             preferencias.cambiar_tema(self.area_central, preferencias.tema_seleccionado)
-            
+    
+                
     # Función para mostrar la información del sistema dentro de la categoría información. Toma los datos de información.py
     def mostrar_informacion_sistema(self):
+        def obtener_temperatura_cpu():
+            try:
+                with open("/sys/class/thermal/thermal_zone0/temp", "r") as file:
+                    temperatura_miligrados = int(file.read().strip())
+                    temperatura_celsius = temperatura_miligrados / 1000.0
+                    return temperatura_celsius
+            except FileNotFoundError:
+                return None
         # Obtener la información del sistema utilizando la clase Informacion
         info_completa = Informacion.obtener_informacion_completa()
         usuario = info_completa["Usuario"]
@@ -300,6 +334,9 @@ class VentanaPrincipal:
         procesador = Informacion.obtener_informacion_procesador()
         memoria = Informacion.obtener_informacion_memoria()
         
+        # Obtener la temperatura del procesador
+        temperatura_cpu = obtener_temperatura_cpu()     
+           
         # Crear el texto con la información del sistema
         texto_info = [
             ("Usuario:", usuario),
@@ -315,8 +352,9 @@ class VentanaPrincipal:
             ("DNS Local:", dns_local),
             ("DNS Público:", dns_publico),
             ("Zona Horaria:", zona_horaria),
+            ("Temperatura CPU:", f"{temperatura_cpu} °C" if temperatura_cpu is not None else "No disponible"),
             ("-" * 110, ""),
-        ]
+                ]
         
         # Insertar el texto en el widget Text
         self.texto_informacion.config(state=tk.NORMAL)  # Habilitar la edición

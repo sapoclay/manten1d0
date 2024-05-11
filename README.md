@@ -66,6 +66,7 @@
 - Se ha añadido la opción de monitorizar el sistema. Esta se presenta con un grafico de la monitorización del momento en el que se presiona el botón.
 - He corregido el tooltip. Ahora cuando el usuario hace clic en un botón, el tooltip desaparece de manera correcta.
 - Añadida la opción de limpiar el historial de los navegadores (Chrome, Firefox y Edge)
+- Se ha corregido el error de python3-tk. Ya que antes si no estaba instalado rompía la ejecución del programa. Ahora se instala de manera automática si falla la importación al iniciar el programa. Una vez terminada la instalación de este paquete, continúa la ejecución normal del programa.
   
 ## Dependencias Imprescindibles 
 
@@ -80,11 +81,13 @@ Estas dependencias las comprobará e instalará el programa una vez se ejecute s
 
 - samba -> sudo apt install samba
 - nmap -> sudo apt install python3-nmap
+- python3-tk -> sudo apt install python3-tk
 - nautilus -> sudo apt install nautilus
 - Tkinter -> sudo apt install python3-tk
 - Net-tools -> sudo apt install net-tools
 - Pyqt5 -> sudo apt install python3-pyqt5
 - Gnome-terminal -> sudo apt install gnome-terminal
+- smartmontools -> sudo apt install smartmontools
 - Matplotlib -> pip3 install matplotlib
 - Pillow -> pip3 install --upgrade pillow
 - Cryptography -> pip3 install cryptography
@@ -97,6 +100,7 @@ Estas dependencias las comprobará e instalará el programa una vez se ejecute s
 - opencv-python-headless -> pip3 install opencv-python-headless
 - wget -> pip3 install wget
 - Tooltip -> pip3 install Tooltip
+- pySMART -> pip3 install pySMART
 
 
 ## Instalación del paquete .DEB
