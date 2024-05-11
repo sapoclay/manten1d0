@@ -1,7 +1,7 @@
 import tkinter as tk
 from tkinter import ttk
 from tkinter import messagebox
-from tkinter import filedialog
+from tooltip import ToolTip  
 import webbrowser
 import time
 from about import mostrar_about
@@ -146,6 +146,7 @@ class VentanaPrincipal:
         for categoria in self.categorias:
             boton = tk.Button(self.menu_lateral, text=categoria, width=20, command=lambda c=categoria: self.mostrar_subcategorias(c))
             boton.pack(pady=5)
+            ToolTip(boton, f"Categoría {categoria}")
             self.botones_categorias.append(boton)
         
         # Crear el área central para mostrar subcategorías
