@@ -9,22 +9,39 @@
 ### Cosas que puede ir haciendo 
 ------------------------------------------------------------------
 ![password-manten1d0](https://github.com/sapoclay/manten1d0/assets/6242827/c45a7157-1cf4-42bc-86da-54db4e03c69e)
-- Añadida la capacidad de almacenar de forma cifrada la contraseña del usuario, para solo tener que escribirla una única vez, cuando se inicia el programa. Esta debe ser la contraseña del usuario, y debe tener permisos para utilizar sudo
+
+- Añadida la capacidad de almacenar de forma cifrada la contraseña del usuario, para solo tener que escribirla una única vez, cuando se inicia el programa. Esta debe ser la contraseña del usuario, y debe tener permisos para utilizar sudo.
+
 ![comprobando-dependencias](https://github.com/sapoclay/manten1d0/assets/6242827/f8f7487e-7973-4741-ac72-90734b35a9c4)
+
 - Se comprueban las dependencias necesarias al iniciar el programa. Si falta alguna de las dependencias que se pueden ver en el listado de dependencias instalables que hay más abajo, el programa debería instalarlas de manera automática para terminar iniciandose. En caso de que todas las dependencias estén instaladas, nos mostrará un aviso y se iniciará el programa.
+
 ![interfaz-manten1d0](https://github.com/sapoclay/manten1d0/assets/6242827/1ba8b27c-d0fa-492e-85a6-282bde3828c0)
+
 - Tras iniciarse el programa, veremos una interfaz de usuario sencilla. Consta de un menú lateral que mostrará todas las opciones que incluye cada categoría en la parte central de la interfaz. Además tendremos algunas opciones en el menú superior de la interfaz.
+  
 ![informacion-sistema](https://github.com/sapoclay/manten1d0/assets/6242827/417f2df7-cd5f-47f3-83df-81dbacb9b45d)
+
 - En la categoría Información, dispondremos de alguna información sobre el sistema operativo que estemos utilizando. También nos mostrará información sobre las tarjetas de red, ip, dns, etc e información el procesador y la memoria de nuestro equipo.
+  
 ![informacion-sistema](https://github.com/sapoclay/manten1d0/assets/6242827/c7afc46b-bca6-44bd-a973-de907a983f02)
+
 - En la opción Sistema, veremos difernetes botones. Cada uno de ellos nos dará la posibilidad de realizar diferentes operaciones sobre el sistema. Para saber más sobre qué hace cada uno de los botones, solo tendremos que pasar el ratón por encima, y el tooltip nos dará una explicación de qué podremos hacer con esa opción en particular.
+  
 ![opcion-internet](https://github.com/sapoclay/manten1d0/assets/6242827/ba3f444c-ac31-4312-8409-23bc3cd18f15)
+
 - La opción Internet nos va a dar la posibilidad de reiniciar la tarjeta de red que seleccionemos el desplegable que tenemos disponible. Además también nos dará la posibilidad de hacer ping a la URL que escribamos en la caja de texto dedicada a ello.
+  
 ![limpiar-cache-navegadores](https://github.com/sapoclay/manten1d0/assets/6242827/09945015-7160-4dc0-97e3-3bfee1df548c)
+
 - La categoría Navegadores nos va a dar la posibilidad de limpiar la caché de los navegadores. Si están disponibles en el sistema, claro está.
+  
 ![diccionario](https://github.com/sapoclay/manten1d0/assets/6242827/8f41ebb9-9250-49f9-807e-545cb1f86eda)
+
 - En la última categoría disponible (por el momento), tenemos disponible la opción de Diccionario. Esta abrirá una ventana nueva con el diccionario que se va a cargar desde una URL predefinida. Este diccionario nos dará la posibilidad de buscar contenido dentro del archivo .MD que tengamos abierto, y nos dará también la posibilidad de abrir un archivo .MD que nosotros queramos. Otra opción que nos dará la ventana del diccionario, será la de abrir una terminal para probar alguno de los comandos que se pueden consultar en el diccionario.
+  
 ![tema-oscuro](https://github.com/sapoclay/manten1d0/assets/6242827/9cf5c903-c237-4a53-a5ba-5203e0a02236)
+
 - En las opciones del programa, encontraremos la posibilidad de cambiar entre un tema oscuro y uno claro, y también nos dará la posibilidad de aumentar el tamaño del texto.
 - En el menú preferencias, también encontraremos la posibilidad de buscar actualizaciones de forma automática del programa.
 - También tendremos la posibilidad de abrir en el navegador por defecto del sistema operativo la URL que escribamos. Esta opción la encontraremos disponible en el menú superior en la opción Archivo.
