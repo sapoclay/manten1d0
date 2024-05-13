@@ -41,7 +41,7 @@ try:
     from cat_informacion import Informacion
     from password import obtener_contrasena, limpiar_archivos_configuracion
     from dependencias import verificar_dependencias, instalar_dependencias
-    from menuCategorias import informacion_cat, diccionario_cat, sistema_cat, internet_cat, red_local_cat, navegadores_cat
+    from menuCategorias import informacion_cat, diccionario_cat, sistema_cat, internet_cat, red_local_cat, navegadores_cat, archivos_cat
     import preferencias  # Importar el módulo de preferencias para manejar el cambio de tema
 except ImportError:
     # Instalar python3-tk automáticamente sin mostrar mensaje al usuario
@@ -58,7 +58,7 @@ except ImportError:
         from cat_informacion import Informacion
         from password import obtener_contrasena, limpiar_archivos_configuracion
         from dependencias import verificar_dependencias, instalar_dependencias
-        from menuCategorias import informacion_cat, diccionario_cat, sistema_cat, internet_cat, red_local_cat, navegadores_cat
+        from menuCategorias import informacion_cat, diccionario_cat, sistema_cat, internet_cat, red_local_cat, navegadores_cat, archivos_cat
         import preferencias  # Importar el módulo de preferencias para manejar el cambio de tema
     else:
         # Salir del programa con código de error 1 si la instalación falla
@@ -199,7 +199,7 @@ class VentanaPrincipal:
         self.menu_lateral.pack(side="left", fill="y")
         
         # Categorías para el menú lateral
-        self.categorias = ["Información", "Sistema", "Internet", "Red Local", "Navegadores", "Diccionario"]
+        self.categorias = ["Información", "Sistema", "Archivos", "Internet", "Red Local", "Navegadores", "Diccionario"]
         self.botones_categorias = []
         for categoria in self.categorias:
             boton = tk.Button(self.menu_lateral, text=categoria, width=20, command=lambda c=categoria: self.mostrar_subcategorias(c))
@@ -241,6 +241,7 @@ class VentanaPrincipal:
         self.mensajes_personalizados = {
             "Información": "Información sobre el Sistema Operativo",
             "Sistema": "Configuraciones y detalles del Sistema Operativo.",
+            "Archivos": "Opciones sobre archivos del Sistema Operativo",
             "Internet": "Configuraciones y detalles sobre la conexión a Internet.",
             "Red Local": "Configuraciones y acciones sobre la red local.",
             "Navegadores": "Acciones con los navegadores web.",
@@ -273,7 +274,12 @@ class VentanaPrincipal:
                 preferencias.cambiar_tema(self.area_central, preferencias.tema_seleccionado)
             else:
                 return
+        
+        elif categoria == "Archivos":
             
+            archivos_cat(self, mensaje_personalizado)
+            # Aplicar el tema seleccionado a la nueva ventana
+            preferencias.cambiar_tema(self.area_central, preferencias.tema_seleccionado)
             
         elif categoria == "Internet":
         

@@ -1,6 +1,11 @@
 import tkinter as tk
 from tkinter import ttk
 from tkinter import messagebox
+from tkinter import filedialog
+from tkinter import messagebox
+from cat_archivos import CopiaSeguridad
+from cat_archivos import RestaurarCopiaSeguridad
+import shutil
 import time
 from cat_diccionario import abrir_ventana_diccionario, cargar_contenido_html
 from cat_internet import  reiniciar_tarjeta_red
@@ -511,4 +516,105 @@ Steps:
     boton_edge_historial = tk.Button(frame_botones_historial, text="Limpiar Historial Edge", command=LimpiadorNavegadores.limpiar_historial_edge)
     boton_edge_historial.pack(side="left", padx=5, pady=10)
     ToolTip(boton_edge_historial, "Limpia el historial de Edge (si está instalado)")
+    
+def archivos_cat(self, mensaje_personalizado):
+    # Limpiar el área central
+    self.contenedor_texto.pack_forget()
+    for widget in self.area_central.winfo_children():
+        widget.destroy()
+    
+    # Crear el label con el mensaje personalizado o un mensaje predeterminado
+    if mensaje_personalizado:
+        label_subcategorias = tk.Label(self.area_central, text=mensaje_personalizado, font=("Arial", 16, "bold"), bg="lightgrey", padx=10, pady=20)
+        label_subcategorias.pack()
+        # Agregar una línea horizontal debajo del botón
+        separador = ttk.Separator(self.area_central, orient="horizontal")
+        separador.pack(fill="x", pady=10, padx=40)
+    else:
+        label_subcategorias = tk.Label(self.area_central, text="ARCHIVOS", font=("Arial", 12))
+        label_subcategorias.pack()
+        # Agregar una línea horizontal debajo del botón
+        separador = ttk.Separator(self.area_central, orient="horizontal")
+        separador.pack(fill="x", pady=10, padx=40)
+        
+    # Botón para realizar la copia de seguridad
+    def realizar_copia_seguridad():
+        # Mostrar cuadros de diálogo para seleccionar origen y destino
+        origen = filedialog.askdirectory(title="Seleccionar carpeta de origen")
+        # Si el usuario cancela la selección de carpeta, salimos de la función
+        if not origen:
+            # Mostrar mensaje de advertencia si falta alguna ruta
+            messagebox.showwarning("Advertencia", "Al no seleccionar la carpeta de origen, se aborta la copia de seguridad.")
+            return
+        destino = filedialog.asksaveasfilename(title="Guardar como archivo .gz", initialdir="/", filetypes=(("Archivos comprimidos", "*.gz"), ("Todos los archivos", "*.*")))
+        # Si el usuario cancela la selección de carpeta, salimos de la función
+        if not destino:
+            # Mostrar mensaje de advertencia si falta alguna ruta
+            messagebox.showwarning("Advertencia", "Al escribir el nombre de un archivo .gz, se aborta la copia de seguridad.")
+            return
+        # Verificar que se hayan seleccionado el origen y el destino
+        if origen and destino:
+            # Crear una instancia de la clase CopiaSeguridad y realizar la copia de seguridad
+            copia_seguridad = CopiaSeguridad(origen, destino)
+            if copia_seguridad.realizar_copia_seguridad():
+                # Mostrar mensaje de éxito al usuario
+                messagebox.showinfo("Copia de seguridad", "Copia de seguridad realizada con éxito.")
+            else:
+                # Mostrar mensaje de error al usuario
+                messagebox.showerror("Error", "Error al realizar la copia de seguridad.")
+        else:
+            # Mostrar mensaje de advertencia si falta alguna ruta
+            messagebox.showwarning("Advertencia", "Por favor, seleccione el directorio de origen y destino.")
+    
+    # Función para restaurar la copia de seguridad
+    def restaurar_copia_seguridad():
+            # Mostrar cuadro de diálogo para seleccionar carpeta de destino
+        destino = filedialog.askdirectory(title="Seleccionar carpeta de destino")
+        
+        # Si el usuario cancela la selección de carpeta, salimos de la función
+        if not destino:
+            # Mostrar mensaje de advertencia si falta alguna ruta
+            messagebox.showwarning("Advertencia", "Al no seleccionar la carpeta de destino, se aborta la restauración de la copia de seguridad.")
+            return
+        
+        # Seleccionar el archivo de copia de seguridad
+        origen = filedialog.askopenfilename(title="Seleccionar archivo de copia de seguridad", filetypes=(("Archivos comprimidos", "*.gz"), ("Todos los archivos", "*.*")))
+        # Si el usuario cancela la selección de carpeta, salimos de la función
+        if not origen:
+            # Mostrar mensaje de advertencia si falta alguna ruta
+            messagebox.showwarning("Advertencia", "Al no seleccionar el archivo .gz a restaurar, se aborta la restauración de la copia de seguridad.")
+            return
+        
+        # Verificar que se hayan seleccionado el origen y el destino
+        if origen and destino:
+            # Crear una instancia de la clase RestaurarCopiaSeguridad y restaurar la copia de seguridad
+            restaurar = RestaurarCopiaSeguridad(origen, destino)
+            if restaurar.restaurar_copia_seguridad():
+                # Mostrar mensaje de éxito al usuario
+                messagebox.showinfo("Restaurar Copia de Seguridad", "Copia de seguridad restaurada con éxito.")
+            else:
+                # Mostrar mensaje de error al usuario
+                messagebox.showerror("Error", "Se ha producido un Error al restaurar la copia de seguridad.")
+        else:
+            # Mostrar mensaje de advertencia si falta alguna ruta
+            messagebox.showwarning("Advertencia", "Por favor, seleccione el directorio de origen y destino.")
+    
+    # Crear un frame para los botones y usar pack dentro de este frame
+    frame_botones = tk.Frame(self.area_central)
+    frame_botones.pack()
+
+    # Botón para realizar la copia de seguridad
+    boton_copia_seguridad = tk.Button(frame_botones, text="Copia de Seguridad", width=20, command=realizar_copia_seguridad)
+    boton_copia_seguridad.pack(side=tk.LEFT, padx=5, pady=5)
+    ToolTip(boton_copia_seguridad, "Realizar una copia de seguridad")
+
+    # Botón para restaurar la copia de seguridad
+    boton_restaurar_copia_seguridad = tk.Button(frame_botones, text="Restaurar Copia de Seguridad", width=30, command=restaurar_copia_seguridad)
+    boton_restaurar_copia_seguridad.pack(side=tk.LEFT, padx=5, pady=5)
+    ToolTip(boton_restaurar_copia_seguridad, "Restaurar una copia de seguridad")
+    
+    # Agregar una línea horizontal debajo del botón
+    separador = ttk.Separator(self.area_central, orient="horizontal")
+    separador.pack(fill="x", pady=10, padx=40)
+    
     
