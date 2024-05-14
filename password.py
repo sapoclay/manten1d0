@@ -39,6 +39,7 @@ import threading
 from subprocess import Popen, PIPE
 import sys
 import subprocess
+import base64
 
 # Verificar y cargar la clave de cifrado
 CLAVE_ARCHIVO = "clave.key" # clave de cifrado
@@ -178,3 +179,19 @@ def solicitar_contrasena_y_ejecutar(funcion, mostrar_output=True):
             threading.Thread(target=ejecucion_contrasena).start()
         else:
             return funcion(contrasena)
+        
+
+def cargar_clave_maestra(contrasena, salt):
+    import base64
+
+    # Combina la contraseña y el salt
+    contrasena_salt = contrasena + salt
+
+    # Codificar la contraseña y el salt con base64
+    contrasena_salt_bytes = contrasena_salt.encode('utf-8')
+    contrasena_salt_base64 = base64.urlsafe_b64encode(contrasena_salt_bytes)
+
+    # Asegurar que la clave tenga 32 bytes llenando con '=' si es necesario
+    clave_maestra = contrasena_salt_base64.ljust(32, b'=')
+
+    return clave_maestra

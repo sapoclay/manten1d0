@@ -41,7 +41,7 @@ DEPENDENCIAS = {
     "opencv-python-headless": ["pip3", "install", "opencv-python-headless"],
     "wget": ["pip3", "install", "wget"],
     "Tooltip": ["pip3", "install", "Tooltip"],
-    "pySMART": ["pip3", "install", "pySMART"]
+    "Fernet": ["pip3", "install", "Fernet"]
 }
 
 

@@ -68,6 +68,7 @@
 - Añadida la opción de limpiar el historial de los navegadores (Chrome, Firefox y Edge)
 - Se ha corregido el error de python3-tk. Ya que antes si no estaba instalado rompía la ejecución del programa. Ahora se instala de manera automática si falla la importación al iniciar el programa. Una vez terminada la instalación de este paquete, continúa la ejecución normal del programa.
 - Añadida la opción para realizar copias de seguridad de carpetas. Se va a crear un archivo .gz en la carpeta que indiquemos. Se utiliza tar para este proposito. También dispone de la opción para restaurar los archivos de la copia de seguridad.
+- Añadida la opción para cifrar archivos. Se utiliza ChaCha20 para el cifrado y para el descifrado.
 
 ## Dependencias Imprescindibles 
 
@@ -101,7 +102,7 @@ Estas dependencias las comprobará e instalará el programa una vez se ejecute s
 - opencv-python-headless -> pip3 install opencv-python-headless
 - wget -> pip3 install wget
 - Tooltip -> pip3 install Tooltip
-- pySMART -> pip3 install pySMART
+- Fernet -> pip3 install Fernet
 
 
 ## Instalación del paquete .DEB

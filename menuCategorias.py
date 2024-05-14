@@ -3,9 +3,10 @@ from tkinter import ttk
 from tkinter import messagebox
 from tkinter import filedialog
 from tkinter import messagebox
+import os
 from cat_archivos import CopiaSeguridad
 from cat_archivos import RestaurarCopiaSeguridad
-import shutil
+from cat_archivos import cifrar_archivo, descifrar_archivo
 import time
 from cat_diccionario import abrir_ventana_diccionario, cargar_contenido_html
 from cat_internet import  reiniciar_tarjeta_red
@@ -22,7 +23,6 @@ from cat_redLocal import encontrar_dispositivos_en_red, doble_clic
 from cat_navegadores import LimpiadorNavegadores
 from tooltip import ToolTip    
 import preferencias
-
 
 def informacion_cat(self, mensaje_personalizado):
     """
@@ -518,6 +518,24 @@ Steps:
     ToolTip(boton_edge_historial, "Limpia el historial de Edge (si está instalado)")
     
 def archivos_cat(self, mensaje_personalizado):
+    """
+    Actualiza el área central con un conjunto de botones y acciones asociadas para realizar operaciones
+    de copia de seguridad, restauración de copia de seguridad, cifrado y descifrado de archivos.
+
+    Parámetros:
+        mensaje_personalizado (str): Un mensaje personalizado opcional que se muestra en lugar del mensaje predeterminado.
+
+    Retorna:
+        None
+
+    Acciones:
+        - Limpia el área central de cualquier widget previo.
+        - Crea un label con un mensaje personalizado o un mensaje predeterminado.
+        - Crea botones para realizar copia de seguridad, restaurar copia de seguridad, cifrar archivos y descifrar archivos.
+        - Muestra ventanas de diálogo para seleccionar archivos o directorios según la acción requerida.
+        - Realiza las operaciones correspondientes (copia de seguridad, restauración, cifrado o descifrado) cuando se hace clic en los botones.
+        - Muestra mensajes de éxito o error en ventanas emergentes según el resultado de las operaciones.
+    """
     # Limpiar el área central
     self.contenedor_texto.pack_forget()
     for widget in self.area_central.winfo_children():
@@ -539,14 +557,16 @@ def archivos_cat(self, mensaje_personalizado):
         
     # Botón para realizar la copia de seguridad
     def realizar_copia_seguridad():
+        # Obtener el directorio home del usuario
+        directorio_home = os.path.expanduser("~")
         # Mostrar cuadros de diálogo para seleccionar origen y destino
-        origen = filedialog.askdirectory(title="Seleccionar carpeta de origen")
+        origen = filedialog.askdirectory(title="Seleccionar carpeta de origen", initialdir=directorio_home)
         # Si el usuario cancela la selección de carpeta, salimos de la función
         if not origen:
             # Mostrar mensaje de advertencia si falta alguna ruta
             messagebox.showwarning("Advertencia", "Al no seleccionar la carpeta de origen, se aborta la copia de seguridad.")
             return
-        destino = filedialog.asksaveasfilename(title="Guardar como archivo .gz", initialdir="/", filetypes=(("Archivos comprimidos", "*.gz"), ("Todos los archivos", "*.*")))
+        destino = filedialog.asksaveasfilename(title="Guardar como archivo .gz", initialdir=directorio_home, filetypes=(("Archivos comprimidos", "*.gz"), ("Todos los archivos", "*.*")))
         # Si el usuario cancela la selección de carpeta, salimos de la función
         if not destino:
             # Mostrar mensaje de advertencia si falta alguna ruta
@@ -568,8 +588,11 @@ def archivos_cat(self, mensaje_personalizado):
     
     # Función para restaurar la copia de seguridad
     def restaurar_copia_seguridad():
-            # Mostrar cuadro de diálogo para seleccionar carpeta de destino
-        destino = filedialog.askdirectory(title="Seleccionar carpeta de destino")
+        # Obtener el directorio home del usuario
+        directorio_home = os.path.expanduser("~")
+        
+        # Mostrar cuadro de diálogo para seleccionar carpeta de destino
+        destino = filedialog.askdirectory(title="Seleccionar carpeta de destino", initialdir=directorio_home)
         
         # Si el usuario cancela la selección de carpeta, salimos de la función
         if not destino:
@@ -578,7 +601,7 @@ def archivos_cat(self, mensaje_personalizado):
             return
         
         # Seleccionar el archivo de copia de seguridad
-        origen = filedialog.askopenfilename(title="Seleccionar archivo de copia de seguridad", filetypes=(("Archivos comprimidos", "*.gz"), ("Todos los archivos", "*.*")))
+        origen = filedialog.askopenfilename(title="Seleccionar archivo de copia de seguridad", initialdir=directorio_home, filetypes=(("Archivos comprimidos", "*.gz"), ("Todos los archivos", "*.*")))
         # Si el usuario cancela la selección de carpeta, salimos de la función
         if not origen:
             # Mostrar mensaje de advertencia si falta alguna ruta
@@ -618,3 +641,17 @@ def archivos_cat(self, mensaje_personalizado):
     separador.pack(fill="x", pady=10, padx=40)
     
     
+
+
+    # Crear un frame para los botones y usar pack dentro de este frame
+    frame_botones_cifrado = tk.Frame(self.area_central)
+    frame_botones_cifrado.pack()
+
+    # Crear botones para cifrar y descifrar
+    boton_cifrar = tk.Button(frame_botones_cifrado, text="Cifrar Archivos", width=20, command=cifrar_archivo)
+    boton_cifrar.pack(side=tk.LEFT, padx=5, pady=5)
+    ToolTip(boton_cifrar, "Cifrar Archivos")
+
+    boton_descifrar = tk.Button(frame_botones_cifrado, text="Descifrar Archivos", width=20, command=descifrar_archivo)
+    boton_descifrar.pack(side=tk.LEFT, padx=5, pady=5)
+    ToolTip(boton_descifrar, "Descifrar Archivos")
