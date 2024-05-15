@@ -3,6 +3,17 @@ Este módulo contiene funciones para gestionar el reinicio de las tarjetas de re
 Utiliza varios módulos de Python para interactuar con el sistema operativo, obtener contraseñas, gestionar la interfaz gráfica de usuario 
 y mostrar mensajes.
 
+Clases:
+    RedTools:
+        Clase que proporciona herramientas para el manejo de la red.
+
+        Args:
+            root: El widget raíz de Tkinter.
+
+        Attributes:
+            root: El widget raíz de Tkinter.
+            area_central: El área central donde se muestran las herramientas relacionadas con la red.
+
 Funciones:
     reiniciar_servicio_red():
         Detecta y reinicia el servicio de red en uso (NetworkManager o systemd-networkd).
@@ -218,14 +229,35 @@ def hacer_ping(entry_url):
 
 class RedTools:
     def __init__(self, root):
+        """
+        Inicializa la clase RedTools.
+
+        Args:
+            root: El widget raíz de Tkinter.
+        """
         self.root = root
         self.area_central = None
 
     def set_area_central(self, area_central):
+        """
+        Establece el área central donde se mostrarán las herramientas relacionadas con la red.
+
+        Args:
+            area_central: El área central de la interfaz gráfica de Tkinter.
+        """
         self.area_central = area_central
 
     def escanear_puertos(self, ip):
+        """
+        Realiza un escaneo de puertos en una dirección IP específica.
+
+        Args:
+            ip (str): La dirección IP a escanear.
+        """
         def realizar_escaneo():
+            """
+            Función interna para realizar el escaneo de puertos.
+            """
             resultado_text.delete('1.0', tk.END)
             try:
                 ip = entry_ip.get()
@@ -249,6 +281,9 @@ class RedTools:
         resultado_text.pack(pady=10)
 
     def test_velocidad(self):
+        """
+        Realiza un test de velocidad de Internet.
+        """
         def realizar_test():
             resultado_text.delete('1.0', tk.END)
             st = speedtest.Speedtest()
@@ -266,6 +301,9 @@ class RedTools:
         resultado_text.pack(pady=10)
 
     def diagnostico_red(self):
+        """
+        Realiza un diagnóstico de la red.
+        """
         def realizar_diagnostico():
             resultado_text.delete('1.0', tk.END)
             try:
