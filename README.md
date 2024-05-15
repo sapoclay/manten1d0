@@ -74,6 +74,10 @@
 
 - Añadidas las funcionalidades "Escenear Puertos", "Test Velocidad" y "Diagnóstico Red" a la categoría Internet.
 
+## Actualización Versión 0.5.5
+
+- Corregido y optimizado el sistema de actualización del programa.
+
 ## Dependencias Imprescindibles 
 
 Dependencias necesarias para poder ejecutar el programa. Estas dependencias deben instalarse manualmente.

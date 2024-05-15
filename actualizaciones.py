@@ -29,6 +29,18 @@ from tkinter import messagebox
 import os
 import sys
 import preferencias
+import configparser
+
+def obtener_version_actual():
+    # Obtener el directorio del archivo que llama a la función
+    directorio_actual = os.path.dirname(os.path.abspath(__file__))
+    # Combinar el directorio con el nombre del archivo config.ini
+    ruta_config = os.path.join(directorio_actual, 'config.ini')
+    
+    config = configparser.ConfigParser()
+    config.read(ruta_config)
+    return config['Version']['actual']
+
 
 def instalar_paquete_deb(archivo_deb):
     """
@@ -63,6 +75,10 @@ def instalar_paquete_deb(archivo_deb):
         messagebox.showerror("Error de instalación", f"Error durante la actualización del programa:\n{error}")
 
 def mostrar_ventana_actualizaciones():
+    
+    # Obtener la versión actual del programa desde el archivo de configuración
+    version_actual = obtener_version_actual()
+
 
     # Crear la ventana de actualizaciones con un tamaño más grande
     ventana_actualizaciones = tk.Toplevel()
@@ -82,9 +98,6 @@ def mostrar_ventana_actualizaciones():
     etiqueta_estado = tk.Label(ventana_actualizaciones, text="\n------ Actualizaciones Disponibles ------\n", font=("Arial", 12))
     etiqueta_estado.pack()
 
-    # Obtener la versión actual del programa
-    version_actual = "0.5.4"  # Versión actual del programa
-
     # Mostrar la versión actual instalada
     version_instalada_label.config(text=f"Versión instalada: {version_actual}")
     
@@ -102,7 +115,7 @@ def mostrar_ventana_actualizaciones():
 
             # Obtener la versión más reciente del repositorio
             version_mas_reciente = respuesta_json['tag_name']
-            version_actual = "0.5.4"  # Versión actual del programa
+            version_actual = obtener_version_actual()
 
             mensaje_resultado = f"Versión actual instalada: {version_actual}\nLa versión más reciente disponible es: {version_mas_reciente}"
 
@@ -112,8 +125,15 @@ def mostrar_ventana_actualizaciones():
 
                 # Obtener la URL de descarga
                 url_descarga = respuesta_json['assets'][0]['browser_download_url']  # URL de descarga del archivo
+
+                # Obtener la ruta de la carpeta home del usuario
+                ruta_home = os.path.expanduser("~")
+
+                # Combinar la ruta de la carpeta home con el nombre del archivo .deb
+                archivo_descargado = os.path.join(ruta_home, "nombre_del_archivo.deb")
+
                 # Descargar el paquete .deb 
-                archivo_descargado = wget.download(url_descarga)
+                wget.download(url_descarga, archivo_descargado)
                 instalar_paquete_deb(archivo_descargado)
             else:
                 # Deshabilitar el botón de comprobar actualizaciones si las versiones son iguales
@@ -146,3 +166,5 @@ def mostrar_ventana_actualizaciones():
     preferencias.cambiar_tema(version_instalada_label, preferencias.tema_seleccionado)
     preferencias.cambiar_tema(version_disponible_label, preferencias.tema_seleccionado)
     preferencias.cambiar_tema(etiqueta_estado, preferencias.tema_seleccionado)
+
+

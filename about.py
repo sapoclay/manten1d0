@@ -16,7 +16,24 @@ import tkinter as tk
 import os
 import preferencias
 
+import os
+import configparser
+
+def obtener_version_actual():
+    # Obtener el directorio del archivo que llama a la función
+    directorio_actual = os.path.dirname(os.path.abspath(__file__))
+    # Combinar el directorio con el nombre del archivo config.ini
+    ruta_config = os.path.join(directorio_actual, 'config.ini')
+    
+    config = configparser.ConfigParser()
+    config.read(ruta_config)
+    return config['Version']['actual']
+
+
+
 def mostrar_about():
+     # Obtener la versión actual del programa desde el archivo de configuración
+    version_actual = obtener_version_actual()
     
     about_window = tk.Toplevel()
     about_window.title("Acerca de")
@@ -36,7 +53,7 @@ def mostrar_about():
     img_label.image = img  # Mantener una referencia para evitar que la imagen sea eliminada por el recolector de basura
     img_label.pack(pady=10)
 
-    about_label = tk.Label(about_window, text="Manten1-d0 de Sistema Ubuntu\nVersión: 0.5.4\nEste programa realiza tareas de mantenimiento básico\nen sistemas Ubuntu.\nNo se dan garantías de ningún tipo.\n")
+    about_label = tk.Label(about_window, text=f"Manten1-d0 de Sistema Ubuntu\nVersión: {version_actual}\nEste programa realiza tareas de mantenimiento básico\nen sistemas Ubuntu.\nNo se dan garantías de ningún tipo.\n")
     about_label.pack(padx=20, pady=20)
     
     if preferencias.tema_seleccionado != "Claro":
