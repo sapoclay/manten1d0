@@ -70,6 +70,10 @@
 - Añadida la opción para realizar copias de seguridad de carpetas. Se va a crear un archivo .gz en la carpeta que indiquemos. Se utiliza tar para este proposito. También dispone de la opción para restaurar los archivos de la copia de seguridad.
 - Añadida la opción para cifrar archivos. Se utiliza ChaCha20 para el cifrado y para el descifrado.
 
+## Actualización Versión 0.5.4
+
+- Añadidas las funcionalidades "Escenear Puertos", "Test Velocidad" y "Diagnóstico Red" a la categoría Internet.
+
 ## Dependencias Imprescindibles 
 
 Dependencias necesarias para poder ejecutar el programa. Estas dependencias deben instalarse manualmente.
@@ -90,6 +94,7 @@ Estas dependencias las comprobará e instalará el programa una vez se ejecute s
 - Pyqt5 -> sudo apt install python3-pyqt5
 - Gnome-terminal -> sudo apt install gnome-terminal
 - smartmontools -> sudo apt install smartmontools
+- traceroute -> sudo apt install traceroute
 - Matplotlib -> pip3 install matplotlib
 - Pillow -> pip3 install --upgrade pillow
 - Cryptography -> pip3 install cryptography

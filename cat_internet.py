@@ -30,6 +30,11 @@ import shutil
 from cat_informacion import Informacion
 import tkinter as tk
 import preferencias
+import subprocess
+import socket
+import speedtest
+import threading
+from tkinter import scrolledtext
 
 
 """ 
@@ -210,3 +215,90 @@ def hacer_ping(entry_url):
         messagebox.showerror("Error", "Tiempo de espera de ping agotado. No se recibió respuesta.")
     except Exception as e:
         messagebox.showerror("Error", f"Ocurrió un error al hacer ping a la URL: {e}")
+
+class RedTools:
+    def __init__(self, root):
+        self.root = root
+        self.area_central = None
+
+    def set_area_central(self, area_central):
+        self.area_central = area_central
+
+    def escanear_puertos(self, ip):
+        def realizar_escaneo():
+            resultado_text.delete('1.0', tk.END)
+            try:
+                ip = entry_ip.get()
+                for puerto in range(1, 1025):
+                    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+                    s.settimeout(0.5)
+                    resultado = s.connect_ex((ip, puerto))
+                    if resultado == 0:
+                        resultado_text.insert(tk.END, f"Puerto {puerto}: Abierto\n")
+                    s.close()
+            except Exception as e:
+                resultado_text.insert(tk.END, f"Error: {e}\n")
+
+        self.limpiar_area_central()
+        tk.Label(self.area_central, text="Escaneo de Puertos", font=("Arial", 14, "bold")).pack(pady=10)
+        tk.Label(self.area_central, text="Introduce la IP a escanear:", font=("Arial", 12)).pack(pady=5)
+        entry_ip = tk.Entry(self.area_central, width=30)
+        entry_ip.pack(pady=5)
+        tk.Button(self.area_central, text="Escanear", command=realizar_escaneo).pack(pady=10)
+        resultado_text = tk.Text(self.area_central, height=20, width=80)
+        resultado_text.pack(pady=10)
+
+    def test_velocidad(self):
+        def realizar_test():
+            resultado_text.delete('1.0', tk.END)
+            st = speedtest.Speedtest()
+            st.download()
+            st.upload()
+            resultados = st.results.dict()
+            resultado_text.insert(tk.END, f"Velocidad de descarga: {resultados['download'] / 1_000_000:.2f} Mbps\n")
+            resultado_text.insert(tk.END, f"Velocidad de carga: {resultados['upload'] / 1_000_000:.2f} Mbps\n")
+            resultado_text.insert(tk.END, f"Ping: {resultados['ping']} ms\n")
+
+        self.limpiar_area_central()
+        tk.Label(self.area_central, text="Test de Velocidad de Internet", font=("Arial", 14, "bold")).pack(pady=10)
+        tk.Button(self.area_central, text="Iniciar Test", command=realizar_test).pack(pady=10)
+        resultado_text = tk.Text(self.area_central, height=20, width=80)
+        resultado_text.pack(pady=10)
+
+    def diagnostico_red(self):
+        def realizar_diagnostico():
+            resultado_text.delete('1.0', tk.END)
+            try:
+                # Verificar si traceroute está instalado
+                if not shutil.which("traceroute"):
+                    raise Exception("El comando 'traceroute' no está instalado. Por favor, instálalo e inténtalo de nuevo.")
+
+                # Verificar si netstat está instalado
+                if not shutil.which("netstat"):
+                    raise Exception("El comando 'netstat' no está instalado. Por favor, instálalo e inténtalo de nuevo.")
+
+                # Ejecutar traceroute
+                resultado_text.insert(tk.END, "Traceroute:\n")
+                traceroute = subprocess.Popen(['traceroute', 'www.google.com'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+                for line in iter(traceroute.stdout.readline, b''):
+                    resultado_text.insert(tk.END, line.decode())
+
+                # Ejecutar netstat
+                resultado_text.insert(tk.END, "\nNetstat:\n")
+                netstat = subprocess.Popen(['netstat', '-tuln'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+                for line in iter(netstat.stdout.readline, b''):
+                    resultado_text.insert(tk.END, line.decode())
+            except Exception as e:
+                resultado_text.insert(tk.END, f"Error: {e}\n")
+
+        self.limpiar_area_central()
+        tk.Label(self.area_central, text="Diagnóstico de Red", font=("Arial", 14, "bold")).pack(pady=10)
+        tk.Button(self.area_central, text="Iniciar Diagnóstico", command=realizar_diagnostico).pack(pady=10)
+        resultado_text_frame = tk.Frame(self.area_central)
+        resultado_text_frame.pack(pady=10)
+        resultado_text = scrolledtext.ScrolledText(resultado_text_frame, height=20, width=80, wrap=tk.NONE)
+        resultado_text.pack(expand=True, fill=tk.BOTH)
+
+    def limpiar_area_central(self):
+        for widget in self.area_central.winfo_children():
+            widget.destroy()

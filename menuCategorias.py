@@ -11,6 +11,7 @@ import time
 from cat_diccionario import abrir_ventana_diccionario, cargar_contenido_html
 from cat_internet import  reiniciar_tarjeta_red
 from cat_internet import hacer_ping
+from cat_internet import RedTools  
 from cat_sistema import actualizar_sistema, limpiar_cache, abrir_gestor_software
 from cat_sistema import AplicacionesAutostart
 from cat_sistema import AdministrarProcesos
@@ -68,9 +69,10 @@ Steps:
             label_subcategorias = tk.Label(self.area_central, text=mensaje_personalizado, font=("Arial", 16, "bold"), bg="black", fg="white", padx=10, pady=20)
 
         label_subcategorias.pack()
-        # Agregar una línea horizontal debajo del botón
-        separador = ttk.Separator(self.area_central, orient="horizontal")
-        separador.pack(fill="x", pady=10, padx=40)
+        # Dibujar una línea horizontal
+        self.canvas = tk.Canvas(self.area_central, width=500, height=2, bg="lightgrey", highlightthickness=0)
+        self.canvas.create_line(0, 1, 500, 1, fill="black")
+        self.canvas.pack(pady=10)
 
     # Mostrar la información del sistema
     self.mostrar_informacion_sistema()
@@ -107,9 +109,10 @@ Steps:
     if mensaje_personalizado:
         label_subcategorias = tk.Label(self.area_central, text=mensaje_personalizado, font=("Arial", 16, "bold"), bg="lightgrey", padx=10, pady=20)
         label_subcategorias.pack()
-         # Agregar una línea horizontal debajo del botón
-        separador = ttk.Separator(self.area_central, orient="horizontal")
-        separador.pack(fill="x", pady=10, padx=40)
+        # Dibujar una línea horizontal
+        self.canvas = tk.Canvas(self.area_central, width=500, height=2, bg="lightgrey", highlightthickness=0)
+        self.canvas.create_line(0, 1, 500, 1, fill="black")
+        self.canvas.pack(pady=10)
         # Aplicar el tema seleccionado a la nueva ventana
         preferencias.cambiar_tema(self.area_central, preferencias.tema_seleccionado)
 
@@ -150,12 +153,17 @@ Steps:
     if mensaje_personalizado:
         label_subcategorias = tk.Label(self.area_central, text=mensaje_personalizado, font=("Arial", 16, "bold"), bg="lightgrey", padx=10, pady=20)
         label_subcategorias.pack()
-        # Agregar una línea horizontal debajo del botón
-        separador = ttk.Separator(self.area_central, orient="horizontal")
-        separador.pack(fill="x", pady=10, padx=40)
+        # Dibujar una línea horizontal
+        self.canvas = tk.Canvas(self.area_central, width=500, height=2, bg="lightgrey", highlightthickness=0)
+        self.canvas.create_line(0, 1, 500, 1, fill="black")
+        self.canvas.pack(pady=10)
     else:
         label_subcategorias = tk.Label(self.area_central, text="SISTEMA OPERATIVO", font=("Arial", 12))
         label_subcategorias.pack()
+        # Dibujar una línea horizontal
+        self.canvas = tk.Canvas(self.area_central, width=500, height=2, bg="lightgrey", highlightthickness=0)
+        self.canvas.create_line(0, 1, 500, 1, fill="black")
+        self.canvas.pack(pady=10)
 
     contenedor_botones = tk.Frame(self.area_central, bg="lightgrey")
     contenedor_botones.pack()
@@ -266,9 +274,10 @@ Steps:
     if mensaje_personalizado:
         label_subcategorias = tk.Label(self.area_central, text=mensaje_personalizado, font=("Arial", 16, "bold"), bg="lightgrey", padx=10, pady=20)
         label_subcategorias.pack()
-        # Agregar una línea horizontal debajo del botón
-        separador = ttk.Separator(self.area_central, orient="horizontal")
-        separador.pack(fill="x", pady=10, padx=40)
+        # Dibujar una línea horizontal
+        self.canvas = tk.Canvas(self.area_central, width=500, height=2, bg="lightgrey", highlightthickness=0)
+        self.canvas.create_line(0, 1, 500, 1, fill="black")
+        self.canvas.pack(pady=10)
     else:
         label_subcategorias = tk.Label(self.area_central, text="INTERNET", font=("Arial", 12))
         label_subcategorias.pack()
@@ -311,9 +320,10 @@ Steps:
     boton_reiniciar.pack(pady=10)
     ToolTip(boton_reiniciar, "Reinicia la tarjeta de red. Tras unos segundos se volverá a iniciar automáticamente")
     
-    # Agregar una línea horizontal debajo del botón
-    separador = ttk.Separator(self.area_central, orient="horizontal")
-    separador.pack(fill="x", pady=10, padx=40)
+    # Dibujar una línea horizontal
+    self.canvas = tk.Canvas(self.area_central, width=500, height=2, bg="lightgrey", highlightthickness=0)
+    self.canvas.create_line(0, 1, 500, 1, fill="black")
+    self.canvas.pack(pady=10)
     
     # Caja de texto para escribir la URL web
     label_url = tk.Label(self.area_central, text="Escribe una URL a la que hacer ping:", font=("Arial", 12, "bold"))
@@ -324,9 +334,30 @@ Steps:
     boton_ping = tk.Button(self.area_central, text="Hacer Ping", command=lambda: hacer_ping(entry_url))
     boton_ping.pack(pady=10)
     ToolTip(boton_ping, "Hacer ping a una URL")
-    # Agregar una línea horizontal debajo del botón
-    separador = ttk.Separator(self.area_central, orient="horizontal")
-    separador.pack(fill="x", pady=10, padx=40)
+    # Dibujar una línea horizontal
+    self.canvas = tk.Canvas(self.area_central, width=500, height=2, bg="lightgrey", highlightthickness=0)
+    self.canvas.create_line(0, 1, 500, 1, fill="black")
+    self.canvas.pack(pady=10)
+
+    # Instanciar la clase RedTools y establecer el área central
+    red_tools = RedTools(self.root)
+    red_tools.set_area_central(self.area_central)
+
+    # Botón para escanear puertos
+    boton_escanear_puertos = tk.Button(self.area_central, text="Escanear Puertos", width=20, command=lambda: red_tools.escanear_puertos(""))
+    boton_escanear_puertos.pack(side=tk.LEFT, padx=10, pady=(0, 10), anchor="n")
+    ToolTip(boton_escanear_puertos, "Escanea los puertos de una IP específica")
+
+    # Botón para test de velocidad de internet
+    boton_test_velocidad = tk.Button(self.area_central, text="Test Velocidad", width=20, command=red_tools.test_velocidad)
+    boton_test_velocidad.pack(side=tk.LEFT, padx=10, pady=(0, 10), anchor="n")
+    ToolTip(boton_test_velocidad, "Mide la velocidad de descarga y carga de la conexión a Internet")
+
+    # Botón para diagnóstico de red
+    boton_diagnostico_red = tk.Button(self.area_central, text="Diagnóstico Red", width=20, command=red_tools.diagnostico_red)
+    boton_diagnostico_red.pack(side=tk.LEFT, padx=10, pady=(0, 10), anchor="n")
+    ToolTip(boton_diagnostico_red, "Diagnostica problemas de conectividad de red con traceroute y netstat")
+
 
 # Función para mostrar la pantalla de la categoría RED LOCAL
 def red_local_cat(self, mensaje_personalizado):
@@ -360,9 +391,10 @@ Steps:
     if mensaje_personalizado:
         label_subcategorias = tk.Label(self.area_central, text=mensaje_personalizado, font=("Arial", 16, "bold"), bg="lightgrey", padx=10, pady=20)
         label_subcategorias.pack()
-        # Agregar una línea horizontal debajo del botón
-        separador = ttk.Separator(self.area_central, orient="horizontal")
-        separador.pack(fill="x", pady=10, padx=40)
+        # Dibujar una línea horizontal
+        self.canvas = tk.Canvas(self.area_central, width=500, height=2, bg="lightgrey", highlightthickness=0)
+        self.canvas.create_line(0, 1, 500, 1, fill="black")
+        self.canvas.pack(pady=10)
     else:
         label_subcategorias = tk.Label(self.area_central, text="RED LOCAL", font=("Arial", 12))
         label_subcategorias.pack()
@@ -473,15 +505,17 @@ Steps:
     if mensaje_personalizado:
         label_subcategorias = tk.Label(self.area_central, text=mensaje_personalizado, font=("Arial", 16, "bold"), bg="lightgrey", padx=10, pady=20)
         label_subcategorias.pack()
-        # Agregar una línea horizontal debajo del botón
-        separador = ttk.Separator(self.area_central, orient="horizontal")
-        separador.pack(fill="x", pady=10, padx=40)
+        # Dibujar una línea horizontal
+        self.canvas = tk.Canvas(self.area_central, width=500, height=2, bg="lightgrey", highlightthickness=0)
+        self.canvas.create_line(0, 1, 500, 1, fill="black")
+        self.canvas.pack(pady=10)
     else:
         label_subcategorias = tk.Label(self.area_central, text="NAVEGADORES", font=("Arial", 12))
         label_subcategorias.pack()
-        # Agregar una línea horizontal debajo del botón
-        separador = ttk.Separator(self.area_central, orient="horizontal")
-        separador.pack(fill="x", pady=10, padx=40)
+        # Dibujar una línea horizontal
+        self.canvas = tk.Canvas(self.area_central, width=500, height=2, bg="lightgrey", highlightthickness=0)
+        self.canvas.create_line(0, 1, 500, 1, fill="black")
+        self.canvas.pack(pady=10)
         
     # Crear un contenedor Frame para los botones
     frame_botones = tk.Frame(self.area_central)
@@ -545,15 +579,17 @@ def archivos_cat(self, mensaje_personalizado):
     if mensaje_personalizado:
         label_subcategorias = tk.Label(self.area_central, text=mensaje_personalizado, font=("Arial", 16, "bold"), bg="lightgrey", padx=10, pady=20)
         label_subcategorias.pack()
-        # Agregar una línea horizontal debajo del botón
-        separador = ttk.Separator(self.area_central, orient="horizontal")
-        separador.pack(fill="x", pady=10, padx=40)
+        # Dibujar una línea horizontal
+        self.canvas = tk.Canvas(self.area_central, width=500, height=2, bg="lightgrey", highlightthickness=0)
+        self.canvas.create_line(0, 1, 500, 1, fill="black")
+        self.canvas.pack(pady=10)
     else:
         label_subcategorias = tk.Label(self.area_central, text="ARCHIVOS", font=("Arial", 12))
         label_subcategorias.pack()
-        # Agregar una línea horizontal debajo del botón
-        separador = ttk.Separator(self.area_central, orient="horizontal")
-        separador.pack(fill="x", pady=10, padx=40)
+        # Dibujar una línea horizontal
+        self.canvas = tk.Canvas(self.area_central, width=500, height=2, bg="lightgrey", highlightthickness=0)
+        self.canvas.create_line(0, 1, 500, 1, fill="black")
+        self.canvas.pack(pady=10)
         
     # Botón para realizar la copia de seguridad
     def realizar_copia_seguridad():
@@ -636,13 +672,11 @@ def archivos_cat(self, mensaje_personalizado):
     boton_restaurar_copia_seguridad.pack(side=tk.LEFT, padx=5, pady=5)
     ToolTip(boton_restaurar_copia_seguridad, "Restaurar una copia de seguridad")
     
-    # Agregar una línea horizontal debajo del botón
-    separador = ttk.Separator(self.area_central, orient="horizontal")
-    separador.pack(fill="x", pady=10, padx=40)
+    # Dibujar una línea horizontal
+    self.canvas = tk.Canvas(self.area_central, width=500, height=2, bg="lightgrey", highlightthickness=0)
+    self.canvas.create_line(0, 1, 500, 1, fill="black")
+    self.canvas.pack(pady=10)
     
-    
-
-
     # Crear un frame para los botones y usar pack dentro de este frame
     frame_botones_cifrado = tk.Frame(self.area_central)
     frame_botones_cifrado.pack()
@@ -655,3 +689,9 @@ def archivos_cat(self, mensaje_personalizado):
     boton_descifrar = tk.Button(frame_botones_cifrado, text="Descifrar Archivos", width=20, command=descifrar_archivo)
     boton_descifrar.pack(side=tk.LEFT, padx=5, pady=5)
     ToolTip(boton_descifrar, "Descifrar Archivos")
+    
+    # Dibujar una línea horizontal
+    self.canvas = tk.Canvas(self.area_central, width=500, height=2, bg="lightgrey", highlightthickness=0)
+    self.canvas.create_line(0, 1, 500, 1, fill="black")
+    self.canvas.pack(pady=10)
+    

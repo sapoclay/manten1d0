@@ -31,6 +31,7 @@ DEPENDENCIAS = {
     "gnome-terminal": ["sudo", "apt", "install", "-y", "gnome-terminal"],
     "python3-psutil": ["sudo", "apt", "install", "-y", "python3-psutil"],
     "smartmontools": ["sudo", "apt", "install", "-y", "smartmontools"],
+    "traceroute": ["sudo", "apt", "install", "-y", "traceroute"],
     "matplotlib": ["pip3", "install", "matplotlib"],
     "pillow": ["pip3", "install", "--upgrade", "pillow"],
     "cryptography": ["pip3", "install", "cryptography"],
@@ -42,7 +43,7 @@ DEPENDENCIAS = {
     "opencv-python-headless": ["pip3", "install", "opencv-python-headless"],
     "wget": ["pip3", "install", "wget"],
     "Tooltip": ["pip3", "install", "Tooltip"],
-    "Fernet": ["pip3", "install", "Fernet"]
+    "Fernet": ["pip3", "install", "Fernet"],
 }
 
 
