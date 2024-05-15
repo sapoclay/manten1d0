@@ -1,5 +1,5 @@
 """
-Docstring para las funciones y módulos relacionados con la gestión de contraseñas y seguridad.
+Funciones y módulos relacionados con la gestión de contraseñas y seguridad.
 
 Imports:
     - tkinter as tk: Para la interfaz gráfica.

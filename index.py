@@ -1,5 +1,6 @@
 """
-Docstring para el módulo que incluye varias importaciones y definiciones de funciones y clases relacionadas con la interfaz de usuario y la funcionalidad principal del programa.
+Módulo que incluye varias importaciones y definiciones de funciones y clases relacionadas con la interfaz de usuario y la funcionalidad principal 
+del programa.
 
 Imports:
     - tkinter as tk: Biblioteca para la creación de interfaces gráficas.

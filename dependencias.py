@@ -1,7 +1,8 @@
 """
 Módulo para gestionar la ejecución de procesos externos.
 
-Este módulo proporciona funciones para ejecutar procesos externos, como la verificación de dependencias del sistema y la instalación de paquetes, así como la ejecución de comandos en la terminal.
+Este módulo proporciona funciones para ejecutar procesos externos, como la verificación de dependencias del sistema y 
+la instalación de paquetes, así como la ejecución de comandos en la terminal.
 
 Attributes:
     DEPENDENCIAS (dict): Diccionario que contiene las dependencias del sistema junto con los métodos de instalación necesarios.
@@ -88,7 +89,7 @@ def instalar_dependencias(progress_bar=None):
         progress_bar (ttk.Progressbar, optional): Indicador de progreso para mostrar durante la instalación. Defaults to None.
 
     Returns:
-        bool: True si la instalación se realiza correctamente, False si hay algún error.
+        bool: True si la instalación se realiza correctamente, False si hay algún error durante la instalación.
     """
     total_dependencias = len(DEPENDENCIAS)
     progreso_actual = 0

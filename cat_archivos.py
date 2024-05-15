@@ -1,5 +1,5 @@
 """
-Este módulo proporciona clases y funciones para realizar copias de seguridad y operaciones de cifrado y descifrado de archivos.
+Clases y funciones para realizar copias de seguridad y operaciones de cifrado y descifrado de archivos.
 
 Dependencias:
     - subprocess: Para ejecutar comandos en el sistema operativo.
@@ -15,8 +15,8 @@ Clases:
     - RestaurarCopiaSeguridad: Permite restaurar una copia de seguridad en un directorio.
 
 Funciones:
-    - generar_clave_maestra: Genera una clave maestra a partir de una contraseña y un salt.
-    - cifrar_archivo: Permite cifrar un archivo seleccionado por el usuario.
+    - generar_clave_maestra: Genera una clave maestra a partir de la contraseña del usuario y un salt.
+    - cifrar_archivo: Permite cifrar un archivo seleccionado por el usuario usando ChaCha20.
     - descifrar_archivo: Permite descifrar un archivo cifrado seleccionado por el usuario.
 """
 

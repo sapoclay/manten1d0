@@ -1,4 +1,75 @@
-# CATEGORÍA INFORMACIÓN
+"""
+Clase Informacion
+
+Esta clase proporciona métodos estáticos para obtener información detallada sobre el sistema, incluyendo interfaces de red, direcciones IP, 
+información del sistema operativo, monitorización de recursos del sistema y más. Los métodos se implementan utilizando diversas bibliotecas y 
+herramientas de Python.
+
+Métodos:
+    obtener_interfaces_red():
+        Obtiene una lista de interfaces de red que están activas.
+        Retorna:
+            list: Lista de nombres de interfaces de red activas.
+
+    obtener_direccion_ip_local():
+        Obtiene la dirección IP local del dispositivo.
+        Retorna:
+            str: Dirección IP local, o 'No disponible' si no se puede determinar.
+
+    obtener_direccion_ip_publica():
+        Obtiene la dirección IP pública del dispositivo.
+        Retorna:
+            str: Dirección IP pública, o 'No disponible' si no se puede determinar.
+
+    obtener_info_sistema():
+        Obtiene información básica del sistema operativo y del usuario.
+        Retorna:
+            dict: Diccionario con información del sistema operativo y del usuario.
+
+    obtener_version_ubuntu():
+        Obtiene la versión de Ubuntu si el sistema operativo es Linux.
+        Retorna:
+            str: Versión de Ubuntu, o 'No disponible' si no se puede determinar.
+
+    obtener_tipo_escritorio():
+        Determina el tipo de entorno de escritorio en uso.
+        Retorna:
+            str: Nombre del entorno de escritorio y tipo de gestor de ventanas, o 'Desconocido' si no se puede determinar.
+
+    monitorizar_sistema():
+        Muestra una ventana de gráfico que monitoriza el uso de CPU, memoria, disco, red, temperatura del CPU y carga del sistema en tiempo real.
+        No retorna nada. Abre una ventana de Tkinter con un gráfico de barras.
+
+    obtener_servidores_dns():
+        Obtiene los servidores DNS locales y públicos configurados.
+        Retorna:
+            dict: Diccionario con listas de servidores DNS locales y públicos.
+
+    get_tiempo_actividad():
+        Obtiene el tiempo de actividad del sistema.
+        Retorna:
+            str: Tiempo de actividad en formato legible, o 'No disponible' si no se puede determinar.
+
+    get_zona_horaria():
+        Obtiene la zona horaria del sistema.
+        Retorna:
+            str: Zona horaria del sistema, o 'No disponible' si no se puede determinar.
+
+    obtener_informacion_procesador():
+        Obtiene información detallada del procesador.
+        Retorna:
+            list: Lista de listas con información del procesador en formato de tabla.
+
+    obtener_informacion_memoria():
+        Obtiene información detallada sobre la memoria RAM y la memoria swap.
+        Retorna:
+            dict: Diccionario con información de memoria RAM y memoria swap.
+
+    obtener_informacion_completa():
+        Obtiene toda la información recopilada por los métodos anteriores en un solo diccionario.
+        Retorna:
+            dict: Diccionario con toda la información recopilada sobre el sistema.
+"""
 import subprocess
 import netifaces
 import platform
@@ -188,16 +259,6 @@ class Informacion:
         except Exception as e:
             print(f"Error al obtener el tiempo de actividad: {e}")
             return "No disponible"
-
-  #  @staticmethod
-   # def get_fabricante_equipo():
-    #    try:
-            # Eliminamos el uso de sudo y la función obtener_contrasena
-     #       fabricante_raw = subprocess.check_output(['dmidecode', '-s', 'system-manufacturer'], universal_newlines=True)
-      #      return fabricante_raw.strip()
-     #   except Exception as e:
-     #       print(f"Error al obtener el fabricante del equipo: {e}")
-     #       return "No disponible"
 
     @staticmethod
     def get_zona_horaria():

@@ -21,7 +21,7 @@ from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 # Clase para generar la ventana de barra de progreso
 class ProgresoVentana(tk.Toplevel):
     """
-Docstring para la clase 'ProgresoVentana'.
+Clase 'ProgresoVentana'.
 
 Class:
     - ProgresoVentana(tk.Toplevel): Clase para generar la ventana de barra de progreso.
@@ -134,7 +134,7 @@ class Limpieza:
 class AplicacionesAutostart:
     
     """
-Docstring para la clase 'AplicacionesAutostart'.
+Clase 'AplicacionesAutostart'.
 
 Class:
     - AplicacionesAutostart: Clase para crear la ventana y gestionar las aplicaciones al Inicio.
@@ -231,7 +231,7 @@ Raises:
 class AdministrarProcesos:
     
     """
-Docstring para la clase 'AdministrarProcesos'.
+Clase 'AdministrarProcesos'.
 
 Class:
     - AdministrarProcesos: Clase para crear y gestionar la ventana de administración de procesos.
@@ -387,7 +387,7 @@ Raises:
 class AplicacionBuscadorDuplicados:
     
     """
-Docstring para la clase 'AplicacionBuscadorDuplicados'.
+Clase 'AplicacionBuscadorDuplicados'.
 
 Class:
     - AplicacionBuscadorDuplicados: Clase para buscar archivos duplicados en el sistema.
@@ -618,7 +618,7 @@ Raises:
 class Repositorios:
     
     """
-Docstring para la clase 'Repositorios'.
+Clase 'Repositorios'.
 
 Class:
     - Repositorios: Clase para gestionar los repositorios del sistema.
@@ -895,7 +895,7 @@ if __name__ == "__main__":
 class MonitorizarSistema:
     
     """
-Docstring para la clase 'MonitorizarSistema'.
+Clase 'MonitorizarSistema'.
 
 Class:
     - MonitorizarSistema: Clase para monitorizar el sistema y visualizar estadísticas en una ventana emergente.

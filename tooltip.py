@@ -59,7 +59,7 @@ class ToolTip:
 
         Args:
             event: El evento que desencadena la función (opcional).
-        """
+        """ 
         if self.tooltip:
             self.tooltip.destroy()
             self.tooltip = None

@@ -26,7 +26,7 @@ import preferencias
 
 def informacion_cat(self, mensaje_personalizado):
     """
-Docstring para la función informacion_cat.
+Función informacion_cat.
 
 Esta función se encarga de mostrar información en el área central de la interfaz gráfica.
 
@@ -79,7 +79,7 @@ Steps:
 # Función para mostrar la pantalla de la categoría DICCIONARIO
 def diccionario_cat(self, mensaje_personalizado):
     """
-Docstring para la función diccionario_cat.
+Función diccionario_cat.
 
 Esta función se encarga de mostrar la pantalla de la categoría DICCIONARIO en la interfaz gráfica.
 
@@ -123,7 +123,7 @@ Steps:
 def sistema_cat(self, mensaje_personalizado):
     
     """
-Docstring para la función sistema_cat.
+Función sistema_cat.
 
 Esta función se encarga de realizar diversas tareas en el sistema operativo a través de la interfaz gráfica.
 
@@ -236,7 +236,7 @@ Steps:
 def internet_cat(self, mensaje_personalizado, entry_url=None):
     
     """
-Docstring para la función internet_cat.
+Función internet_cat.
 
 Esta función se encarga de mostrar la categoría "Internet" en la interfaz gráfica, permitiendo al usuario realizar acciones relacionadas con la configuración de redes y la conectividad a internet.
 
@@ -332,7 +332,7 @@ Steps:
 def red_local_cat(self, mensaje_personalizado):
     
     """
-Docstring para la función red_local_cat.
+Función red_local_cat.
 
 Esta función muestra la pantalla de la categoría "Red Local" en la interfaz gráfica, permitiendo al usuario buscar dispositivos en la red local y establecer conexiones con ellos, en caso de ser posible.
 
@@ -444,7 +444,7 @@ Steps:
 def navegadores_cat(self, mensaje_personalizado):
     
     """
-Docstring para la función navegadores_cat.
+Función navegadores_cat.
 
 Esta función muestra la pantalla de la categoría "Navegadores" en la interfaz gráfica, proporcionando opciones para limpiar la caché y el historial de los navegadores instalados.
 

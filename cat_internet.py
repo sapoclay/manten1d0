@@ -1,3 +1,27 @@
+"""
+Este módulo contiene funciones para gestionar el reinicio de las tarjetas de red en un sistema Linux (Ubuntu). 
+Utiliza varios módulos de Python para interactuar con el sistema operativo, obtener contraseñas, gestionar la interfaz gráfica de usuario 
+y mostrar mensajes.
+
+Funciones:
+    reiniciar_servicio_red():
+        Detecta y reinicia el servicio de red en uso (NetworkManager o systemd-networkd).
+
+    reiniciar_networkmanager():
+        Reinicia el servicio NetworkManager utilizando el comando systemctl.
+
+    reiniciar_systemd_networkd():
+        Reinicia el servicio systemd-networkd utilizando el comando systemctl.
+
+    reiniciar_tarjeta_red(interfaz, etiqueta_ip_local_info, etiqueta_ip_publica_info, callback=None):
+        Reinicia una interfaz de red específica desactivándola y activándola nuevamente. Actualiza las etiquetas de la interfaz gráfica con las nuevas direcciones IP.
+
+    mostrar_resultado_ping(resultado_ping):
+        Muestra el resultado de un comando ping en una nueva ventana de Tkinter.
+
+    hacer_ping(entry_url):
+        Realiza un comando ping a una URL especificada por el usuario y muestra el resultado.
+"""
 import subprocess
 from password import obtener_contrasena
 import time
@@ -14,7 +38,11 @@ Funciones relacionadas con el reinicio de las tarjetas de red
 
 """
 def reiniciar_servicio_red():
-    # Ejecutar el comando para obtener los servicios de red
+    """
+    Detecta y reinicia el servicio de red en uso (NetworkManager o systemd-networkd).
+
+    Si no se encuentra ningún servicio de red conocido, imprime un mensaje indicando la situación.
+    """
     try:
         resultado = subprocess.run(['systemctl', 'list-units', '--type=service'], capture_output=True, text=True)
         servicios_red = resultado.stdout
@@ -29,6 +57,11 @@ def reiniciar_servicio_red():
             print(f"Error al obtener los servicios de red: {e}")
 
 def reiniciar_networkmanager():
+    """
+    Reinicia el servicio NetworkManager utilizando el comando systemctl.
+
+    Si ocurre un error durante el reinicio, imprime un mensaje indicando la situación.
+    """
     try:
         subprocess.run(['sudo', 'systemctl', 'restart', 'NetworkManager'], check=True)
         print("Se reinició el servicio NetworkManager.")
@@ -36,6 +69,11 @@ def reiniciar_networkmanager():
         print(f"Error al reiniciar NetworkManager: {e}")
 
 def reiniciar_systemd_networkd():
+    """
+    Reinicia el servicio systemd-networkd utilizando el comando systemctl.
+
+    Si ocurre un error durante el reinicio, imprime un mensaje indicando la situación.
+    """
     try:
         subprocess.run(['sudo', 'systemctl', 'restart', 'systemd-networkd'], check=True)
         print("Se reinició el servicio systemd-networkd.")
@@ -43,6 +81,19 @@ def reiniciar_systemd_networkd():
         print(f"Error al reiniciar systemd-networkd: {e}")
 
 def reiniciar_tarjeta_red(interfaz, etiqueta_ip_local_info, etiqueta_ip_publica_info, callback=None):
+        """
+        Reinicia una interfaz de red específica desactivándola y activándola nuevamente. 
+        Actualiza las etiquetas de la interfaz gráfica con las nuevas direcciones IP.
+
+        Args:
+            interfaz (str): Nombre de la interfaz de red a reiniciar.
+            etiqueta_ip_local_info (tk.Label): Etiqueta de Tkinter para mostrar la dirección IP local. Deshabilitado.
+            etiqueta_ip_publica_info (tk.Label): Etiqueta de Tkinter para mostrar la dirección IP pública.Deshabilitado.
+            callback (function, optional): Función de callback para ejecutar después de reiniciar la tarjeta de red.
+
+        Si no se selecciona ninguna interfaz o no se proporciona la contraseña, muestra una advertencia. Si ifconfig no está instalado, 
+        lo instala automáticamente.
+        """
         try:
             # Verificar si se ha seleccionado una interfaz
             if not interfaz:
@@ -99,7 +150,12 @@ def reiniciar_tarjeta_red(interfaz, etiqueta_ip_local_info, etiqueta_ip_publica_
             messagebox.showerror("Error", f"Error al reiniciar la tarjeta de red: {e}")
 
 def mostrar_resultado_ping(resultado_ping):
-    # Crear una nueva ventana para mostrar el resultado del ping
+    """
+    Muestra el resultado de un comando ping en una nueva ventana de Tkinter.
+
+    Args:
+        resultado_ping (str): Resultado del comando ping a mostrar.
+    """
     ventana_resultado_ping = tk.Toplevel()
     ventana_resultado_ping.title("Resultado del Ping")
 
@@ -111,12 +167,29 @@ def mostrar_resultado_ping(resultado_ping):
     preferencias.cambiar_tema(resultado_label, preferencias.tema_seleccionado)
 
 def hacer_ping(entry_url):
+    """
+    Realiza un comando ping a una URL especificada por el usuario y muestra el resultado.
+
+    Args:
+        entry_url (tk.Entry): Entrada de Tkinter que contiene la URL para hacer ping.
+
+    Si no se ingresa una URL, muestra un mensaje de error. Si el ping falla, muestra un mensaje de error con el motivo.
+    """
     url = entry_url.get()
     if not url:
         messagebox.showerror("Error", "Por favor, ingrese una URL para hacer ping.")
         return
     
     def eliminar_protocolo(url):
+        """
+        Elimina el protocolo de una URL.
+
+        Args:
+            url (str): URL de la que se eliminará el protocolo.
+
+        Retorna:
+            str: URL sin el protocolo.
+        """
         # Lista de protocolos conocidos
         protocolos = ['http://', 'https://', 'ftp://', 'ftps://', 'sftp://', 'ssh://', 'telnet://', 'smtp://', 'imap://', 'pop3://']
 

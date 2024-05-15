@@ -1,5 +1,5 @@
 """
-Docstring para las funciones y módulos relacionados con el descubrimiento de dispositivos en la red local y la gestión de eventos.
+Funciones relacionadas con el descubrimiento de dispositivos en la red local y la gestión de eventos.
 
 Imports:
     - tkinter as tk: Para la interfaz gráfica.
@@ -11,7 +11,8 @@ Imports:
 Funciones:
     - encontrar_dispositivos_en_red(): Escanea la red local en busca de dispositivos y devuelve una lista de direcciones IP.
     - abrir_administrador_de_archivos(ip): Abre el administrador de archivos del sistema para la dirección IP especificada.
-    - doble_clic(_, lista_dispositivos): Maneja el evento de doble clic en la lista de dispositivos, abriendo el administrador de archivos para la IP seleccionada.
+    - doble_clic(_, lista_dispositivos): Maneja el evento de doble clic en la lista de dispositivos, abriendo el administrador de archivos 
+    para la IP seleccionada.
 
 Raises:
     - FileNotFoundError: Si el administrador de archivos correspondiente no está instalado en el sistema.

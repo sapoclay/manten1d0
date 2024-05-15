@@ -1,5 +1,5 @@
 """
-Docstring para la clase `LimpiadorNavegadores` y los módulos asociados para la limpieza de caché y historial de navegadores.
+Clase `LimpiadorNavegadores` y los módulos asociados para la limpieza de caché y historial de navegadores.
 
 Imports:
     - subprocess: Para ejecutar procesos del sistema.

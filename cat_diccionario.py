@@ -66,7 +66,7 @@ class VentanaDiccionario(QMainWindow):
     def buscar(self):
         
         """
-        Filtra el contenido HTML según el término de búsqueda ingresado en el campo de búsqueda.
+        Filtra el contenido HTML según el término de búsqueda que el usuario escriba en el campo de búsqueda.
         """
         
         search_term = self.search_input.text().lower()

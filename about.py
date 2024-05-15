@@ -1,5 +1,5 @@
 """
-Docstring para la función 'mostrar_about'.
+Función 'mostrar_about'.
 
 Imports:
     - tkinter as tk: Para la creación de interfaces gráficas.
@@ -7,10 +7,9 @@ Imports:
     - preferencias: Para ajustar las preferencias de la interfaz.
 
 Function:
-    - mostrar_about(): Abre una ventana que muestra información sobre el programa. La ventana incluye un logotipo, la versión del programa y un mensaje informativo. Además, si se ha seleccionado un tema oscuro en las preferencias, aplica el tema oscuro a la ventana.
+    - mostrar_about(): Abre una ventana que muestra información sobre el programa. La ventana incluye un logotipo, la versión del programa y un 
+    mensaje informativo. Además, si se ha seleccionado un tema oscuro en las preferencias, aplica el tema oscuro a las ventanas del proyecto.
 
-Raises:
-    - No hay excepciones especificadas en la función.
 """
 
 import tkinter as tk

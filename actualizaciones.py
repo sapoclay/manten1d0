@@ -1,5 +1,5 @@
 """
-Docstring para el script de actualización de programas a través de GitHub.
+Script de actualización de programas a través de GitHub.
 
 Imports:
     - tkinter as tk: Para la creación de interfaces gráficas.
@@ -32,7 +32,7 @@ import preferencias
 
 def instalar_paquete_deb(archivo_deb):
     """
-    Instala un paquete .deb en el sistema utilizando el comando 'apt install'.
+    Instala un paquete .deb en el sistema utilizando el comando 'apt install'. Sobreescibe una instalación anterior si la hubiese.
 
     Parameters:
         archivo_deb (str): La ruta al archivo .deb que se va a instalar.
@@ -63,12 +63,7 @@ def instalar_paquete_deb(archivo_deb):
         messagebox.showerror("Error de instalación", f"Error durante la actualización del programa:\n{error}")
 
 def mostrar_ventana_actualizaciones():
-    """
-    Muestra una ventana para buscar actualizaciones del programa.
 
-    La ventana muestra la versión instalada y la versión disponible, y permite al usuario buscar e instalar actualizaciones de forma automática.
-
-    """
     # Crear la ventana de actualizaciones con un tamaño más grande
     ventana_actualizaciones = tk.Toplevel()
     ventana_actualizaciones.title("Buscar Actualizaciones")
