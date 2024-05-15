@@ -3,7 +3,7 @@
 ------------------------------------------------------------------
 * Manten1d0: Sistema de mantenimiento básico y otras cosas para Ubuntu. 
 * Creado con: Python 3.10.12
-* Versión actual del programa: 0.5.3
+* Versión actual del programa: 0.5.5
 * Probado en: Ubuntu 22.04
 ------------------------------------------------------------------
 ### Cosas que puede ir haciendo 
@@ -67,6 +67,7 @@
 - He corregido el tooltip. Ahora cuando el usuario hace clic en un botón, el tooltip desaparece de manera correcta.
 - Añadida la opción de limpiar el historial de los navegadores (Chrome, Firefox y Edge)
 - Se ha corregido el error de python3-tk. Ya que antes si no estaba instalado rompía la ejecución del programa. Ahora se instala de manera automática si falla la importación al iniciar el programa. Una vez terminada la instalación de este paquete, continúa la ejecución normal del programa.
+![cat-archivos](https://github.com/sapoclay/manten1d0/assets/6242827/ec8ecec8-fd0b-4d1b-9529-f881e81b3267)
 - Añadida la opción para realizar copias de seguridad de carpetas. Se va a crear un archivo .gz en la carpeta que indiquemos. Se utiliza tar para este proposito. También dispone de la opción para restaurar los archivos de la copia de seguridad.
 - Añadida la opción para cifrar archivos. Se utiliza ChaCha20 para el cifrado y para el descifrado.
 
