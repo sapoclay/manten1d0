@@ -81,6 +81,7 @@ import re
 import matplotlib.pyplot as plt
 import tkinter as tk
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
+from password import obtener_contrasena
 
 class Informacion:
     @staticmethod
@@ -171,6 +172,67 @@ class Informacion:
                 return f"{escritorio} - gestor de ventanas {gestor_ventanas}"
 
         return "Desconocido"
+    
+    @staticmethod
+    def obtener_informacion_tarjeta_grafica():
+        info_gpu = {
+            "Nombre": "No disponible",
+            "Modelo": "No disponible",
+            "Memoria": "No disponible",
+            "Controlador": "No disponible",
+            "Temperatura": "No disponible"
+        }
+
+        try:
+            contrasena = obtener_contrasena()
+
+            # Obtener información de la GPU usando lspci
+            lspci_proceso = subprocess.Popen(['sudo', '-S', 'lspci'], stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
+            output, error = lspci_proceso.communicate(input=contrasena + "\n")
+
+            if lspci_proceso.returncode != 0:
+                print(f"Error al ejecutar lspci: {error}")
+                return info_gpu
+
+            gpu_info = [line for line in output.split('\n') if 'VGA compatible controller' in line or '3D controller' in line]
+
+            if gpu_info:
+                info_gpu["Nombre"] = gpu_info[0]
+
+                # Usar lshw para obtener detalles adicionales
+                lshw_proceso = subprocess.Popen(['sudo', '-S', 'lshw', '-C', 'display'], stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
+                lshw_output, lshw_error = lshw_proceso.communicate(input=contrasena + "\n")
+
+                if lshw_proceso.returncode != 0:
+                    print(f"Error al ejecutar lshw: {lshw_error}")
+                    return info_gpu
+
+                for line in lshw_output.split('\n'):
+                    line = line.strip()
+                    if 'descripción:' in line:
+                        info_gpu["Descripción"] = line.split('descripción:')[1].strip()
+                    elif 'producto:' in line:
+                        info_gpu["Modelo"] = line.split('producto:')[1].strip()
+                    elif 'fabricante:' in line:
+                        info_gpu["Nombre"] = line.split('fabricante:')[1].strip()
+                    elif 'driver=' in line:
+                        info_gpu["Controlador"] = line.split('driver=')[1].strip()
+                    elif 'size:' in line:
+                        info_gpu["Memoria"] = line.split('size:')[1].strip()
+
+                # Obtener temperatura de la GPU
+                try:
+                    nvidia_smi_output = subprocess.check_output(['nvidia-smi', '--query-gpu=temperature.gpu', '--format=csv,noheader'], universal_newlines=True)
+                    info_gpu["Temperatura"] = nvidia_smi_output.strip() + " °C"
+                except Exception as e:
+                    print(f"Error al obtener la temperatura de la GPU: {e}")
+
+        except Exception as e:
+            print(f"Error al obtener información de la tarjeta gráfica: {e}")
+
+        return info_gpu
+
+
 
     @staticmethod
     def monitorizar_sistema():
@@ -337,6 +399,8 @@ class Informacion:
         info["Sistema Operativo"] = info_sistema["Sistema Operativo"]
         info["Versión de Sistema"] = info_sistema["Versión de Sistema"]
         info["Versión de Ubuntu"] = info_sistema["Versión de Ubuntu"]
+        # Info tarjeta gráfica
+        info["Información de la Tarjeta Gráfica"] = Informacion.obtener_informacion_tarjeta_grafica()
         # Obtener la información de los dns
         info_dns = Informacion.obtener_servidores_dns()
         dns_local = ", ".join(info_dns["dns_local"])

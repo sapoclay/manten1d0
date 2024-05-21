@@ -1,3 +1,19 @@
+"""
+Este módulo proporciona una interfaz gráfica para modificar el perfil de usuario en un sistema operativo basado en Unix/Linux.
+
+Módulos Importados:
+- tkinter: Proporciona la funcionalidad para crear la interfaz gráfica de usuario.
+- messagebox: Permite mostrar cuadros de mensaje.
+- filedialog: Permite al usuario seleccionar archivos.
+- simpledialog: Permite solicitar la entrada del usuario a través de cuadros de diálogo.
+- PIL (Pillow): Proporciona herramientas para trabajar con imágenes.
+- os: Proporciona una forma de usar funcionalidades dependientes del sistema operativo.
+- subprocess: Permite ejecutar comandos del sistema operativo y capturar su salida.
+- getpass: Proporciona una manera de manejar entradas sensibles como contraseñas.
+- password: Contiene funciones para limpiar archivos de configuración y obtener contraseñas de sudo.
+- tooltip: Proporciona una clase para mostrar tooltips en widgets de tkinter.
+"""
+
 import tkinter as tk
 from tkinter import messagebox, filedialog, simpledialog
 from PIL import Image, ImageTk
@@ -11,7 +27,13 @@ from tooltip import ToolTip
 
 
 class PerfilUsuario:
+    """Clase para la interfaz de modificación del perfil de usuario."""
     def __init__(self, root):
+        """Inicializa la interfaz gráfica de usuario.
+
+        Args:
+            root (tk.Tk): La ventana principal de tkinter.
+        """
         self.root = root
         self.root.title("Modificar Perfil de Usuario en el Sistema Operativo")
         self.root.geometry("400x600")
@@ -85,6 +107,7 @@ class PerfilUsuario:
         self.cargar_datos_usuario()
 
     def mostrar_ocultar_contrasena(self):
+        """Muestra u oculta la contraseña en los campos de entrada."""
         if self.entry_password.cget('show') == '*':
             self.entry_password.config(show='')
             self.entry_confirm_password.config(show='')
@@ -95,6 +118,7 @@ class PerfilUsuario:
             self.boton_mostrar_contrasena.config(text="Mostrar")
 
     def seleccionar_imagen(self):
+        """Abre un cuadro de diálogo para seleccionar una imagen de perfil."""
         self.imagen_perfil = filedialog.askopenfilename(
             initialdir=os.path.expanduser("~"),
             title="Seleccionar Imagen de Perfil",
@@ -106,6 +130,11 @@ class PerfilUsuario:
             messagebox.showinfo("Imagen seleccionada", f"Imagen seleccionada: {self.imagen_perfil}")
 
     def mostrar_previsualizacion_imagen(self, ruta_imagen):
+        """Muestra una previsualización de la imagen de perfil seleccionada.
+
+        Args:
+            ruta_imagen (str): La ruta del archivo de imagen seleccionado.
+        """
         try:
             imagen = Image.open(ruta_imagen)
             imagen.thumbnail((100, 100))
@@ -116,6 +145,7 @@ class PerfilUsuario:
             messagebox.showerror("Error", f"No se pudo cargar la imagen de perfil: {e}")
 
     def cargar_datos_usuario(self):
+        """Carga los datos actuales del usuario, incluyendo el nombre y la imagen de perfil."""
         try:
             username = getpass.getuser()
             # Obtener el nombre completo usando `getent`
@@ -153,6 +183,7 @@ class PerfilUsuario:
             messagebox.showerror("Error", f"No se pudieron cargar los datos del usuario: {e}")
 
     def guardar_perfil(self):
+        """Guarda los cambios en el perfil del usuario, incluyendo el nombre y la contraseña."""
         nombre = self.entry_nombre.get()
         password = self.entry_password.get()
         confirm_password = self.entry_confirm_password.get()

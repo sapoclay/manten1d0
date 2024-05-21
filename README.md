@@ -103,6 +103,8 @@ Estas dependencias las comprobará e instalará el programa una vez se ejecute s
 - Gnome-terminal -> sudo apt install gnome-terminal
 - smartmontools -> sudo apt install smartmontools
 - traceroute -> sudo apt install traceroute
+- pciutils -> sudo apt-get install pciutils
+- lshw -> sudo apt-get install lshw
 - Matplotlib -> pip3 install matplotlib
 - Pillow -> pip3 install --upgrade pillow
 - Cryptography -> pip3 install cryptography
@@ -116,6 +118,7 @@ Estas dependencias las comprobará e instalará el programa una vez se ejecute s
 - wget -> pip3 install wget
 - Tooltip -> pip3 install Tooltip
 - Fernet -> pip3 install Fernet
+- py3nvml -> pip3 install py3nvml
 
 
 ## Instalación del paquete .DEB

@@ -329,6 +329,7 @@ class VentanaPrincipal:
                     return temperatura_celsius
             except FileNotFoundError:
                 return None
+
         # Obtener la información del sistema utilizando la clase Informacion
         info_completa = Informacion.obtener_informacion_completa()
         usuario = info_completa["Usuario"]
@@ -337,6 +338,7 @@ class VentanaPrincipal:
         version_ubuntu = info_completa["Versión de Ubuntu"]
         tipo_escritorio = info_completa["Tipo de Escritorio"]
         tiempo_actividad = info_completa["Tiempo de Actividad"]
+        tarjeta_grafica = info_completa["Información de la Tarjeta Gráfica"]
         interfaces_red = ", ".join(info_completa["Interfaces de Red"])  # Convertir la lista a cadena separada por comas
         ip_local = info_completa["Dirección IP Local"]
         ip_publica = info_completa["Dirección IP Pública"]
@@ -345,10 +347,10 @@ class VentanaPrincipal:
         zona_horaria = info_completa["Zona Horaria"]
         procesador = Informacion.obtener_informacion_procesador()
         memoria = Informacion.obtener_informacion_memoria()
-        
+
         # Obtener la temperatura del procesador
         temperatura_cpu = obtener_temperatura_cpu()     
-           
+
         # Crear el texto con la información del sistema
         texto_info = [
             ("Usuario:", usuario),
@@ -366,8 +368,8 @@ class VentanaPrincipal:
             ("Zona Horaria:", zona_horaria),
             ("Temperatura CPU:", f"{temperatura_cpu} °C" if temperatura_cpu is not None else "No disponible"),
             ("-" * 110, ""),
-                ]
-        
+        ]
+
         # Insertar el texto en el widget Text
         self.texto_informacion.config(state=tk.NORMAL)  # Habilitar la edición
         self.texto_informacion.delete('1.0', tk.END)  # Borrar todo el contenido existente en el widget Text
@@ -376,6 +378,12 @@ class VentanaPrincipal:
             self.texto_informacion.insert(tk.END, f"{label} ", "bold")  # Insertar texto estático con negrita
             self.texto_informacion.insert(tk.END, f"{value}\n")  # Insertar valor de la variable
             self.texto_informacion.tag_configure("bold", font=("Arial", 12, "bold"))  # Aplicar estilo de texto negrita al texto estático
+
+        self.texto_informacion.insert(tk.END, "\nInformación de la tarjeta gráfica:\n", "bold")  # Texto "Información de la tarjeta gráfica" en negrita
+        for key, value in tarjeta_grafica.items():
+            self.texto_informacion.insert(tk.END, f"{key}: {value}\n")
+        
+        self.texto_informacion.insert(tk.END, "-" * 110 + "\n")  # Línea horizontal
 
         self.texto_informacion.insert(tk.END, "\nInformación del Procesador:\n", "bold")  # Texto "Información del Procesador" en negrita
         for item in procesador:

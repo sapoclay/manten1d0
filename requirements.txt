@@ -13,3 +13,4 @@ Fernet
 netifaces
 pexpect
 cffi
+py3nvml
