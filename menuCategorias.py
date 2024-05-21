@@ -22,6 +22,7 @@ from cat_sistema import MonitorizarSistema
 from cat_informacion import Informacion
 from cat_redLocal import encontrar_dispositivos_en_red, doble_clic
 from cat_navegadores import LimpiadorNavegadores
+from cat_perfil import PerfilUsuario
 from tooltip import ToolTip    
 import preferencias
 
@@ -533,6 +534,11 @@ Steps:
     boton_edge = tk.Button(frame_botones, text="Limpiar Caché Edge", command=lambda: LimpiadorNavegadores.limpiar_cache_edge(self, boton_edge, lambda mensaje: messagebox.showinfo("Resultado", mensaje)))
     boton_edge.pack(side="left", padx=5, pady=10)
     ToolTip(boton_edge, "Limpia la caché de Edge (si está instalado)")
+    
+    # Dibujar una línea horizontal
+    self.canvas = tk.Canvas(self.area_central, width=500, height=2, bg="lightgrey", highlightthickness=0)
+    self.canvas.create_line(0, 1, 500, 1, fill="black")
+    self.canvas.pack(pady=10)
 
     # Crear una nueva fila para los botones de limpiar historial
     frame_botones_historial = tk.Frame(self.area_central)
@@ -694,4 +700,40 @@ def archivos_cat(self, mensaje_personalizado):
     self.canvas = tk.Canvas(self.area_central, width=500, height=2, bg="lightgrey", highlightthickness=0)
     self.canvas.create_line(0, 1, 500, 1, fill="black")
     self.canvas.pack(pady=10)
+    
+def perfil_cat(self, mensaje_personalizado):
+     # Limpiar el área central
+    self.contenedor_texto.pack_forget()
+    for widget in self.area_central.winfo_children():
+        widget.destroy()
+    
+    # Crear el label con el mensaje personalizado o un mensaje predeterminado
+    if mensaje_personalizado:
+        label_subcategorias = tk.Label(self.area_central, text=mensaje_personalizado, font=("Arial", 16, "bold"), bg="lightgrey", padx=10, pady=20)
+        label_subcategorias.pack()
+        # Dibujar una línea horizontal
+        self.canvas = tk.Canvas(self.area_central, width=500, height=2, bg="lightgrey", highlightthickness=0)
+        self.canvas.create_line(0, 1, 500, 1, fill="black")
+        self.canvas.pack(pady=10)
+    else:
+        label_subcategorias = tk.Label(self.area_central, text="PERFIL USUARIO", font=("Arial", 12))
+        label_subcategorias.pack()
+        # Dibujar una línea horizontal
+        self.canvas = tk.Canvas(self.area_central, width=500, height=2, bg="lightgrey", highlightthickness=0)
+        self.canvas.create_line(0, 1, 500, 1, fill="black")
+        self.canvas.pack(pady=10)
+        
+    # Función para abrir la ventana desde la que modificar el perfil de usuario
+    def abrir_ventana_perfil():
+        ventana_perfil = tk.Toplevel()
+        PerfilUsuario(ventana_perfil)
+    
+    # Crear un frame para los botones relacionados con el perfil de usuario
+    frame_botones_perfil = tk.Frame(self.area_central)
+    frame_botones_perfil.pack()
+
+    # Crearmos el botón para abrir la ventana desde la que modificar el perfil de usuario
+    boton_perfil = tk.Button(frame_botones_perfil, text="Modificar Perfil Usuario", width=20, command=abrir_ventana_perfil)
+    boton_perfil.pack(side=tk.LEFT, padx=5, pady=5)
+    ToolTip(boton_perfil, "Modifica tu perfil de usuario")
     

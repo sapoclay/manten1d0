@@ -1,0 +1,15 @@
+matplotlib
+pillow
+cryptography
+psutil
+markdown2
+PyQt5
+speedtest-cli
+tabulate
+opencv-python-headless
+wget
+Tooltip
+Fernet
+netifaces
+pexpect
+cffi
