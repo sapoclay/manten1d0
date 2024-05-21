@@ -3,6 +3,7 @@ import sys
 from password import obtener_contrasena
 import tkinter as tk
 from tkinter import messagebox, ttk
+import os
 
 # Lista de dependencias del sistema junto con sus métodos de instalación
 DEPENDENCIAS_SISTEMA = {
@@ -34,10 +35,16 @@ def verificar_dependencias_sistema():
         return False
     else:
         return True
+    
+# Función para obtener la ruta absoluta al archivo requirements.txt
+def obtener_ruta_requirements():
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    return os.path.join(script_dir, 'requirements.txt')
 
 def verificar_dependencias_pip():
     try:
-        with open('requirements.txt', 'r') as req_file:
+        requirements_path = obtener_ruta_requirements()
+        with open(requirements_path, 'r') as req_file:
             required_packages = {}
             for line in req_file:
                 line = line.strip()
