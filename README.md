@@ -82,6 +82,7 @@
 - Modificados los permisos del archivo config.ini para su lectura desde el archivo .deb.
 - Añadidas funcionalidades para modificar el perfil de usuario del sistema (requiere que el usuario tenga privilegios de sudo). Por el momento solo permite modificar el nombre de usuario, la contraseña y la fotografía de perfil.
 - La categoría Sistema ahora ofrece la posibilidad de seleccionar un archivo .deb e instalarlo utilizando dpkg.
+![desinstalar](https://github.com/sapoclay/manten1d0/assets/6242827/06dfeed0-a1f2-428d-b461-a3b812392876)
 - Añadida la posibilidad de desinstalar los paquetes snap y deb instalados por el usuario. En la ventana de desinstalación se ha añadido un cuadro de búsqueda dinámico para buscar el paquete a desinstalar.
 - También se ha añadido la opción para abrir el repositorio en GitHub del proyecto desde el menú superior, opción Preferencias.
 ![conexion-internet](https://github.com/sapoclay/manten1d0/assets/6242827/2c714f02-b0e9-4106-9c61-2dc2e1a441c9)
