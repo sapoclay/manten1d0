@@ -260,7 +260,7 @@ Steps:
 
     boton_desinstalar_paquetes = tk.Button(contenedor_botones, text="Desinstalar Paquetes", command=abrir_desinstalar_paquetes)
     boton_desinstalar_paquetes.grid(row=3, column=2, padx=10, pady=10)
-    ToolTip(boton_instalar_deb, "Desinstalar paquetes instalados por el usuario")
+    ToolTip(boton_desinstalar_paquetes, "Desinstalar paquetes instalados por el usuario")
 
     
 # Función para mostrar la categoría INTERNET
