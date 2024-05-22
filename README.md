@@ -24,7 +24,7 @@
 
 - En la categoría Información, dispondremos de alguna información sobre el sistema operativo que estemos utilizando. También nos mostrará información sobre las tarjetas de red, ip, dns, etc e información el procesador y la memoria de nuestro equipo.
   
-![opcion-sistema](https://github.com/sapoclay/manten1d0/assets/6242827/682c8fbf-d36b-47d8-b119-35d07ce4142d)
+![sistema](https://github.com/sapoclay/manten1d0/assets/6242827/d8a4cb09-9b22-4489-80f7-6a130af56b7b)
 
 - En la opción Sistema, veremos difernetes botones. Cada uno de ellos nos dará la posibilidad de realizar diferentes operaciones sobre el sistema. Para saber más sobre qué hace cada uno de los botones, solo tendremos que pasar el ratón por encima, y el tooltip nos dará una explicación de qué podremos hacer con esa opción en particular.
   
