@@ -32,9 +32,9 @@
 
 - La opción Internet nos va a dar la posibilidad de reiniciar la tarjeta de red que seleccionemos el desplegable que tenemos disponible. Además también nos dará la posibilidad de hacer ping a la URL que escribamos en la caja de texto dedicada a ello.
   
-![limpiar-cache-navegadores](https://github.com/sapoclay/manten1d0/assets/6242827/09945015-7160-4dc0-97e3-3bfee1df548c)
+![navegadores](https://github.com/sapoclay/manten1d0/assets/6242827/dc6c5b5b-dfc0-4979-8af9-0e5dab6f6a40)
 
-- La categoría Navegadores nos va a dar la posibilidad de limpiar la caché de los navegadores. Si están disponibles en el sistema, claro está.
+- La categoría Navegadores nos va a dar la posibilidad de limpiar la caché de los navegadores. Limpiar la caché de los navegadores, y también tendremo la posibilidad de instalar Chrome, Firefox o Edge de forma desatendida.
   
 ![diccionario](https://github.com/sapoclay/manten1d0/assets/6242827/8f41ebb9-9250-49f9-807e-545cb1f86eda)
 
@@ -84,6 +84,7 @@
 - La categoría Sistema ahora ofrece la posibilidad de seleccionar un archivo .deb e instalarlo utilizando dpkg.
 - Añadida la posibilidad de desinstalar los paquetes snap y deb instalados por el usuario. En la ventana de desinstalación se ha añadido un cuadro de búsqueda dinámico para buscar el paquete a desinstalar.
 - También se ha añadido la opción para abrir el repositorio en GitHub del proyecto desde el menú superior, opción Preferencias.
+![conexion-internet](https://github.com/sapoclay/manten1d0/assets/6242827/2c714f02-b0e9-4106-9c61-2dc2e1a441c9)
 - Se ha añadido información sobre la conexión a internet en el menú lateral. En la parte inferior aparecerá una etiqueta en verde cuando la conexión a internet esté activa. Si en algún momento se pierde la conexión, esta etiqueta pasará a rojo y el texto cambiará a "Sin conexión".
 - Acabo de añadir la opción de instalación de los navegadores más típicos (Firefox, Chrome y Edge). Esta opción de instalación aparece en la categoría Navegadores.
 - Corrección de errores menores.
