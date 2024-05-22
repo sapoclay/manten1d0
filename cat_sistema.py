@@ -41,7 +41,7 @@ Raises:
     def __init__(self, master, accion):
         super().__init__(master)
         self.title("Progreso")
-        self.geometry("300x100")
+        self.geometry("400x100")
         self.progressbar = ttk.Progressbar(self, orient="horizontal", mode="indeterminate")
         self.progressbar.pack(pady=20)
         self.label = tk.Label(self, text=f"Ejecutando {accion}...", font=("Arial", 12))

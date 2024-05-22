@@ -24,6 +24,7 @@ from cat_sistema import DesinstalarPaquetes
 from cat_informacion import Informacion
 from cat_redLocal import encontrar_dispositivos_en_red, doble_clic
 from cat_navegadores import LimpiadorNavegadores
+from cat_navegadores import InstalarNavegadores
 from cat_perfil import PerfilUsuario
 from tooltip import ToolTip    
 import preferencias
@@ -513,6 +514,8 @@ Returns:
 Steps:
     - Limpia el área central de la interfaz gráfica.
     - Crea un label con el mensaje personalizado o uno predeterminado si no se proporciona, seguido de una línea horizontal.
+    - Crea un contendor Fram para organizar los botones de instalación de navegadores
+    - Crea botones para instalar los navegadores
     - Crea un contenedor Frame para organizar los botones de limpieza de caché.
     - Crea botones para limpiar la caché de los navegadores Chrome, Firefox y Edge, si están instalados.
     - Crea un nuevo contenedor Frame para organizar los botones de limpieza de historial.
@@ -539,6 +542,30 @@ Steps:
         self.canvas = tk.Canvas(self.area_central, width=500, height=2, bg="lightgrey", highlightthickness=0)
         self.canvas.create_line(0, 1, 500, 1, fill="black")
         self.canvas.pack(pady=10)
+        
+    # Crear un contenedor Frame para los botones
+    frame_botones_instalacion = tk.Frame(self.area_central)
+    frame_botones_instalacion.pack()
+
+    # Botones para instalar Chrome
+    boton_chrome = tk.Button(frame_botones_instalacion, text="Instalar Chrome", command=InstalarNavegadores.instalar_chrome)
+    boton_chrome.pack(side="left", padx=5, pady=10)
+    ToolTip(boton_chrome, "Instalar Google Chrome)")
+    
+    # Botones para instalar Firefox
+    boton_firefox = tk.Button(frame_botones_instalacion, text="Instalar Firefox", command=InstalarNavegadores.instalar_firefox)
+    boton_firefox.pack(side="left", padx=5, pady=10)
+    ToolTip(boton_firefox, "Instalar Mozilla Firefox)")
+
+    # Botones para instalar Edge
+    boton_edge = tk.Button(frame_botones_instalacion, text="Instalar Edge", command=InstalarNavegadores.instalar_edge)
+    boton_edge.pack(side="left", padx=5, pady=10)
+    ToolTip(boton_edge, "Instalar Microsoft Edge)")
+    
+    # Dibujar una línea horizontal
+    self.canvas = tk.Canvas(self.area_central, width=500, height=2, bg="lightgrey", highlightthickness=0)
+    self.canvas.create_line(0, 1, 500, 1, fill="black")
+    self.canvas.pack(pady=10)
         
     # Crear un contenedor Frame para los botones
     frame_botones = tk.Frame(self.area_central)

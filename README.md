@@ -81,9 +81,12 @@
 - Simplificado el sistema de comprobación de dependencias para instalar las dependencias con pip3 y con APT. Ahora las dependencias de pip3 se establecen en el archivo requierements.txt y las dependencias APT se establecen en el diccionario del archivo dependencias.py.
 - Modificados los permisos del archivo config.ini para su lectura desde el archivo .deb.
 - Añadidas funcionalidades para modificar el perfil de usuario del sistema (requiere que el usuario tenga privilegios de sudo). Por el momento solo permite modificar el nombre de usuario, la contraseña y la fotografía de perfil.
-- Añadida a la categoría Sistema la posibilidad de seleccionar un archivo .deb e instalarlo utilizando dpkg.
+- La categoría Sistema ahora ofrece la posibilidad de seleccionar un archivo .deb e instalarlo utilizando dpkg.
 - Añadida la posibilidad de desinstalar los paquetes snap y deb instalados por el usuario. En la ventana de desinstalación se ha añadido un cuadro de búsqueda dinámico para buscar el paquete a desinstalar.
-- Añadida la opción para abrir el repositorio en GitHub del proyecto.
+- También se ha añadido la opción para abrir el repositorio en GitHub del proyecto desde el menú superior, opción Preferencias.
+- Se ha añadido información sobre la conexión a internet en el menú lateral. En la parte inferior aparecerá una etiqueta en verde cuando la conexión a internet esté activa. Si en algún momento se pierde la conexión, esta etiqueta pasará a rojo y el texto cambiará a "Sin conexión".
+- Acabo de añadir la opción de instalación de los navegadores más típicos (Firefox, Chrome y Edge). Esta opción de instalación aparece en la categoría Navegadores.
+- Corrección de errores menores.
 
 ## Dependencias Imprescindibles 
 

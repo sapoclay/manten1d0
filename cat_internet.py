@@ -340,3 +340,4 @@ class RedTools:
     def limpiar_area_central(self):
         for widget in self.area_central.winfo_children():
             widget.destroy()
+            
