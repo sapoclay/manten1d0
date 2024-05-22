@@ -962,3 +962,75 @@ Raises:
         # Vincular el evento de cierre de la ventana a una función que solo destruya la ventana de gráficos
         ventana_grafico.protocol("WM_DELETE_WINDOW", ventana_grafico.destroy)
         ventana_grafico.mainloop()
+        
+class DebInstalador:
+    """
+    Clase para gestionar la instalación de paquetes .deb en un sistema Ubuntu utilizando dpkg.
+
+    Métodos:
+    --------
+    seleccionar_archivo()
+        Abre un cuadro de diálogo para seleccionar un archivo .deb.
+    instalar_deb()
+        Instala el archivo .deb seleccionado utilizando dpkg y corrige dependencias si es necesario.
+    """
+
+    def __init__(self):
+        """
+        Inicializa la clase DebInstalador.
+
+        Atributos:
+        ----------
+        file_path : str or None
+            Ruta del archivo .deb seleccionado para la instalación.
+        """
+        self.file_path = None
+
+    def seleccionar_archivo(self):
+        """
+        Abre un cuadro de diálogo para seleccionar un archivo .deb y guarda la ruta del archivo seleccionado.
+
+        Utiliza tkinter para mostrar un cuadro de diálogo de selección de archivo que se abre en la carpeta home del usuario.
+        Si no se selecciona ningún archivo, muestra un mensaje informativo. Si se selecciona un archivo, guarda la ruta
+        del archivo en self.file_path y muestra un mensaje informativo con la ruta del archivo seleccionado.
+        """
+        home_dir = os.path.expanduser("~")
+        root = tk.Tk()
+        root.withdraw()  # Ocultar la ventana principal de tkinter
+        self.file_path = filedialog.askopenfilename(
+            initialdir=home_dir,
+            filetypes=[("Debian packages", "*.deb")]
+        )
+        if not self.file_path:
+            messagebox.showinfo("Información", "No se ha seleccionado ningún archivo.")
+        else:
+            messagebox.showinfo("Información", f"Archivo seleccionado: {self.file_path}")
+
+    def instalar_deb(self):
+        """
+        Instala el archivo .deb seleccionado utilizando dpkg y corrige dependencias si es necesario.
+
+        Si no se ha seleccionado ningún archivo, muestra un mensaje informativo. Si se ha seleccionado un archivo,
+        intenta instalarlo utilizando dpkg. Si la instalación falla debido a dependencias no satisfechas, intenta
+        corregirlas utilizando apt-get.
+
+        Muestra mensajes informativos y de error según corresponda.
+        """
+
+        try:
+            messagebox.showinfo("Información", f"Instalando {self.file_path}...")
+            # Obtén la contraseña desde el archivo password.py
+            contrasena = obtener_contrasena()
+            # Prepara el comando con sudo
+            comando = f'echo {contrasena} | sudo -S dpkg -i {self.file_path}'
+            subprocess.run(comando, shell=True, check=True)
+            messagebox.showinfo("Información", "Instalación completada.")
+        except subprocess.CalledProcessError as e:
+            messagebox.showerror("Error", f"Error durante la instalación: {e}")
+            messagebox.showinfo("Información", "Intentando corregir dependencias...")
+            try:
+                comando_fix = f'echo {contrasena} | sudo -S apt-get -f install -y'
+                subprocess.run(comando_fix, shell=True, check=True)
+                messagebox.showinfo("Información", "Dependencias corregidas y paquete instalado.")
+            except subprocess.CalledProcessError as e:
+                messagebox.showerror("Error", f"Error al corregir dependencias: {e}")

@@ -81,6 +81,7 @@
 - Simplificado el sistema de comprobación de dependencias para instalar las dependencias con pip3 y con APT. Ahora las dependencias de pip3 se establecen en el archivo requierements.txt y las dependencias APT se establecen en el diccionario del archivo dependencias.py.
 - Modificados los permisos del archivo config.ini para su lectura desde el archivo .deb.
 - Añadidas funcionalidades para modificar el perfil de usuario del sistema (requiere que el usuario tenga privilegios de sudo). Por el momento solo permite modificar el nombre de usuario, la contraseña y la fotografía de perfil.
+- Añadida a la categoría Sistema la posibilidad de seleccionar un archivo .deb e instalarlo utilizando dpkg.
 
 ## Dependencias Imprescindibles 
 

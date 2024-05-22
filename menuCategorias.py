@@ -19,6 +19,7 @@ from cat_sistema import AplicacionBuscadorDuplicados
 from cat_sistema import Limpieza 
 from cat_sistema import Repositorios
 from cat_sistema import MonitorizarSistema
+from cat_sistema import DebInstalador
 from cat_informacion import Informacion
 from cat_redLocal import encontrar_dispositivos_en_red, doble_clic
 from cat_navegadores import LimpiadorNavegadores
@@ -239,6 +240,16 @@ Steps:
     boton_monitorizar = tk.Button(contenedor_botones, text="Monitorizar", command=abrir_ventana_monitorizar_sistema)
     boton_monitorizar.grid(row=3, column=0, padx=10, pady=10)
     ToolTip(boton_gestion_repositorios, "Genera un gráfico de los recursos del sistema en el momento actual")
+    
+    # Función para abrir el instalador de .deb
+    def abrir_instalador_deb():
+        instalador = DebInstalador()
+        instalador.seleccionar_archivo()
+        instalador.instalar_deb()
+
+    boton_instalar_deb = tk.Button(contenedor_botones, text="Instalar .deb", command=abrir_instalador_deb)
+    boton_instalar_deb.grid(row=3, column=1, padx=10, pady=10)
+    ToolTip(boton_instalar_deb, "Selecciona e instala un paquete .deb usando dpkg")
 
     
 # Función para mostrar la categoría INTERNET
