@@ -82,6 +82,8 @@
 - Modificados los permisos del archivo config.ini para su lectura desde el archivo .deb.
 - Añadidas funcionalidades para modificar el perfil de usuario del sistema (requiere que el usuario tenga privilegios de sudo). Por el momento solo permite modificar el nombre de usuario, la contraseña y la fotografía de perfil.
 - Añadida a la categoría Sistema la posibilidad de seleccionar un archivo .deb e instalarlo utilizando dpkg.
+- Añadida la posibilidad de desinstalar los paquetes snap y deb instalados por el usuario. En la ventana de desinstalación se ha añadido un cuadro de búsqueda dinámico para buscar el paquete a desinstalar.
+- Añadida la opción para abrir el repositorio en GitHub del proyecto.
 
 ## Dependencias Imprescindibles 
 

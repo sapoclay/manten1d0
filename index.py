@@ -178,6 +178,11 @@ class VentanaPrincipal:
             if url:
                 webbrowser.open_new(url)
         
+        def abrir_url_github():
+            import webbrowser
+            """Abre la URL del repositorio de GitHub en el navegador predeterminado."""
+            webbrowser.open("https://github.com/sapoclay/manten1d0")
+        
         # Crear el menú superior
         self.menu_superior = tk.Menu(self.root)
         self.menu_archivo = tk.Menu(self.menu_superior, tearoff=0)
@@ -187,6 +192,7 @@ class VentanaPrincipal:
         self.menu_superior.add_cascade(label="Archivo", menu=self.menu_archivo)
         # Crear el menú Preferencias
         preferencias_menu = tk.Menu(self.root, tearoff=0)
+        preferencias_menu.add_command(label="Repositorio GitHub", command=abrir_url_github)
         preferencias_menu.add_command(label="Buscar Actualizaciones", command=abrir_ventana_actualizaciones)
         preferencias_menu.add_command(label="Opciones", command=abrir_ventana_personalizacion)
         # Agregar el menú Preferencias como una cascada en el menú principal

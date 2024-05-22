@@ -53,7 +53,7 @@ def mostrar_about():
     img_label.image = img  # Mantener una referencia para evitar que la imagen sea eliminada por el recolector de basura
     img_label.pack(pady=10)
 
-    about_label = tk.Label(about_window, text=f"Manten1-d0 de Sistema Ubuntu\nVersión: {version_actual}\nEste programa realiza tareas de mantenimiento básico\nen sistemas Ubuntu.\nNo se dan garantías de ningún tipo.\n")
+    about_label = tk.Label(about_window, text=f"Manten1-d0 de Sistema Ubuntu\nVersión: {version_actual}\nEste programa realiza tareas de mantenimiento básico\nen sistemas Ubuntu.\nNo se dan garantías de ningún tipo.\nRepositorio: https://github.com/sapoclay/manten1d0")
     about_label.pack(padx=20, pady=20)
     
     if preferencias.tema_seleccionado != "Claro":

@@ -20,6 +20,7 @@ from cat_sistema import Limpieza
 from cat_sistema import Repositorios
 from cat_sistema import MonitorizarSistema
 from cat_sistema import DebInstalador
+from cat_sistema import DesinstalarPaquetes
 from cat_informacion import Informacion
 from cat_redLocal import encontrar_dispositivos_en_red, doble_clic
 from cat_navegadores import LimpiadorNavegadores
@@ -239,7 +240,7 @@ Steps:
 
     boton_monitorizar = tk.Button(contenedor_botones, text="Monitorizar", command=abrir_ventana_monitorizar_sistema)
     boton_monitorizar.grid(row=3, column=0, padx=10, pady=10)
-    ToolTip(boton_gestion_repositorios, "Genera un gráfico de los recursos del sistema en el momento actual")
+    ToolTip(boton_monitorizar, "Genera un gráfico de los recursos del sistema en el momento actual")
     
     # Función para abrir el instalador de .deb
     def abrir_instalador_deb():
@@ -250,6 +251,16 @@ Steps:
     boton_instalar_deb = tk.Button(contenedor_botones, text="Instalar .deb", command=abrir_instalador_deb)
     boton_instalar_deb.grid(row=3, column=1, padx=10, pady=10)
     ToolTip(boton_instalar_deb, "Selecciona e instala un paquete .deb usando dpkg")
+    
+    # Función para abrir el desinstalador de paquetes 
+    def abrir_desinstalar_paquetes():
+        ventana_desinstalar = tk.Toplevel(self.area_central)
+        desinstalar = DesinstalarPaquetes(ventana_desinstalar)
+       # desinstalar.DesinstalarPaquetes()
+
+    boton_desinstalar_paquetes = tk.Button(contenedor_botones, text="Desinstalar Paquetes", command=abrir_desinstalar_paquetes)
+    boton_desinstalar_paquetes.grid(row=3, column=2, padx=10, pady=10)
+    ToolTip(boton_instalar_deb, "Desinstalar paquetes instalados por el usuario")
 
     
 # Función para mostrar la categoría INTERNET

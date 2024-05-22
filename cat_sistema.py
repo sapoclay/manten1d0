@@ -2,14 +2,14 @@ import subprocess
 from password import obtener_contrasena
 import threading
 import time
-from tkinter import messagebox
+from tkinter import messagebox, Listbox, Scrollbar, END
 import tkinter as tk
 from tkinter import ttk
 import os
 from tkinter import filedialog
 import psutil
 from tkinter import font
-import tkinter.messagebox as messagebox
+#import tkinter.messagebox as messagebox
 import hashlib
 from datetime import datetime, timezone
 import platform
@@ -1034,3 +1034,161 @@ class DebInstalador:
                 messagebox.showinfo("Información", "Dependencias corregidas y paquete instalado.")
             except subprocess.CalledProcessError as e:
                 messagebox.showerror("Error", f"Error al corregir dependencias: {e}")
+                
+class DesinstalarPaquetes:
+    """
+    Una clase para gestionar la desinstalación de paquetes deb y snap en un sistema Ubuntu usando una interfaz gráfica.
+
+    Atributos:
+    root (tk.Tk): La ventana principal de la interfaz gráfica.
+    search_var (tk.StringVar): Variable de texto para el campo de búsqueda.
+    search_entry (tk.Entry): Campo de entrada para la búsqueda de paquetes.
+    packages_listbox (Listbox): Lista que muestra los paquetes instalados.
+    uninstall_button (tk.Button): Botón para desinstalar el paquete seleccionado.
+    placeholder (str): Texto del placeholder del campo de búsqueda.
+    installed_packages (list): Lista de paquetes instalados en el sistema.
+
+    Métodos:
+    __init__(self, root):
+        Inicializa la ventana principal y los elementos de la interfaz gráfica.
+    set_placeholder(self, event=None):
+        Establece el placeholder en el campo de búsqueda.
+    clear_placeholder(self, event=None):
+        Limpia el placeholder del campo de búsqueda.
+    cargar_paquetes_instalados(self):
+        Carga y muestra los paquetes deb y snap instalados por el usuario en el sistema.
+    actualizar_lista_paquetes(self):
+        Actualiza la lista de paquetes mostrados según el término de búsqueda.
+    buscar_paquete(self, event=None):
+        Busca paquetes en la lista según la entrada del usuario.
+    desinstalar_paquetes(self):
+        Desinstala el paquete seleccionado según su tipo (deb o snap).
+    """
+
+    def __init__(self, root):
+        """
+        Inicializa la ventana principal y los elementos de la interfaz gráfica.
+        
+        Args:
+        root (tk.Tk): La ventana principal de la interfaz gráfica.
+        """
+        self.root = root
+        self.root.title("Gestor de Paquetes")
+        
+        # Crear campo de búsqueda con placeholder
+        self.search_var = tk.StringVar()
+        self.search_entry = tk.Entry(self.root, textvariable=self.search_var, fg='grey')
+        self.search_entry.pack(side=tk.TOP, padx=10, pady=10, fill=tk.X)
+        self.search_entry.bind("<KeyRelease>", self.buscar_paquete)
+        self.search_entry.bind("<FocusIn>", self.clear_placeholder)
+        self.search_entry.bind("<FocusOut>", self.set_placeholder)
+        
+        self.placeholder = "Buscar"
+        self.set_placeholder()
+
+        # Crear lista de paquetes
+        self.packages_listbox = Listbox(self.root, selectmode=tk.SINGLE, width=50)
+        self.packages_listbox.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
+
+        # Agregar scroll a la lista de paquetes
+        scrollbar = Scrollbar(self.root)
+        scrollbar.pack(side=tk.RIGHT, fill=tk.BOTH)
+        self.packages_listbox.config(yscrollcommand=scrollbar.set)
+        scrollbar.config(command=self.packages_listbox.yview)
+
+        # Botón para desinstalar paquete seleccionado
+        self.uninstall_button = tk.Button(self.root, text="Desinstalar", command=self.desinstalar_paquetes)
+        self.uninstall_button.pack(pady=10)
+
+        # Lista de paquetes instalados
+        self.installed_packages = []
+        # Cargar los paquetes instalados
+        self.cargar_paquetes_instalados()
+        self.actualizar_lista_paquetes()  # Asegura que los paquetes se muestran al inicio
+
+    def set_placeholder(self, event=None):
+        """
+        Establece el placeholder en el campo de búsqueda si está vacío.
+        
+        Args:
+        event: Evento opcional que desencadena la función.
+        """
+        if not self.search_var.get():
+            self.search_entry.insert(0, self.placeholder)
+            self.search_entry.config(fg='grey')
+
+    def clear_placeholder(self, event=None):
+        """
+        Limpia el placeholder del campo de búsqueda si está presente.
+        
+        Args:
+        event: Evento opcional que desencadena la función.
+        """
+        if self.search_var.get() == self.placeholder:
+            self.search_entry.delete(0, tk.END)
+            self.search_entry.config(fg='black')
+
+    def cargar_paquetes_instalados(self):
+        """
+        Carga y muestra los paquetes deb y snap instalados por el usuario en el sistema.
+        """
+        self.installed_packages = []  # Reinicia la lista de paquetes instalados
+
+        # Listar paquetes deb instalados por el usuario
+        deb_packages = subprocess.check_output("dpkg --get-selections | grep -v deinstall", shell=True, text=True)
+        for package in deb_packages.splitlines():
+            package_name = package.split()[0]
+            self.installed_packages.append(f"deb: {package_name}")
+
+        # Listar paquetes snap instalados
+        snap_packages = subprocess.check_output("snap list", shell=True, text=True)
+        for line in snap_packages.splitlines()[1:]:  # Omitir la primera línea de encabezado
+            package_name = line.split()[0]
+            self.installed_packages.append(f"snap: {package_name}")
+
+        self.actualizar_lista_paquetes()  # Llamar aquí para mostrar los paquetes inicialmente
+
+    def actualizar_lista_paquetes(self):
+        """
+        Actualiza la lista de paquetes mostrados según el término de búsqueda.
+        """
+        self.packages_listbox.delete(0, END)
+        search_term = self.search_var.get().lower()
+        for package in self.installed_packages:
+            if search_term in package.lower() or search_term == self.placeholder.lower():
+                self.packages_listbox.insert(END, package)
+
+    def buscar_paquete(self, event=None):
+        """
+        Función para buscar paquetes según la entrada del usuario.
+        
+        Args:
+        event: Evento opcional que desencadena la función.
+        """
+        self.actualizar_lista_paquetes()
+
+    def desinstalar_paquetes(self):
+        """
+        Desinstala el paquete seleccionado según su tipo (deb o snap).
+        """
+        selected = self.packages_listbox.curselection()
+        if not selected:
+            messagebox.showinfo("Información", "Por favor, selecciona un paquete para desinstalar.")
+            return
+        
+        package = self.packages_listbox.get(selected[0])
+        package_type, package_name = package.split(": ")
+
+        try:
+            if package_type == "deb":
+                comando = f'echo {obtener_contrasena()} | sudo -S apt-get remove --purge -y {package_name}'
+            elif package_type == "snap":
+                comando = f'echo {obtener_contrasena()} | sudo -S snap remove {package_name}'
+            else:
+                raise ValueError("Tipo de paquete desconocido.")
+
+            subprocess.run(comando, shell=True, check=True)
+            messagebox.showinfo("Información", f"Paquete {package_name} desinstalado correctamente.")
+            self.cargar_paquetes_instalados()
+        except subprocess.CalledProcessError as e:
+            messagebox.showerror("Error", f"Error al desinstalar el paquete: {e}")
