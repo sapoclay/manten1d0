@@ -88,6 +88,7 @@
 ![conexion-internet](https://github.com/sapoclay/manten1d0/assets/6242827/2c714f02-b0e9-4106-9c61-2dc2e1a441c9)
 - Se ha añadido información sobre la conexión a internet en el menú lateral. En la parte inferior aparecerá una etiqueta en verde cuando la conexión a internet esté activa. Si en algún momento se pierde la conexión, esta etiqueta pasará a rojo y el texto cambiará a "Sin conexión".
 - Acabo de añadir la opción de instalación de los navegadores más típicos (Firefox, Chrome y Edge). Esta opción de instalación aparece en la categoría Navegadores.
+- Reparados los errores en la gestión de los repositorios.
 - Corrección de errores menores.
 
 ## Dependencias Imprescindibles 

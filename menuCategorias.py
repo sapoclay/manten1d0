@@ -225,13 +225,13 @@ Steps:
     
     def abrir_ventana_gestion_repositorios():
         ventana_gestion_repositorios = tk.Toplevel(self.area_central)
-        buscar_archivos_duplicados = Repositorios(ventana_gestion_repositorios)
-    
+        gestion_repositorios = Repositorios(ventana_gestion_repositorios)
+
     # Botón para abrir la ventana para la gestión de repositorios
     boton_gestion_repositorios = tk.Button(contenedor_botones, text="Gestiona Repositorios", command=abrir_ventana_gestion_repositorios)
     boton_gestion_repositorios.grid(row=2, column=2, padx=10, pady=10)
     ToolTip(boton_gestion_repositorios, "Gestiona los repositorios del sistema")
-    
+        
 
     # Llamada a la función
     def abrir_ventana_monitorizar_sistema():

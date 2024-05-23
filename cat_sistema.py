@@ -2,7 +2,7 @@ import subprocess
 from password import obtener_contrasena
 import threading
 import time
-from tkinter import messagebox, Listbox, Scrollbar, END
+from tkinter import messagebox, Listbox, Scrollbar, END, simpledialog, Menu
 import tkinter as tk
 from tkinter import ttk
 import os
@@ -17,6 +17,7 @@ from tooltip import ToolTip
 import subprocess
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
+from placeholder import entradaConPlaceHolder
 
 # Clase para generar la ventana de barra de progreso
 class ProgresoVentana(tk.Toplevel):
@@ -616,140 +617,35 @@ Raises:
                 messagebox.showerror("Error", "El archivo ya no existe en la ubicación: {}".format(ruta_archivo))
                 
 class Repositorios:
-    
-    """
-Clase 'Repositorios'.
-
-Class:
-    - Repositorios: Clase para gestionar los repositorios del sistema.
-
-Attributes:
-    - master: El widget principal al que pertenece la ventana.
-
-Methods:
-    - __init__(self, master): Constructor de la clase. Inicializa la ventana y sus componentes.
-        - master: El widget principal al que pertenece la ventana.
-    - hacer_backup_sources_list(self): Realiza una copia de seguridad del archivo sources.list.
-    - restaurar_backup(self): Restaura la copia de seguridad del archivo sources.list.
-    - agregar_repositorio(self): Abre una ventana para que el usuario agregue un nuevo repositorio.
-    - mostrar_repositorios(self): Muestra la lista de repositorios instalados.
-    - seleccionar_repositorio(self, listbox): Maneja la selección de un repositorio en la lista.
-        - listbox: El Listbox que contiene la lista de repositorios.
-    - mostrar_ventana_accion_repo(self, repo_seleccionado): Muestra una ventana de diálogo para editar o eliminar un repositorio seleccionado.
-        - repo_seleccionado: El repositorio seleccionado.
-    - eliminar_repo(self, repo_a_eliminar, ventana_dialogo): Elimina un repositorio seleccionado.
-        - repo_a_eliminar: El repositorio a eliminar.
-        - ventana_dialogo: La ventana de diálogo asociada.
-    - editar_repositorio(self, repo_original, repo_nuevo, ventana_dialogo): Edita un repositorio existente con una nueva URL.
-        - repo_original: La URL del repositorio original.
-        - repo_nuevo: La nueva URL del repositorio.
-        - ventana_dialogo: La ventana de diálogo asociada.
-    - obtener_repositorios_instalados(self): Obtiene la lista de repositorios instalados en el sistema.
-    - mostrar_advertencia_copia_seguridad(self): Muestra una advertencia sobre la copia de seguridad del archivo sources.list.
-    - actualizar_repositorios(self): Actualiza la lista de repositorios mostrada en la interfaz de usuario.
-
-Functions:
-    - abrir_administrador_repositorios(): Abre una ventana para administrar los repositorios del sistema.
-
-Raises:
-    - No se especifican excepciones en la clase.
-"""
-    
     def __init__(self, master):
         self.master = master
-        master.title("Gestor de Repositorios")
+        master.title("Administrador de Repositorios")
 
-        # Crear un marco para los botones de acción
-        self.frame_botones = tk.Frame(master)
-        self.frame_botones.pack(padx=10, pady=10)
-
-        # Botones para agregar y restaurar repositorios
-        tk.Button(self.frame_botones, text="Añadir Repositorio", command=self.agregar_repositorio).pack(side=tk.LEFT, padx=10)
-        tk.Button(self.frame_botones, text="Restaurar sources.list", command=self.restaurar_backup).pack(side=tk.LEFT, padx=10)
-
-        # Crear un marco para mostrar la lista de repositorios
+        # Crear un marco para la lista de repositorios
         self.frame_repositorios = tk.Frame(master)
-        self.frame_repositorios.pack(padx=10, pady=10, expand=True, fill=tk.BOTH)
+        self.frame_repositorios.pack(padx=10, pady=10, fill=tk.BOTH, expand=True)
 
-        # Inicializar la contraseña como None
-        self.contrasena = None
+        # Botón para actualizar la lista de repositorios
+        self.btn_actualizar = tk.Button(master, text="Actualizar Repositorios", command=self.actualizar_repositorios)
+        self.btn_actualizar.pack(side=tk.LEFT, padx=10, pady=10)
+        ToolTip(self.btn_actualizar, "Actualizar el listado de repositorios")
+
+
+        # Botón para eliminar el repositorio seleccionado
+        self.btn_eliminar = tk.Button(master, text="Eliminar Repositorio", command=self.eliminar_repositorios_seleccionados)
+        self.btn_eliminar.pack(side=tk.LEFT, padx=10, pady=10)
+        ToolTip(self.btn_eliminar, "Eliminar el repositorio seleccionado del sistema")
+
+        # Botón para añadir un PPA
+        self.btn_anadir = tk.Button(master, text="Añadir PPA", command=self.abrir_ventana_anadir_ppa)
+        self.btn_anadir.pack(side=tk.LEFT, padx=10, pady=10)
+        ToolTip(self.btn_anadir, "Añadir un PPA al sistema")
+
+        # Variable para los checkboxes
+        self.repositorios_seleccionados = []
 
         # Mostrar la lista de repositorios
         self.mostrar_repositorios()
-
-        # Mostrar una advertencia sobre la copia de seguridad
-        self.mostrar_advertencia_copia_seguridad()
-
-    def hacer_backup_sources_list(self):
-        contrasena = obtener_contrasena()
-        if contrasena is None:
-            messagebox.showwarning("Contraseña requerida", "Debes ingresar la contraseña para ejecutar esta acción.")
-            return
-
-        try:
-            # Ejecutar el comando sudo cp para hacer una copia de seguridad del archivo sources.list
-            comando = ['sudo', '-S', 'cp', '/etc/apt/sources.list', '/etc/apt/sources.list.bak']
-            proceso = subprocess.run(comando, input=contrasena.encode(), text=True, capture_output=True, check=True)
-            messagebox.showinfo("Éxito", "Copia de seguridad de sources.list creada correctamente.")
-        except subprocess.CalledProcessError as e:
-            messagebox.showerror("Error", f"No se pudo hacer una copia de seguridad de sources.list: {e}")
-
-    def restaurar_backup(self):
-        try:
-            contrasena = obtener_contrasena()
-            if contrasena is None:
-                messagebox.showwarning("Contraseña requerida", "Debes ingresar la contraseña para ejecutar esta acción.")
-                return
-
-            # Ejecutar el comando sudo cp para restaurar la copia de seguridad del archivo sources.list
-            comando = ['sudo', '-S', 'cp', '/etc/apt/sources.list.bak', '/etc/apt/sources.list']
-            proceso = subprocess.run(comando, input=contrasena.encode(), text=True, capture_output=True, check=True)
-            
-            # Verificar si la copia de seguridad se restauró correctamente
-            if proceso.returncode == 0:
-                messagebox.showinfo("Éxito", "Copia de seguridad restaurada correctamente.")
-                # Actualizar la lista de repositorios después de restaurar la copia de seguridad
-                self.actualizar_repositorios()
-            else:
-                messagebox.showerror("Error", "No se pudo restaurar la copia de seguridad.")
-        except Exception as e:
-            messagebox.showerror("Error", f"No se pudo restaurar la copia de seguridad: {e}")
-
-    def agregar_repositorio(self):
-        # Función interna para manejar el botón de "Guardar" en la ventana de agregar repositorio
-        def guardar_repositorio():
-            url = entry_url.get()
-            if not url:
-                messagebox.showerror("Error", "Por favor, ingrese la URL del repositorio.")
-                return
-
-            contrasena = obtener_contrasena()
-            if not contrasena:
-                return
-            
-            self.hacer_backup_sources_list()  # Hacer una copia de seguridad del archivo sources.list
-            
-            try:
-                subprocess.run(['sudo', '-S', 'add-apt-repository', url], input=contrasena.encode(), check=True)
-                messagebox.showinfo("Éxito", f"Repositorio {url} agregado correctamente.")
-                ventana_agregar.destroy()
-                # Actualizar la lista de repositorios después de agregar uno nuevo
-                self.actualizar_repositorios()
-            except subprocess.CalledProcessError as e:
-                messagebox.showerror("Error", f"No se pudo agregar el repositorio: {e}")
-
-        # Crear una nueva ventana para agregar el repositorio
-        ventana_agregar = tk.Toplevel(self.master)
-        ventana_agregar.title("Agregar Repositorio")
-
-        # Etiqueta y campo de entrada para la URL del repositorio
-        tk.Label(ventana_agregar, text="URL del Repositorio:").pack()
-        entry_url = tk.Entry(ventana_agregar, width=50)
-        entry_url.pack()
-
-        # Botón para guardar el repositorio
-        boton_guardar = tk.Button(ventana_agregar, text="Guardar", command=guardar_repositorio)
-        boton_guardar.pack(pady=5)
 
     def mostrar_repositorios(self):
         # Limpiar el contenido del marco antes de mostrar la lista de repositorios
@@ -759,138 +655,167 @@ Raises:
         # Obtener la lista de repositorios instalados
         lista_repositorios = self.obtener_repositorios_instalados()
 
-        # Crear una barra de desplazamiento vertical
-        scrollbar = tk.Scrollbar(self.frame_repositorios, orient=tk.VERTICAL)
-
-        # Crear un Listbox para mostrar los repositorios
-        repos_listbox = tk.Listbox(self.frame_repositorios, yscrollcommand=scrollbar.set)
-
-        # Agregar cada repositorio a la Listbox
-        for repo in lista_repositorios:
-            repos_listbox.insert(tk.END, repo)
-
-        # Configurar la relación entre el Listbox y la barra de desplazamiento
-        scrollbar.config(command=repos_listbox.yview)
-
-        # Empacar la barra de desplazamiento y el Listbox en el marco de repositorios
-        repos_listbox.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
+        # Crear un scrollbar
+        scrollbar = tk.Scrollbar(self.frame_repositorios)
         scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
 
-        # Asociar un evento de selección al Listbox para realizar acciones
-        repos_listbox.bind('<<ListboxSelect>>', lambda event: self.seleccionar_repositorio(repos_listbox))
+        # Crear un canvas para contener los checkboxes
+        canvas = tk.Canvas(self.frame_repositorios, yscrollcommand=scrollbar.set)
+        canvas.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
 
-        # Configurar el tamaño de la ventana secundaria
-        self.master.geometry("600x400")
+        # Crear un frame dentro del canvas para los checkboxes
+        frame_checkboxes = tk.Frame(canvas)
+        canvas.create_window((0, 0), window=frame_checkboxes, anchor='nw')
 
-        # Centrar la ventana secundaria
-        self.master.update_idletasks()
-        width = self.master.winfo_width()
-        height = self.master.winfo_height()
-        x_offset = (self.master.winfo_screenwidth() - width) // 2
-        y_offset = (self.master.winfo_screenheight() - height) // 2
-        self.master.geometry(f"+{x_offset}+{y_offset}")
+        # Configurar el scrollbar
+        scrollbar.config(command=canvas.yview)
+        frame_checkboxes.bind("<Configure>", lambda e: canvas.config(scrollregion=canvas.bbox("all")))
 
-        
-    def seleccionar_repositorio(self, listbox):
-        # Obtener el índice del elemento seleccionado
-        seleccion = listbox.curselection()
-        if seleccion:
-            indice = seleccion[0]
-            # Obtener el valor del repositorio seleccionado
-            repo_seleccionado = listbox.get(indice)
-            # Mostrar una ventana de diálogo para editar o eliminar el repositorio
-            self.mostrar_ventana_accion_repo(repo_seleccionado)
-    
-    def mostrar_ventana_accion_repo(self, repo_seleccionado):
-        # Crear una nueva ventana de diálogo
-        ventana_dialogo = tk.Toplevel(self.master)
-        ventana_dialogo.title("Editar o Eliminar Repositorio")
-
-        # Etiqueta y campo de entrada para mostrar la URL del repositorio seleccionado
-        tk.Label(ventana_dialogo, text="URL del Repositorio:").pack()
-        entry_url = tk.Entry(ventana_dialogo, width=50)
-        entry_url.insert(tk.END, repo_seleccionado)
-        entry_url.pack()
-
-        # Agregar menú contextual para el campo de entrada
-        menu_contextual = tk.Menu(ventana_dialogo, tearoff=0)
-        menu_contextual.add_command(label="Pegar", command=lambda: entry_url.event_generate("<<Paste>>"))
-        entry_url.bind("<Button-3>", lambda event: menu_contextual.post(event.x_root, event.y_root))
-
-        # Botones para aplicar cambios, eliminar o cancelar la operación
-        boton_editar = tk.Button(ventana_dialogo, text="Editar Repositorio", command=lambda: self.editar_repositorio(repo_seleccionado, entry_url.get(), ventana_dialogo))
-        boton_editar.pack(pady=5)
-        boton_eliminar = tk.Button(ventana_dialogo, text="Eliminar Repositorio", command=lambda: self.eliminar_repo(repo_seleccionado, ventana_dialogo))
-        boton_eliminar.pack(pady=5)
-        boton_cancelar = tk.Button(ventana_dialogo, text="Cancelar", command=ventana_dialogo.destroy)
-        boton_cancelar.pack(pady=5)
-
-    def eliminar_repo(self, repo_a_eliminar, ventana_dialogo):
-        # Solicitar confirmación al usuario antes de eliminar el repositorio
-        confirmacion = messagebox.askyesno("Confirmación", f"¿Estás seguro de que deseas eliminar el repositorio '{repo_a_eliminar}'?")
-        if confirmacion:
-            contrasena = obtener_contrasena()
-            if not contrasena:
-                return
-
-            try:
-                self.hacer_backup_sources_list()  # Hacer una copia de seguridad del archivo sources.list
-                # Ejecutar el comando para eliminar el repositorio
-                subprocess.run(['sudo', '-S', 'add-apt-repository', '--remove', repo_a_eliminar], input=contrasena.encode(), check=True)
-                messagebox.showinfo("Éxito", "Repositorio eliminado correctamente.")
-                ventana_dialogo.destroy()
-                # Actualizar la lista de repositorios después de eliminar uno
-                self.actualizar_repositorios()
-            except subprocess.CalledProcessError as e:
-                messagebox.showerror("Error", f"No se pudo eliminar el repositorio: {e}")
-
-    def editar_repositorio(self, repo_original, repo_nuevo, ventana_dialogo):
-        try:
-            contrasena = obtener_contrasena()
-            if not contrasena:
-                return
-            
-            self.hacer_backup_sources_list()  # Hacer una copia de seguridad del archivo sources.list
-            # Ejecutar el comando para editar el repositorio
-            subprocess.run(['sudo', '-S', 'add-apt-repository', '--remove', repo_original], input=contrasena.encode(), check=True)
-            subprocess.run(['sudo', '-S', 'add-apt-repository', repo_nuevo], input=contrasena.encode(), check=True)
-            messagebox.showinfo("Éxito", "Repositorio editado correctamente.")
-            ventana_dialogo.destroy()
-            # Actualizar la lista de repositorios después de editar uno
-            self.actualizar_repositorios()
-        except subprocess.CalledProcessError as e:
-            messagebox.showerror("Error", f"No se pudo editar el repositorio: {e}")
+        # Mostrar la lista de repositorios con checkboxes
+        self.repositorios_seleccionados = []
+        for repo in lista_repositorios:
+            var = tk.BooleanVar()
+            checkbox = tk.Checkbutton(frame_checkboxes, text=repo, variable=var, command=lambda var=var: self.on_checkbox_click(var))
+            checkbox.pack(anchor='w')
+            self.repositorios_seleccionados.append((repo, var))
 
     def obtener_repositorios_instalados(self):
-        # Comando para obtener la lista de repositorios
-        comando = "apt-cache policy | grep http | awk '{print $2 $3}'"
+        repositorios = []
 
-        # Ejecutar el comando y recuperar la salida
-        try:
-            resultado = subprocess.run(comando, shell=True, text=True, capture_output=True, check=True)
-            repositorios = resultado.stdout.strip().split('\n')
-            return repositorios
-        except subprocess.CalledProcessError as e:
-            messagebox.showerror("Error", f"No se pudieron obtener los repositorios: {e}")
-            return []
+        # Leer los archivos en /etc/apt/sources.list.d/
+        archivos = os.listdir("/etc/apt/sources.list.d/")
+        for archivo in archivos:
+            if archivo.endswith(".list"):
+                with open(os.path.join("/etc/apt/sources.list.d/", archivo), "r") as f:
+                    contenido = f.readlines()
+                    for linea in contenido:
+                        if linea.startswith("deb"):
+                            repositorios.append(linea.strip())
 
-    def mostrar_advertencia_copia_seguridad(self):
-        messagebox.showwarning("Advertencia", "Se realizará una copia de seguridad del archivo sources.list antes de hacer cualquier modificación. La ubicación de la copia de seguridad será: /etc/apt/sources.list.bak")
+        # Leer el archivo /etc/apt/sources.list
+        with open("/etc/apt/sources.list", "r") as f:
+            contenido = f.readlines()
+            for linea in contenido:
+                if linea.startswith("deb"):
+                    repositorios.append(linea.strip())
+
+        return repositorios
 
     def actualizar_repositorios(self):
-        self.mostrar_repositorios()
+        try:
+            subprocess.check_call(['sudo', 'apt-get', 'update'])
+            self.mostrar_repositorios()
+        except subprocess.CalledProcessError as e:
+            messagebox.showerror("Error", f"No se pudo actualizar la lista de repositorios: {e}")
 
-def abrir_administrador_repositorios():
-    ventana_admin_repos = tk.Toplevel(ventana_principal)
-    ventana_admin_repos.title("Administrador de Repositorios")
-    Repositorios(ventana_admin_repos)
+    def eliminar_repositorios_seleccionados(self):
+        seleccionados = [repo for repo, var in self.repositorios_seleccionados if var.get()]
+        if not seleccionados:
+            messagebox.showwarning("Advertencia", "Seleccione al menos un repositorio para eliminar.")
+            return
 
-# Ejecutar la ventana principal solo si este archivo se ejecuta directamente
-if __name__ == "__main__":
-    ventana_principal = tk.Tk()
-    boton_admin_repos = tk.Button(ventana_principal, text="Administrar Repositorios", command=abrir_administrador_repositorios)
-    boton_admin_repos.pack()
-    ventana_principal.mainloop()
+        repo = seleccionados[0]  # Solo un repositorio debe estar seleccionado
+        confirmar = messagebox.askyesno("Confirmar Eliminación", f"¿Está seguro de que desea eliminar el repositorio: {repo}?")
+        if confirmar:
+            self.eliminar_repo_confirmado(repo)
+
+    def eliminar_repo_confirmado(self, repo):
+        from password import obtener_contrasena  # Importar la función para obtener la contraseña
+        contrasena = obtener_contrasena()  # Obtener la contraseña
+
+        # Determinar si el repositorio es un PPA o un repositorio regular
+        if "ppa.launchpad.net" in repo:
+            ppa_name = self.obtener_nombre_ppa(repo)
+            if ppa_name:
+                proceso = subprocess.Popen(['sudo', '-S', 'add-apt-repository', '--remove', ppa_name], stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+                salida, error = proceso.communicate(input=(contrasena + '\n').encode() + b'\n')
+                if proceso.returncode == 0:
+                    messagebox.showinfo("Éxito", f"Repositorio {repo} eliminado correctamente con APT.")
+                else:
+                    messagebox.showerror("Error", f"No se pudo eliminar el repositorio {repo}: {error.decode()}")
+        else:
+            # Eliminar los archivos en /etc/apt/sources.list.d/ con sudo
+            self.eliminar_archivos_repositorio(repo, contrasena)
+
+        # Actualizar la lista de repositorios después de eliminar uno
+        self.actualizar_repositorios()
+
+    def obtener_nombre_ppa(self, repo):
+        # Extraer el nombre del PPA desde la URL del repositorio
+        for line in repo.split():
+            if line.startswith("ppa:"):
+                return line
+        return None
+
+    def eliminar_archivos_repositorio(self, repo, contrasena):
+        # Obtener la lista de archivos en el directorio /etc/apt/sources.list.d/
+        archivos = os.listdir("/etc/apt/sources.list.d/")
+
+        # Iterar sobre los archivos y eliminar los que contienen la URL del repositorio
+        for archivo in archivos:
+            archivo_path = os.path.join("/etc/apt/sources.list.d/", archivo)
+            with open(archivo_path, "r") as f:
+                contenido = f.read()
+                if repo in contenido:
+                    try:
+                        # Eliminar el archivo .list con sudo
+                        proceso = subprocess.Popen(['sudo', '-S', 'rm', archivo_path], stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+                        salida, error = proceso.communicate(input=(contrasena + '\n').encode())
+                        
+                        # Eliminar el archivo .list.save si existe con sudo
+                        archivo_save_path = archivo_path + ".save"
+                        if os.path.exists(archivo_save_path):
+                            proceso = subprocess.Popen(['sudo', '-S', 'rm', archivo_save_path], stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+                            salida, error = proceso.communicate(input=(contrasena + '\n').encode())
+                    except FileNotFoundError:
+                        pass  # Si el archivo no existe, continuamos sin error
+
+        # Mostrar mensaje de éxito
+        messagebox.showinfo("Éxito", f"Repositorio {repo} eliminado correctamente del directorio /etc/apt/sources.list.d/")
+
+    def on_checkbox_click(self, checkbox_var):
+        # Deshabilitar todos los demás checkboxes si el checkbox actual está marcado
+        if checkbox_var.get():
+            for repo, var in self.repositorios_seleccionados:
+                if var != checkbox_var:
+                    var.set(False)
+
+    def abrir_ventana_anadir_ppa(self):
+        # Crear una nueva ventana para ingresar la URL del PPA
+        ventana_ppa = tk.Toplevel(self.master)
+        ventana_ppa.title("Añadir PPA")
+
+        # Crear una entrada con marcador de posición para la URL del PPA
+        entrada_ppa = entradaConPlaceHolder(ventana_ppa, placeholder="PPA:nombredelppa", width=50)
+        entrada_ppa.pack(pady=10, padx=10)
+
+        # Funcionalidad de clic derecho para pegar
+        menu = Menu(entrada_ppa, tearoff=0)
+        menu.add_command(label="Pegar", command=lambda: entrada_ppa.event_generate("<<Paste>>"))
+
+        def mostrar_menu(event):
+            menu.post(event.x_root, event.y_root)
+
+        entrada_ppa.bind("<Button-3>", mostrar_menu)
+
+        # Botón para añadir el PPA
+        btn_anadir = tk.Button(ventana_ppa, text="Añadir", command=lambda: self.anadir_ppa(entrada_ppa.get(), ventana_ppa))
+        btn_anadir.pack(pady=10)
+
+    def anadir_ppa(self, ppa_url, ventana_ppa):
+        from password import obtener_contrasena  # Importar la función para obtener la contraseña
+        contrasena = obtener_contrasena()  # Obtener la contraseña
+
+        if ppa_url:
+            proceso = subprocess.Popen(['sudo', '-S', 'add-apt-repository', ppa_url], stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+            salida, error = proceso.communicate(input=(contrasena + '\n').encode() + b'\n')
+            if proceso.returncode == 0:
+                messagebox.showinfo("Éxito", f"Repositorio {ppa_url} añadido correctamente.")
+                self.actualizar_repositorios()
+            else:
+                messagebox.showerror("Error", f"No se pudo añadir el repositorio {ppa_url}: {error.decode()}")
+        ventana_ppa.destroy()
+
     
 class MonitorizarSistema:
     

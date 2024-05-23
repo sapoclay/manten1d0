@@ -292,7 +292,7 @@ class VentanaPrincipal:
         # Mensaje de bienvenida
         self.label_bienvenida = tk.Label(
             self.area_central,
-            text="¡Bienvenido!\n Comienza haciendo clic\n en una categoría del menú lateral.",
+            text="¡Bienvenid@!\n Comienza haciendo clic\n en una categoría del menú lateral.",
             font=("Arial", 18, "bold"),
             bg="lightgrey",
         )
