@@ -35,8 +35,7 @@ def verificar_dependencias_sistema():
         return False
     else:
         return True
-    
-# Función para obtener la ruta absoluta al archivo requirements.txt
+
 def obtener_ruta_requirements():
     script_dir = os.path.dirname(os.path.abspath(__file__))
     return os.path.join(script_dir, 'requirements.txt')
@@ -57,29 +56,22 @@ def verificar_dependencias_pip():
         installed_packages = subprocess.check_output([sys.executable, '-m', 'pip', 'freeze'], universal_newlines=True)
         installed_packages_dict = {pkg.split('==')[0].lower(): pkg.split('==')[1] if '==' in pkg else None for pkg in installed_packages.splitlines()}
 
-        #print(f"Paquetes instalados: {installed_packages_dict}")
-
         packages_to_install = []
         for pkg, version in required_packages.items():
             installed_version = installed_packages_dict.get(pkg.lower())
             if installed_version is None:
-                print(f"{pkg} no está instalado.")
                 packages_to_install.append(pkg if version is None else f"{pkg}=={version}")
             elif version is not None and installed_version != version:
-                print(f"{pkg} tiene una versión diferente: instalada {installed_version}, requerida {version}.")
                 packages_to_install.append(f"{pkg}=={version}")
 
         if packages_to_install:
             mensaje = "Las siguientes dependencias de Python no están instaladas o tienen versiones incorrectas:\n\n"
             mensaje += "\n".join(packages_to_install)
             messagebox.showinfo("Dependencias de Python faltantes", mensaje)
-         #   print(f"Dependencias de Python faltantes: {packages_to_install}")
             return False
         else:
-            #print("Todas las dependencias de Python están instaladas.")
             return True
     except Exception as e:
-        #print(f"Error al verificar dependencias de Python: {e}")
         messagebox.showerror("Error", f"Error al verificar dependencias de Python: {e}")
         return False
 
@@ -102,9 +94,7 @@ def instalar_dependencias(progress_bar=None):
     progreso_actual = 0
     contrasena = obtener_contrasena()
 
-    # Instalar dependencias del sistema
     for dependencia, metodo_instalacion in DEPENDENCIAS_SISTEMA.items():
-        #print(f"Instalando {dependencia}...")
         try:
             proceso_instalacion = subprocess.Popen(["sudo", "-S"] + metodo_instalacion, stdin=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
             salida, error = proceso_instalacion.communicate(input=contrasena + "\n")
@@ -128,9 +118,9 @@ def instalar_dependencias(progress_bar=None):
                 print(f"No se pudo instalar {dependencia}: {e}")
             return False
 
-    # Instalar dependencias de Python
     try:
-        with open('requirements.txt', 'r') as req_file:
+        requirements_path = obtener_ruta_requirements()
+        with open(requirements_path, 'r') as req_file:
             required_packages = {}
             for line in req_file:
                 line = line.strip()
@@ -146,7 +136,6 @@ def instalar_dependencias(progress_bar=None):
         packages_to_install = [pkg if version is None else f"{pkg}=={version}" for pkg, version in required_packages.items() if pkg.lower() not in installed_packages_dict or (version is not None and installed_packages_dict[pkg.lower()] != version)]
 
         if packages_to_install:
-            #print("Instalando dependencias de Python...")
             subprocess.check_call([sys.executable, '-m', 'pip', 'install'] + packages_to_install)
 
             if progress_bar:
