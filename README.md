@@ -54,7 +54,7 @@
 ## Actualización Versión 0.5.2
 
 - Añadida la opción de buscar archivos duplicados dentro de una carpeta con permisos suficientes. Esto se hace mediante el calculo del hash de cada archivo utilizando SHA-256. Si coincide con el de otros archivos, se determina que son iguales. Esta opción muestra el archivo original y los archivos iguales. Además permite seleccionar todos los archivos que aparecen en el listado y se incluye también un botón para eliminar solo los archivos seleccionados. El listado de archivos duplicados encontrados permite el scroll utilizando la rueda del ratón o el teclado.
-- Se ha añadido también la posibildida de hacer doble clic sobre alguno de los archivos seleccionados y que se abra la ubicación del archivo utilizando el gestor de archivos nautilus.
+- Se ha añadido también la posibilididad de hacer doble clic sobre alguno de los archivos seleccionados y que se abra la ubicación del archivo utilizando el gestor de archivos nautilus.
 - Todos los botones cuentan ahora con un Tooltip a modo explicativo.
   
 ## Actualización Versión 0.5.3
