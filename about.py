@@ -11,7 +11,7 @@ Function:
     mensaje informativo. Además, si se ha seleccionado un tema oscuro en las preferencias, aplica el tema oscuro a las ventanas del proyecto.
 
 """
-
+ 
 import tkinter as tk
 import os
 import preferencias

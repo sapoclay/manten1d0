@@ -19,7 +19,7 @@ Funciones:
     - cifrar_archivo: Permite cifrar un archivo seleccionado por el usuario usando ChaCha20.
     - descifrar_archivo: Permite descifrar un archivo cifrado seleccionado por el usuario.
 """
-
+ 
 import subprocess
 from tkinter import messagebox
 from password import obtener_contrasena

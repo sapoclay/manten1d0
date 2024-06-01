@@ -10,7 +10,7 @@ Attributos:
 Funciones:
     cambiar_tema(ventana, tema_seleccionado): Cambia el tema de la ventana y todos sus elementos hijos.
     abrir_ventana_configuracion(root): Abre una ventana de configuración para ajustar diferentes aspectos de la apariencia de la GUI. 
-"""
+""" 
 
 import tkinter as tk
 from tkinter import ttk

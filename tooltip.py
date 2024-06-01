@@ -18,7 +18,7 @@ class ToolTip:
         hide_tooltip(event=None):
             Oculta el tooltip cuando el cursor sale del widget o se hace clic en él.
     """
-
+ 
     def __init__(self, widget, text):
         """
         Inicializa un tooltip para el widget especificado con el texto dado.

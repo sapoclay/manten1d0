@@ -19,7 +19,6 @@ DEPENDENCIAS_SISTEMA = {
     "python3-tk": ["sudo", "apt", "install", "-y", "python3-tk"],
     "pciutils": ["sudo", "apt", "install", "-y", "pciutils"],
     "lshw": ["sudo", "apt", "install", "-y", "lshw"],
-    "cups": ["sudo", "apt", "install", "-y", "cups"]
 }
 
 def verificar_dependencias_sistema():

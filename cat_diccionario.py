@@ -138,7 +138,7 @@ class VentanaDiccionario(QMainWindow):
         except Exception as e:
             # Manejar cualquier excepción que pueda ocurrir al intentar abrir la terminal
             print(f"No se pudo abrir la terminal: {e}")
-
+ 
 
 def abrir_ventana_diccionario(contenido_html):
     

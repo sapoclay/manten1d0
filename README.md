@@ -124,7 +124,6 @@ Estas dependencias las comprobará e instalará el programa una vez se ejecute s
 - traceroute -> sudo apt install traceroute
 - pciutils -> sudo apt-get install pciutils
 - lshw -> sudo apt-get install lshw
-- cups -> sudo apt-get install cups
 - Matplotlib -> pip3 install matplotlib
 - Pillow -> pip3 install --upgrade pillow
 - Cryptography -> pip3 install cryptography

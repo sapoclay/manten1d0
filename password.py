@@ -194,4 +194,4 @@ def cargar_clave_maestra(contrasena, salt):
     # Asegurar que la clave tenga 32 bytes llenando con '=' si es necesario
     clave_maestra = contrasena_salt_base64.ljust(32, b'=')
 
-    return clave_maestra
+    return clave_maestra 
