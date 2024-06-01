@@ -95,7 +95,7 @@ def mostrar_ventana_actualizaciones():
     version_disponible_label.pack()
 
     # Etiqueta para mostrar el estado de la búsqueda con una fuente más grande
-    etiqueta_estado = tk.Label(ventana_actualizaciones, text="\n------ Actualizaciones Disponibles ------\n", font=("Arial", 12))
+    etiqueta_estado = tk.Label(ventana_actualizaciones, text="\n------ Actualizaciones ------\n", font=("Arial", 12))
     etiqueta_estado.pack()
 
     # Mostrar la versión actual instalada

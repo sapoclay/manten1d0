@@ -18,19 +18,38 @@ Raises:
     - FileNotFoundError: Si el administrador de archivos correspondiente no está instalado en el sistema.
     - Exception: Si ocurre un error al abrir el administrador de archivos.
 """
-
+ 
 import tkinter as tk
 from tkinter import messagebox
 import nmap
 import subprocess
 import threading
+import psutil
+import socket
+
+# Función para obtener la red local automáticamente
+def obtener_red_local():
+    for interface, addrs in psutil.net_if_addrs().items():
+        for addr in addrs:
+            if addr.family == socket.AF_INET and not addr.address.startswith('127.'):
+                ip_address = addr.address
+                netmask = addr.netmask
+                return f"{ip_address}/{netmask_to_cidr(netmask)}"
+    return None
+
+def netmask_to_cidr(netmask):
+    return sum([bin(int(x)).count('1') for x in netmask.split('.')])
 
 # Función para encontrar dispositivos en la red local
 def encontrar_dispositivos_en_red():
     nm = nmap.PortScanner()
-    nm.scan(hosts='192.168.1.0/24', arguments='-sn')
-    dispositivos = [host for host in nm.all_hosts()]
-    return dispositivos
+    red = obtener_red_local()
+    if red:
+        nm.scan(hosts=red, arguments='-sn')
+        dispositivos = [host for host in nm.all_hosts()]
+        return dispositivos
+    else:
+        return []
 
 def abrir_administrador_de_archivos(ip):
     try:

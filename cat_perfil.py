@@ -72,8 +72,10 @@ class PerfilUsuario:
         self.canvas.pack(pady=10)
 
         # Botón para elegir una imagen de perfil
-        tk.Button(root, text="Seleccionar Imagen de Perfil", command=self.seleccionar_imagen).pack()
-
+        self.seleccion_imagen = tk.Button(root, text="Seleccionar Imagen de Perfil", command=self.seleccionar_imagen)
+        self.seleccion_imagen.pack(pady=5)
+        ToolTip(self.seleccion_imagen, "Guardar Perfil de Usuario con los Datos Introducidos")
+        
         # Previsualización de la imagen de perfil
         self.label_imagen = tk.Label(root)
         self.label_imagen.pack(pady=10)
@@ -89,10 +91,15 @@ class PerfilUsuario:
         self.frame_botones.pack(pady=10)
 
         # Botón para guardar los cambios
-        tk.Button(self.frame_botones, text="Guardar Perfil", command=self.guardar_perfil).pack(side=tk.LEFT, padx=5)
+        self.boton_guardar_perfil = tk.Button(self.frame_botones, text="Guardar Perfil", command=self.guardar_perfil)
+        self.boton_guardar_perfil.pack(side=tk.LEFT, padx=5)
+        ToolTip(self.boton_guardar_perfil, "Guardar Perfil de Usuario con los Datos Introducidos")
 
         # Botón para cancelar
-        tk.Button(self.frame_botones, text="Cancelar", command=root.destroy).pack(side=tk.LEFT, padx=5)
+        self.boton_cancelar = tk.Button(self.frame_botones, text="Cancelar", command=root.destroy)
+        self.boton_cancelar.pack(side=tk.LEFT, padx=5)
+        ToolTip(self.boton_cancelar, "Cancelar el guardado del Perfil de Usuario")
+
 
         # Dibujar una línea horizontal
         self.canvas = tk.Canvas(root, width=200, height=2, bg="lightgrey", highlightthickness=0)

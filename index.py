@@ -58,6 +58,7 @@ try:
         perfil_cat,
         red_local_cat,
         sistema_cat,
+        notas_cat,
     )
 
     import preferencias  # Importar el módulo de preferencias para manejar el cambio de tema
@@ -220,10 +221,20 @@ class VentanaPrincipal:
         def abrir_url_github():
 
             webbrowser.open("https://github.com/sapoclay/manten1d0")
+            
+        def abrir_terminal():
+            try:
+                # Comando para abrir la terminal predeterminada en Ubuntu
+                subprocess.Popen(["gnome-terminal"])
+            except Exception as e:
+                # Manejar cualquier excepción que pueda ocurrir al intentar abrir la terminal
+                print(f"No se pudo abrir la terminal: {e}")
 
         # Crear el menú superior
         self.menu_superior = tk.Menu(self.root)
         self.menu_archivo = tk.Menu(self.menu_superior, tearoff=0)
+        self.menu_archivo.add_command(label="Abrir Terminal (Ctrl+Alt+T)", command=abrir_terminal)
+        self.menu_archivo.add_separator()
         self.menu_archivo.add_command(label="Abrir URL en Navegador", command=abrir_url)
         self.menu_archivo.add_separator()
         self.menu_archivo.add_command(label="Salir", command=self.cerrar_ventana_principal)
@@ -231,9 +242,11 @@ class VentanaPrincipal:
         # Crear el menú Preferencias
         preferencias_menu = tk.Menu(self.root, tearoff=0)
         preferencias_menu.add_command(label="Repositorio GitHub", command=abrir_url_github)
+        preferencias_menu.add_separator()
         preferencias_menu.add_command(
             label="Buscar Actualizaciones", command=abrir_ventana_actualizaciones
         )
+        preferencias_menu.add_separator()
         preferencias_menu.add_command(label="Opciones", command=abrir_ventana_personalizacion)
         # Agregar el menú Preferencias como una cascada en el menú principal
         self.menu_superior.add_cascade(label="Preferencias", menu=preferencias_menu)
@@ -257,6 +270,7 @@ class VentanaPrincipal:
             "Red Local",
             "Navegadores",
             "Diccionario",
+            "Notas",
         ]
         self.botones_categorias = []
         for categoria in self.categorias:
@@ -269,7 +283,10 @@ class VentanaPrincipal:
             boton.pack(pady=5)
             ToolTip(boton, f"Categoría {categoria}")
             self.botones_categorias.append(boton)
-
+        # Dibujar una línea horizontal
+        self.canvas = tk.Canvas(self.menu_lateral, width=50, height=2, bg="lightgrey", highlightthickness=0)
+        self.canvas.create_line(0, 1, 50, 1, fill="black")
+        self.canvas.pack(pady=10)        
         # Crear indicador de conexión a Internet
         self.indicador_internet = tk.Label(
             self.menu_lateral,
@@ -277,8 +294,9 @@ class VentanaPrincipal:
             bg="red",
             fg="white",
             width=20,
-            height=2,
+            height=1,
         )
+        
         self.indicador_internet.pack(pady=20)
         ToolTip(self.indicador_internet, "Estado de la conexión a internet del equipo")
 
@@ -340,6 +358,7 @@ class VentanaPrincipal:
             "Red Local": "Configuraciones y acciones sobre la red local.",
             "Navegadores": "Acciones con los navegadores web.",
             "Diccionario": "Diccionario sobre comandos Gnu/Linux",
+            "Notas": "Escribe tus apuntes y notas rápidas",
         }
 
         # Llenar el área de texto con la información inicial
@@ -356,6 +375,10 @@ class VentanaPrincipal:
         elif categoria == "Diccionario":
 
             diccionario_cat(self, mensaje_personalizado)
+            
+        elif categoria == "Notas":
+
+            notas_cat(self, mensaje_personalizado)
 
         elif categoria == "Perfil Usuario":
 

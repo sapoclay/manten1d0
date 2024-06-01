@@ -1,6 +1,6 @@
 import tkinter as tk
 
-        # Crear una entrada con marcador de posición para la URL del PPA
+        # Crear una entrada con marcador de posición 
         #entrada = entradaConPlaceHolder(sitio_donde_colocarlo, placeholder="texto", width=50)
         #entrada.pack(pady=10, padx=10)
 

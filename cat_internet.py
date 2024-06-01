@@ -46,7 +46,8 @@ import socket
 import speedtest
 import threading
 from tkinter import scrolledtext
-
+from tooltip import ToolTip    
+from placeholder import entradaConPlaceHolder
 
 """ 
 
@@ -247,20 +248,15 @@ class RedTools:
         """
         self.area_central = area_central
 
-    def escanear_puertos(self, ip):
+    def escanear_puertos(self):
         """
         Realiza un escaneo de puertos en una dirección IP específica.
-
-        Args:
-            ip (str): La dirección IP a escanear.
         """
-        def realizar_escaneo():
+        def realizar_escaneo(ip):
             """
             Función interna para realizar el escaneo de puertos.
             """
-            resultado_text.delete('1.0', tk.END)
             try:
-                ip = entry_ip.get()
                 for puerto in range(1, 1025):
                     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
                     s.settimeout(0.5)
@@ -268,35 +264,97 @@ class RedTools:
                     if resultado == 0:
                         resultado_text.insert(tk.END, f"Puerto {puerto}: Abierto\n")
                     s.close()
+                # Cerramos la ventana de progreso al finalizar el escaneo
+                progress_window.destroy()
             except Exception as e:
                 resultado_text.insert(tk.END, f"Error: {e}\n")
+                # Cerramos la ventana de progreso si ocurre un error
+                progress_window.destroy()
 
+        # Limpiar el área central
         self.limpiar_area_central()
+
+        # Crear etiquetas y entradas
         tk.Label(self.area_central, text="Escaneo de Puertos", font=("Arial", 14, "bold")).pack(pady=10)
         tk.Label(self.area_central, text="Introduce la IP a escanear:", font=("Arial", 12)).pack(pady=5)
-        entry_ip = tk.Entry(self.area_central, width=30)
+        entry_ip = entradaConPlaceHolder(self.area_central, placeholder="Ejemplo de IP: 8.8.8.8", width=30)
         entry_ip.pack(pady=5)
-        tk.Button(self.area_central, text="Escanear", command=realizar_escaneo).pack(pady=10)
+
+        # Crear área de texto para mostrar resultados
         resultado_text = tk.Text(self.area_central, height=20, width=80)
         resultado_text.pack(pady=10)
+
+        # Función para iniciar el escaneo
+        def iniciar_escaneo():
+            ip = entry_ip.get()
+
+            # Crear una ventana de progreso
+            global progress_window
+            progress_window = tk.Toplevel(self.root)
+            progress_window.title("Progreso")
+            progress_window.geometry("400x100")
+            progress_window.resizable(False, False)
+
+            # Etiqueta que muestra el mensaje de progreso
+            progress_label = tk.Label(progress_window, text="Escaneando puertos... Espera un momento...", padx=10, pady=10)
+            progress_label.pack()
+
+            # Mostramos la ventana de progreso
+            progress_window.update()
+
+            # Pequeña pausa para permitir que la ventana de progreso se muestre
+            progress_window.after(100)
+
+            # Crear un hilo para el escaneo de puertos
+            escaneo_thread = threading.Thread(target=realizar_escaneo, args=(ip,))
+            escaneo_thread.start()
+
+        # Crear botón de escaneo
+        boton_escanear = tk.Button(self.area_central, text="Escanear Puertos", width=20, command=iniciar_escaneo)
+        boton_escanear.pack(pady=10)
+        ToolTip(boton_escanear, "Inicia el escaneo de puertos de la IP indicada")
 
     def test_velocidad(self):
         """
         Realiza un test de velocidad de Internet.
         """
-        def realizar_test():
+        def realizar_test(resultado_text):
+            # Creamos una ventana de progreso
+            progress_window = tk.Toplevel(resultado_text.master)
+            progress_window.title("Progreso")
+            progress_window.geometry("400x100")
+            progress_window.resizable(False, False)
+
+            # Etiqueta que muestra el mensaje de progreso
+            progress_label = tk.Label(progress_window, text="Realizando el test de velocidad... Espera un momento...", padx=10, pady=10)
+            progress_label.pack()
+
+            # Mostramos la ventana de progreso
+            progress_window.update()
+
+            # Pequeña pausa para permitir que la ventana de progreso se muestre
+            progress_window.after(100)
+
+            # Realizamos el test de velocidad
             resultado_text.delete('1.0', tk.END)
             st = speedtest.Speedtest()
             st.download()
             st.upload()
             resultados = st.results.dict()
+
+            # Mostramos los resultados en el área de texto
             resultado_text.insert(tk.END, f"Velocidad de descarga: {resultados['download'] / 1_000_000:.2f} Mbps\n")
             resultado_text.insert(tk.END, f"Velocidad de carga: {resultados['upload'] / 1_000_000:.2f} Mbps\n")
             resultado_text.insert(tk.END, f"Ping: {resultados['ping']} ms\n")
 
+            # Cerramos la ventana de progreso
+            progress_window.destroy()
+
         self.limpiar_area_central()
         tk.Label(self.area_central, text="Test de Velocidad de Internet", font=("Arial", 14, "bold")).pack(pady=10)
-        tk.Button(self.area_central, text="Iniciar Test", command=realizar_test).pack(pady=10)
+        boton_iniciar_test = tk.Button(self.area_central, text="Iniciar Test", command=lambda: realizar_test(resultado_text))
+        boton_iniciar_test.pack(pady=10)
+        ToolTip(boton_iniciar_test, "Inicia el Test de Velocidad")
         resultado_text = tk.Text(self.area_central, height=20, width=80)
         resultado_text.pack(pady=10)
 
@@ -304,9 +362,28 @@ class RedTools:
         """
         Realiza un diagnóstico de la red.
         """
-        def realizar_diagnostico():
-            resultado_text.delete('1.0', tk.END)
+        def realizar_diagnostico(resultado_text):
+            # Función interna para ejecutar el diagnóstico
             try:
+                # Creamos una ventana de progreso
+                progress_window = tk.Toplevel(resultado_text.master)
+                progress_window.title("Progreso del Diagnóstico de Red")
+                progress_window.geometry("400x100")
+                progress_window.resizable(False, False)
+
+                # Etiqueta que muestra el mensaje de progreso
+                progress_label = tk.Label(progress_window, text="Realizando diagnóstico de red... Espera un momento...", padx=10, pady=10)
+                progress_label.pack()
+
+                # Mostramos la ventana de progreso
+                progress_window.update()
+
+                # Pequeña pausa para permitir que la ventana de progreso se muestre
+                progress_window.after(100)
+
+                # Crear el resultado del diagnóstico
+                resultado_text.delete('1.0', tk.END)
+
                 # Verificar si traceroute está instalado
                 if not shutil.which("traceroute"):
                     raise Exception("El comando 'traceroute' no está instalado. Por favor, instálalo e inténtalo de nuevo.")
@@ -327,11 +404,21 @@ class RedTools:
                 for line in iter(netstat.stdout.readline, b''):
                     resultado_text.insert(tk.END, line.decode())
             except Exception as e:
+                # Manejar errores y mostrarlos en la ventana de progreso
                 resultado_text.insert(tk.END, f"Error: {e}\n")
+            finally:
+                # Cerrar la ventana de progreso al finalizar
+                progress_window.destroy()
 
-        self.limpiar_area_central()
+        # Limpiar el área central
+        for widget in self.area_central.winfo_children():
+            widget.destroy()
+
+        # Crear los widgets
         tk.Label(self.area_central, text="Diagnóstico de Red", font=("Arial", 14, "bold")).pack(pady=10)
-        tk.Button(self.area_central, text="Iniciar Diagnóstico", command=realizar_diagnostico).pack(pady=10)
+        boton_iniciar_diagnostico = tk.Button(self.area_central, text="Iniciar Diagnóstico", command=lambda: realizar_diagnostico(resultado_text))
+        boton_iniciar_diagnostico.pack(pady=10)
+        ToolTip(boton_iniciar_diagnostico, "Haz clic para iniciar el diagnóstico de la red")
         resultado_text_frame = tk.Frame(self.area_central)
         resultado_text_frame.pack(pady=10)
         resultado_text = scrolledtext.ScrolledText(resultado_text_frame, height=20, width=80, wrap=tk.NONE)

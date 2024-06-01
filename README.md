@@ -91,6 +91,16 @@
 - Reparados los errores en la gestión de los repositorios.
 - Corrección de errores menores.
 
+## Actualización Versión 0.5.6
+- Añadido un editor de texto básico para tomar notas. Permite trabajar con archivos .md y .txt. Se han añadido opciones al menú contextual del ratón dentro del editor básico. El editor cuenta palabras y caracteres. Permite búsqueda, con resaltado de resultados.
+- Corrección de ToolTips.
+- Ahora se muestra la información de la tarjeta gráfica utilzando lspci y lshw. Además se usa nvidia-smi (si está disponible) para calcular la temperatura y la memoria disponible en la tarjeta. Si la tarjeta no es nvidia, los datos no se mostrarán correctamente (es que todas mis tarjetas son nvidia XD )
+- Reparados los errores que se producían en la instalación de paquetes .DEB cuando no se selecciona un archivo para instalar.
+- Optimizado el test de velocidad de la conexión a internet, el diagnóstico de red y el escaner de puertos.
+- Añadidos botones para abrir los navegadores web (Firefox, Chrome o Edge)
+- También se han añadido botones para abrir los navegadores (Firefox, Chrome o Edge) en modo incógnito.
+- En la red local, ahora el programa detecta automáticamente la red local. Ya no tiene por que ser 192.168.x.x. Por el momento la conexión debe realizarse entre equipos con Samba instalado. Se utiliza nautilus para abrir las carpetas compartidas.
+
 ## Dependencias Imprescindibles 
 
 Dependencias necesarias para poder ejecutar el programa. Estas dependencias deben instalarse manualmente.
@@ -114,6 +124,7 @@ Estas dependencias las comprobará e instalará el programa una vez se ejecute s
 - traceroute -> sudo apt install traceroute
 - pciutils -> sudo apt-get install pciutils
 - lshw -> sudo apt-get install lshw
+- cups -> sudo apt-get install cups
 - Matplotlib -> pip3 install matplotlib
 - Pillow -> pip3 install --upgrade pillow
 - Cryptography -> pip3 install cryptography

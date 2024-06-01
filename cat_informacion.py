@@ -173,6 +173,7 @@ class Informacion:
 
         return "Desconocido"
     
+
     @staticmethod
     def obtener_informacion_tarjeta_grafica():
         info_gpu = {
@@ -180,7 +181,8 @@ class Informacion:
             "Modelo": "No disponible",
             "Memoria": "No disponible",
             "Controlador": "No disponible",
-            "Temperatura": "No disponible"
+            "Temperatura": "No disponible",
+            "Descripción": "No disponible"
         }
 
         try:
@@ -197,7 +199,7 @@ class Informacion:
             gpu_info = [line for line in output.split('\n') if 'VGA compatible controller' in line or '3D controller' in line]
 
             if gpu_info:
-                info_gpu["Nombre"] = gpu_info[0]
+                info_gpu["Nombre"] = gpu_info[0].split(': ')[-1]
 
                 # Usar lshw para obtener detalles adicionales
                 lshw_proceso = subprocess.Popen(['sudo', '-S', 'lshw', '-C', 'display'], stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
@@ -207,18 +209,35 @@ class Informacion:
                     print(f"Error al ejecutar lshw: {lshw_error}")
                     return info_gpu
 
+                current_section = None
                 for line in lshw_output.split('\n'):
                     line = line.strip()
-                    if 'descripción:' in line:
-                        info_gpu["Descripción"] = line.split('descripción:')[1].strip()
-                    elif 'producto:' in line:
-                        info_gpu["Modelo"] = line.split('producto:')[1].strip()
-                    elif 'fabricante:' in line:
-                        info_gpu["Nombre"] = line.split('fabricante:')[1].strip()
-                    elif 'driver=' in line:
-                        info_gpu["Controlador"] = line.split('driver=')[1].strip()
-                    elif 'size:' in line:
-                        info_gpu["Memoria"] = line.split('size:')[1].strip()
+                    if not line:
+                        continue
+
+                    if line.startswith('*-display'):
+                        current_section = 'display'
+                    elif line.startswith('*-'):
+                        current_section = None
+
+                    if current_section == 'display':
+                        if line.startswith('descripción:'):
+                            info_gpu["Descripción"] = line.split('descripción:')[1].strip()
+                        elif line.startswith('producto:'):
+                            info_gpu["Modelo"] = line.split('producto:')[1].strip()
+                        elif line.startswith('fabricante:'):
+                            info_gpu["Nombre"] = line.split('fabricante:')[1].strip()
+                        elif 'driver=' in line:
+                            info_gpu["Controlador"] = line.split('driver=')[1].strip()
+                        elif line.startswith('size:'):
+                            info_gpu["Memoria"] = line.split('size:')[1].strip()
+
+                # Obtener memoria de la GPU usando nvidia-smi si está disponible
+                try:
+                    nvidia_smi_output = subprocess.check_output(['nvidia-smi', '--query-gpu=memory.total', '--format=csv,noheader'], universal_newlines=True)
+                    info_gpu["Memoria"] = nvidia_smi_output.strip() 
+                except Exception as e:
+                    print(f"Error al obtener la memoria de la GPU con nvidia-smi: {e}")
 
                 # Obtener temperatura de la GPU
                 try:

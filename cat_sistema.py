@@ -229,40 +229,8 @@ Raises:
         aplicaciones_autostart = AplicacionesAutostart(ventana_aplicaciones_autostart)
 
 
-class AdministrarProcesos:
-    
-    """
-Clase 'AdministrarProcesos'.
 
-Class:
-    - AdministrarProcesos: Clase para crear y gestionar la ventana de administración de procesos.
-
-Attributes:
-    - root: El widget principal al que pertenece la ventana.
-
-Methods:
-    - __init__(self, root): Constructor de la clase. Inicializa la ventana y sus componentes.
-        - root: El widget principal al que pertenece la ventana.
-    - on_entry_focus_in(self, event): Método para manejar el evento de enfoque en la entrada de búsqueda.
-        - event: El evento que desencadena la función.
-    - on_entry_focus_out(self, event): Método para manejar el evento de desenfoque en la entrada de búsqueda.
-        - event: El evento que desencadena la función.
-    - load_processes(self): Carga la lista de procesos en el Treeview.
-    - close_process(self): Cierra el proceso seleccionado después de la confirmación del usuario.
-    - filter_processes(self, event): Filtra los procesos en función de la entrada de búsqueda.
-        - event: El evento que desencadena la función.
-    - sort_column(self, column): Ordena los elementos en función de la columna seleccionada.
-        - column: La columna seleccionada para ordenar.
-    - update_cpu_usage_single(self, pid): Actualiza el uso de CPU para un proceso específico.
-        - pid: El PID del proceso para el que se actualizará el uso de la CPU.
-    - update_tree(self, pid, cpu_percent): Actualiza el Treeview con el uso de CPU actualizado para un proceso específico.
-        - pid: El PID del proceso.
-        - cpu_percent: El uso de CPU actualizado para el proceso.
-
-Raises:
-    - No hay excepciones especificadas en la clase.
-"""
-    
+class AdministrarProcesos:    
     def __init__(self, root):
         self.root = root
         self.root.title("Administrar Procesos")
@@ -305,6 +273,9 @@ Raises:
         self.close_button.pack(side=tk.TOP)
         
         self.load_processes()
+
+        # Iniciar la actualización periódica de los procesos
+        self.update_processes()
 
     def on_entry_focus_in(self, event):
         if self.search_entry_var.get() == "Buscar por nombre o PID":
@@ -361,7 +332,7 @@ Raises:
         elif column_index == 1:  # Verificar si la columna es Nombre
             items.sort(key=lambda x: x[0].lower(), reverse=current_sort_order == "desc")
         elif column_index == 2:  # Verificar si la columna es Uso de CPU
-            items.sort(key=lambda x: float(x[0].rstrip("%")) if x[0] != "N/A" else float('inf'), reverse=current_sort_order == "desc")  # Convertir a float antes de ordenar
+            items.sort(key=lambda x: float(x[0].rstrip("%")) if x[0].replace('.', '', 1).isdigit() else float('inf'), reverse=current_sort_order == "desc")  # Convertir a float antes de ordenar
 
         for index, (value, child) in enumerate(items):
             self.tree.move(child, '', index)
@@ -373,17 +344,40 @@ Raises:
             process = psutil.Process(pid)
             cpu_percent = process.cpu_percent(interval=0.5)
             self.root.after(100, self.update_tree, pid, f"{cpu_percent:.2f}%")
-            print(f"Actualizando uso de CPU para el proceso {pid} a: {cpu_percent:.2f}%")
         except psutil.NoSuchProcess:
-            print(f"No se pudo calcular el uso de CPU para el proceso {pid}: process PID not found")
+            pass
         except Exception as e:
             print(f"No se pudo calcular el uso de CPU para el proceso {pid}: {e}")
 
     def update_tree(self, pid, cpu_percent):
+        if not self.tree.winfo_exists():
+            return  # Salir si el widget Treeview no existe
         for child in self.tree.get_children():
             if self.tree.item(child)["values"][0] == pid:
-                self.tree.item(child, values=(pid, self.tree.item(child)["values"][1], cpu_percent))
+                # Actualiza solo el valor de la CPU
+                current_values = self.tree.item(child)["values"]
+                new_values = (current_values[0], current_values[1], cpu_percent)
+                self.tree.item(child, values=new_values)
 
+    def update_processes(self):
+        for proc in psutil.process_iter(['pid', 'name']):
+            proc_info = proc.info
+            try:
+                pid = proc_info['pid']
+                # Si el proceso ya está en la lista, actualiza el uso de CPU
+                if any(self.tree.item(child)["values"][0] == pid for child in self.tree.get_children()):
+                    threading.Thread(target=self.update_cpu_usage_single, args=(pid,)).start()
+                else:
+                    self.tree.insert("", "end", text="", values=(pid, proc_info['name'], "Calculando..."))
+                    threading.Thread(target=self.update_cpu_usage_single, args=(pid,)).start()
+            except (psutil.NoSuchProcess, psutil.AccessDenied):
+                continue
+
+        # Llama a update_processes nuevamente después de 5 segundos
+        self.root.after(5000, self.update_processes)  # Actualiza cada 5 segundos
+
+
+        
 # Categoría para buscar archivos duplicados en el sistema
 class AplicacionBuscadorDuplicados:
     
@@ -927,7 +921,7 @@ class DebInstalador:
             filetypes=[("Debian packages", "*.deb")]
         )
         if not self.file_path:
-            messagebox.showinfo("Información", "No se ha seleccionado ningún archivo.")
+            return
         else:
             messagebox.showinfo("Información", f"Archivo seleccionado: {self.file_path}")
 
@@ -941,6 +935,10 @@ class DebInstalador:
 
         Muestra mensajes informativos y de error según corresponda.
         """
+        # Verificar si se ha seleccionado un archivo .deb
+        if not self.file_path:
+            messagebox.showinfo("Información", "No se ha seleccionado ningún archivo.")
+            return
 
         try:
             messagebox.showinfo("Información", f"Instalando {self.file_path}...")
@@ -959,6 +957,7 @@ class DebInstalador:
                 messagebox.showinfo("Información", "Dependencias corregidas y paquete instalado.")
             except subprocess.CalledProcessError as e:
                 messagebox.showerror("Error", f"Error al corregir dependencias: {e}")
+
                 
 class DesinstalarPaquetes:
     """
@@ -1024,6 +1023,7 @@ class DesinstalarPaquetes:
         # Botón para desinstalar paquete seleccionado
         self.uninstall_button = tk.Button(self.root, text="Desinstalar", command=self.desinstalar_paquetes)
         self.uninstall_button.pack(pady=10)
+        ToolTip(self.uninstall_button, "Desinstalar el Paquete Seleccionado")
 
         # Lista de paquetes instalados
         self.installed_packages = []

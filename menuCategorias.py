@@ -4,6 +4,7 @@ from tkinter import messagebox
 from tkinter import filedialog
 from tkinter import messagebox
 import os
+import subprocess
 from cat_archivos import CopiaSeguridad
 from cat_archivos import RestaurarCopiaSeguridad
 from cat_archivos import cifrar_archivo, descifrar_archivo
@@ -26,6 +27,7 @@ from cat_redLocal import encontrar_dispositivos_en_red, doble_clic
 from cat_navegadores import LimpiadorNavegadores
 from cat_navegadores import InstalarNavegadores
 from cat_perfil import PerfilUsuario
+from cat_editorTexto import EditorTextos
 from tooltip import ToolTip    
 import preferencias
 
@@ -57,7 +59,7 @@ Steps:
         widget.pack_forget()
 
     # Mostrar el contenedor de texto para mostrar información
-    self.contenedor_texto.pack(expand=True, fill="both", padx=10, pady=(10, 0))
+    self.contenedor_texto.pack(expand=True, fill="both", padx=10, pady=(20, 10))
 
     if preferencias.tema_seleccionado != "Claro":
         # Aplicar el tema seleccionado a la nueva ventana
@@ -65,22 +67,26 @@ Steps:
 
     # Actualizar el mensaje personalizado si existe
     if mensaje_personalizado:
-        label_subcategorias = tk.Label(self.area_central, text=mensaje_personalizado, font=("Arial", 16, "bold"), bg="lightgrey", padx=10, pady=10)
+        label_subcategorias = tk.Label(self.area_central, text=mensaje_personalizado, font=("Arial", 16, "bold"), bg="lightgrey", padx=10, pady=20)
         
         if preferencias.tema_seleccionado != "Claro":
             # Aplicar el tema seleccionado al mensaje personalizado
             preferencias.cambiar_tema(label_subcategorias, preferencias.tema_seleccionado)
-            label_subcategorias = tk.Label(self.area_central, text=mensaje_personalizado, font=("Arial", 16, "bold"), bg="black", fg="white", padx=10, pady=20)
+            label_subcategorias.config(bg="black", fg="white")
 
         label_subcategorias.pack()
+
         # Dibujar una línea horizontal
         self.canvas = tk.Canvas(self.area_central, width=500, height=2, bg="lightgrey", highlightthickness=0)
         self.canvas.create_line(0, 1, 500, 1, fill="black")
-        self.canvas.pack(pady=10)
+        self.canvas.pack(pady=1) 
 
     # Mostrar la información del sistema
     self.mostrar_informacion_sistema()
-    self.texto_informacion.pack(expand=True, fill="both", padx=0, pady=0)
+
+    # Texto de información se muestre justo debajo de la línea
+    self.texto_informacion.pack(expand=True, fill="both", padx=10, pady=(1, 30))  
+
     
 # Función para mostrar la pantalla de la categoría DICCIONARIO
 def diccionario_cat(self, mensaje_personalizado):
@@ -368,7 +374,7 @@ Steps:
     red_tools.set_area_central(self.area_central)
 
     # Botón para escanear puertos
-    boton_escanear_puertos = tk.Button(self.area_central, text="Escanear Puertos", width=20, command=lambda: red_tools.escanear_puertos(""))
+    boton_escanear_puertos = tk.Button(self.area_central, text="Escanear Puertos", width=20, command=lambda: red_tools.escanear_puertos())    
     boton_escanear_puertos.pack(side=tk.LEFT, padx=10, pady=(0, 10), anchor="n")
     ToolTip(boton_escanear_puertos, "Escanea los puertos de una IP específica")
 
@@ -543,6 +549,90 @@ Steps:
         self.canvas.create_line(0, 1, 500, 1, fill="black")
         self.canvas.pack(pady=10)
         
+    # Contenedor para los botones de abrir navegadores
+    frame_botones_abrir = tk.Frame(self.area_central)
+    frame_botones_abrir.pack(pady=10)
+
+    def abrir_chrome():
+        try:
+            subprocess.run(['google-chrome'])
+        except Exception as e:
+            print(f"Error al abrir Chrome: {e}")
+            
+    # Botón para abrir Chrome
+    boton_abrir_chrome = tk.Button(frame_botones_abrir, text="Abrir Navegador Chrome", command=abrir_chrome)
+    boton_abrir_chrome.pack(side="left", padx=5, pady=10)
+    ToolTip(boton_abrir_chrome, "Abrir Google Chrome")
+    
+    def abrir_firefox():
+        try:
+            subprocess.run(['firefox'])
+        except Exception as e:
+            print(f"Error al abrir Firefox: {e}")
+
+    # Botón para abrir Firefox
+    boton_abrir_firefox = tk.Button(frame_botones_abrir, text="Abrir Navegador Firefox", command=abrir_firefox)
+    boton_abrir_firefox.pack(side="left", padx=5, pady=10)
+    ToolTip(boton_abrir_firefox, "Abrir Mozilla Firefox")
+        
+    def abrir_edge():
+        try:
+            subprocess.run(['microsoft-edge'])
+        except Exception as e:
+            print(f"Error al abrir Edge: {e}")
+
+    # Botón para abrir Edge
+    boton_abrir_edge = tk.Button(frame_botones_abrir, text="Abrir Navegador Edge", command=abrir_edge)
+    boton_abrir_edge.pack(side="left", padx=5, pady=10)
+    ToolTip(boton_abrir_edge, "Abrir Microsoft Edge")
+    
+    # Dibujar una línea horizontal
+    self.canvas = tk.Canvas(self.area_central, width=500, height=2, bg="lightgrey", highlightthickness=0)
+    self.canvas.create_line(0, 1, 500, 1, fill="black")
+    self.canvas.pack(pady=10)
+    
+    # Contenedor para los botones de abrir navegadores
+    frame_botones_abrir_incognito = tk.Frame(self.area_central)
+    frame_botones_abrir_incognito.pack(pady=10)
+    
+    def abrir_chrome_incognito():
+        try:
+            subprocess.run(['google-chrome', '--incognito'])
+        except Exception as e:
+            print(f"Error al abrir Chrome: {e}")
+    
+    # Botón para abrir Chrome en modo incognito
+    boton_abrir_chrome_incognito = tk.Button(frame_botones_abrir_incognito, text="Abrir Chrome Incognito", command=abrir_chrome_incognito)
+    boton_abrir_chrome_incognito.pack(side="left", padx=5, pady=10)
+    ToolTip(boton_abrir_chrome_incognito, "Abrir Google Chrome en modo incógnito")
+    
+    def abrir_firefox_incognito():
+        try:
+            subprocess.run(['firefox', '--private-window'])
+        except Exception as e:
+            print(f"Error al abrir Firefox: {e}")
+
+    # Botón para abrir Firefox
+    boton_abrir_firefox_incognito = tk.Button(frame_botones_abrir_incognito, text="Abrir Firefox Incognito", command=abrir_firefox_incognito)
+    boton_abrir_firefox_incognito.pack(side="left", padx=5, pady=10)
+    ToolTip(boton_abrir_firefox_incognito, "Abrir Mozilla Firefox en modo privado")
+
+    def abrir_edge_incognito():
+        try:
+            subprocess.run(['microsoft-edge', '--inprivate'])
+        except Exception as e:
+            print(f"Error al abrir Edge: {e}")
+            
+    # Botón para abrir Edge
+    boton_abrir_edge = tk.Button(frame_botones_abrir_incognito, text="Abrir Edge Incognito", command=abrir_edge_incognito)
+    boton_abrir_edge.pack(side="left", padx=5, pady=10)
+    ToolTip(boton_abrir_edge, "Abrir Microsoft Edge en modo InPrivate")
+    
+    # Dibujar una línea horizontal
+    self.canvas = tk.Canvas(self.area_central, width=500, height=2, bg="lightgrey", highlightthickness=0)
+    self.canvas.create_line(0, 1, 500, 1, fill="black")
+    self.canvas.pack(pady=10)
+    
     # Crear un contenedor Frame para los botones
     frame_botones_instalacion = tk.Frame(self.area_central)
     frame_botones_instalacion.pack()
@@ -785,4 +875,59 @@ def perfil_cat(self, mensaje_personalizado):
     boton_perfil = tk.Button(frame_botones_perfil, text="Modificar Perfil Usuario", width=20, command=abrir_ventana_perfil)
     boton_perfil.pack(side=tk.LEFT, padx=5, pady=5)
     ToolTip(boton_perfil, "Modifica tu perfil de usuario")
+    
+def notas_cat(self, mensaje_personalizado):
+    
+    """
+    Función notas_cat.
+
+    Esta función muestra la pantalla de la categoría "Notas" en la interfaz gráfica.
+
+    Args:
+        self: La instancia de la clase que llama a la función.
+        mensaje_personalizado (str): Mensaje opcional que se mostrará en la interfaz.
+
+    Returns:
+        No retorna ningún valor.
+
+    Steps:
+        - Limpia el área central de la interfaz gráfica.
+        - Crea un label con el mensaje personalizado o uno predeterminado si no se proporciona, seguido de una línea horizontal.
+        - Crea un botón para lanzar el editor de texto desde cat_editorTexto.py
+        """
+    
+    # Limpiar el área central
+    self.contenedor_texto.pack_forget()
+    for widget in self.area_central.winfo_children():
+        widget.destroy()
+    
+    # Crear el label con el mensaje personalizado o un mensaje predeterminado
+    if mensaje_personalizado:
+        label_subcategorias = tk.Label(self.area_central, text=mensaje_personalizado, font=("Arial", 16, "bold"), bg="lightgrey", padx=10, pady=20)
+        label_subcategorias.pack()
+        # Dibujar una línea horizontal
+        self.canvas = tk.Canvas(self.area_central, width=500, height=2, bg="lightgrey", highlightthickness=0)
+        self.canvas.create_line(0, 1, 500, 1, fill="black")
+        self.canvas.pack(pady=10)
+    else:
+        label_subcategorias = tk.Label(self.area_central, text="TOMA NOTAS", font=("Arial", 12))
+        label_subcategorias.pack()
+        # Dibujar una línea horizontal
+        self.canvas = tk.Canvas(self.area_central, width=500, height=2, bg="lightgrey", highlightthickness=0)
+        self.canvas.create_line(0, 1, 500, 1, fill="black")
+        self.canvas.pack(pady=10)
+        
+    # Crear un frame para los botones
+    frame_botones_notas = tk.Frame(self.area_central)
+    frame_botones_notas.pack()
+    
+    def abrir_ventana_toma_notas():
+        ventana_notas = tk.Toplevel(self.area_central)
+        toma_notas = EditorTextos(ventana_notas)
+        
+    # Botón para abrir la ventana para la toma de notas
+    boton_tomar_notas = tk.Button(frame_botones_notas, text="Abrir Editor Texto", command=abrir_ventana_toma_notas)
+    boton_tomar_notas.grid(row=2, column=2, padx=10, pady=10)
+    ToolTip(boton_tomar_notas, "Abrir el Editor de Texto para tomar Notas")
+    
     
