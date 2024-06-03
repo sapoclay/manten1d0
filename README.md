@@ -1,9 +1,9 @@
 ## Manten1d0: Mantenimiento básico de Ubuntu
-![about-manten1d0](https://github.com/sapoclay/manten1d0/assets/6242827/d05e63db-ec27-4448-8ab9-5394d018b893)
+![Manten1d0](https://github.com/sapoclay/manten1d0/assets/6242827/358bb3c2-d0af-4f07-a592-dcee7b1ed1a0)
 ------------------------------------------------------------------
 * Manten1d0: Sistema de mantenimiento básico y otras cosas para Ubuntu. 
 * Creado con: Python 3.10.12
-* Versión actual del programa: 0.5.5
+* Versión actual del programa: 0.5.7
 * Probado en: Ubuntu 22.04
 ------------------------------------------------------------------
 ### Cosas que puede ir haciendo 
@@ -16,11 +16,11 @@
 
 - Se comprueban las dependencias necesarias al iniciar el programa. Si falta alguna de las dependencias que se pueden ver en el listado de dependencias instalables que hay más abajo, el programa debería instalarlas de manera automática para terminar iniciandose. En caso de que todas las dependencias estén instaladas, nos mostrará un aviso y se iniciará el programa.
 
-![interfaz-manten1d0](https://github.com/sapoclay/manten1d0/assets/6242827/1ba8b27c-d0fa-492e-85a6-282bde3828c0)
+![interfaz](https://github.com/sapoclay/manten1d0/assets/6242827/80f57daf-97a6-4212-b1c0-da5c61a64000)
 
 - Tras iniciarse el programa, veremos una interfaz de usuario sencilla. Consta de un menú lateral que mostrará todas las opciones que incluye cada categoría en la parte central de la interfaz. Además tendremos algunas opciones en el menú superior de la interfaz.
   
-![informacion-sistema](https://github.com/sapoclay/manten1d0/assets/6242827/417f2df7-cd5f-47f3-83df-81dbacb9b45d)
+![info-SO](https://github.com/sapoclay/manten1d0/assets/6242827/729081ad-5f20-4911-9fe7-cc1b31495942)
 
 - En la categoría Información, dispondremos de alguna información sobre el sistema operativo que estemos utilizando. También nos mostrará información sobre las tarjetas de red, ip, dns, etc e información el procesador y la memoria de nuestro equipo.
   
@@ -67,7 +67,7 @@
 - He corregido el tooltip. Ahora cuando el usuario hace clic en un botón, el tooltip desaparece de manera correcta.
 - Añadida la opción de limpiar el historial de los navegadores (Chrome, Firefox y Edge)
 - Se ha corregido el error de python3-tk. Ya que antes si no estaba instalado rompía la ejecución del programa. Ahora se instala de manera automática si falla la importación al iniciar el programa. Una vez terminada la instalación de este paquete, continúa la ejecución normal del programa.
-![cat-archivos](https://github.com/sapoclay/manten1d0/assets/6242827/ec8ecec8-fd0b-4d1b-9529-f881e81b3267)
+![opciones-archivos](https://github.com/sapoclay/manten1d0/assets/6242827/f0d64f77-03b9-40d9-91bf-9c3c2a9c2c5d)
 - Añadida la opción para realizar copias de seguridad de carpetas. Se va a crear un archivo .gz en la carpeta que indiquemos. Se utiliza tar para este proposito. También dispone de la opción para restaurar los archivos de la copia de seguridad.
 - Añadida la opción para cifrar archivos. Se utiliza ChaCha20 para el cifrado y para el descifrado.
 
@@ -104,8 +104,10 @@
 - Otras correcciones a la hora de gestionar el cierre de la aplicación.
 
 ## Actualización Versión 0.5.7
+![logs](https://github.com/sapoclay/manten1d0/assets/6242827/2e742038-8c1d-4de6-9aa8-c3639ba54f38)
 - Añadida la consulta de logs del sistema a la opción "Sistema".
 - Se ha añadido a la sección "Archivos", la posibilidad de buscar en todo el sistema de manera recursiva archivos. En la lista de archivos encontrados, si se hace doble clic sobre uno de los archivos, se abrirá el gestor de archivos nautilus en la carpeta en la que se encuentre el archivo seleccionado. Además acepta la búsqueda utilizando * o ?.
+![renombrar-archivos](https://github.com/sapoclay/manten1d0/assets/6242827/49915632-ad65-4238-8d76-cf4ceb15a230)
 - He añadido la opción de renombrado masivo en la sección "Archivos". Con ella bastará con seleccionar la carpeta que incluye los archivos. Después no hay más que escribir el prefijo que se le quiere dar a totos los archivos, y tras pulsar el botón renombrar, se cambiará el nombre a todos los archivos utilizando el prefijo escrito y un número incremental. También nos permitirá ver con nautilus la carpeta que seleccionemos con los archivos a renombrar.
 
 ## Dependencias Imprescindibles 
