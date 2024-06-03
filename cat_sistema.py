@@ -1,23 +1,19 @@
+import os
+import platform
 import subprocess
-from password import obtener_contrasena
 import threading
 import time
-from tkinter import messagebox, scrolledtext, Listbox, Scrollbar, END, simpledialog, Menu
-import tkinter as tk
-from tkinter import ttk
-import os
-from tkinter import filedialog
-import psutil
-from tkinter import font
-#import tkinter.messagebox as messagebox
-import hashlib
 from datetime import datetime, timezone
-import platform
-from tooltip import ToolTip    
-import subprocess
-import matplotlib.pyplot as plt
+from tkinter import Tk, messagebox, scrolledtext, Listbox, Scrollbar, END, Menu, filedialog, font, ttk
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
+import psutil
+from password import obtener_contrasena
+from tooltip import ToolTip
 from placeholder import entradaConPlaceHolder
+import hashlib
+import matplotlib.pyplot as plt
+
+
 
 # Clase para generar la ventana de barra de progreso
 class ProgresoVentana(tk.Toplevel):

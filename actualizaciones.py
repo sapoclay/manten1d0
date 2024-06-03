@@ -29,7 +29,7 @@ from tkinter import messagebox
 import os
 import sys
 import preferencias
-import configparser
+import configparser 
 
 def obtener_version_actual():
     # Obtener el directorio del archivo que llama a la función
@@ -40,7 +40,6 @@ def obtener_version_actual():
     config = configparser.ConfigParser()
     config.read(ruta_config)
     return config['Version']['actual']
-
 
 def instalar_paquete_deb(archivo_deb):
     """

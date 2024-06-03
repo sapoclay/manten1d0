@@ -15,7 +15,7 @@ Módulos Importados:
 """
 
 import tkinter as tk
-from tkinter import messagebox, filedialog, simpledialog
+from tkinter import messagebox, filedialog
 from PIL import Image, ImageTk
 import os
 from subprocess import Popen, PIPE
@@ -23,8 +23,6 @@ import subprocess
 import getpass
 from password import limpiar_archivos_configuracion, obtener_contrasena
 from tooltip import ToolTip
-
-
 
 class PerfilUsuario:
     """Clase para la interfaz de modificación del perfil de usuario."""

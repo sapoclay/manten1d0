@@ -1,8 +1,7 @@
 import subprocess
 import sys
 from password import obtener_contrasena
-import tkinter as tk
-from tkinter import messagebox, ttk
+from tkinter import messagebox
 import os
 
 # Lista de dependencias del sistema junto con sus métodos de instalación

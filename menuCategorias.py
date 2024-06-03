@@ -1,37 +1,38 @@
-import tkinter as tk
-from tkinter import ttk
-from tkinter import messagebox
-from tkinter import filedialog
-from tkinter import messagebox
 import os
 import subprocess
-from cat_archivos import CopiaSeguridad
-from cat_archivos import RestaurarCopiaSeguridad
-from cat_archivos import cifrar_archivo, descifrar_archivo
-from cat_archivos import FileSearchApp
-from cat_archivos import BulkRenameApp
 import time
+import tkinter as tk
+from tkinter import ttk, messagebox, filedialog
+from cat_archivos import (
+    CopiaSeguridad,
+    RestaurarCopiaSeguridad,
+    cifrar_archivo,
+    descifrar_archivo,
+    FileSearchApp,
+    BulkRenameApp
+)
 from cat_diccionario import abrir_ventana_diccionario, cargar_contenido_html
-from cat_internet import  reiniciar_tarjeta_red
-from cat_internet import hacer_ping
-from cat_internet import RedTools  
-from cat_sistema import actualizar_sistema, limpiar_cache, abrir_gestor_software
-from cat_sistema import AplicacionesAutostart
-from cat_sistema import AdministrarProcesos
-from cat_sistema import AplicacionBuscadorDuplicados
-from cat_sistema import Limpieza 
-from cat_sistema import Repositorios
-from cat_sistema import MonitorizarSistema
-from cat_sistema import DebInstalador
-from cat_sistema import DesinstalarPaquetes
-from cat_sistema import consultaLogs
+from cat_internet import reiniciar_tarjeta_red, hacer_ping, RedTools
+from cat_sistema import (
+    actualizar_sistema,
+    limpiar_cache,
+    abrir_gestor_software,
+    AplicacionesAutostart,
+    AdministrarProcesos,
+    AplicacionBuscadorDuplicados,
+    Limpieza,
+    Repositorios,
+    MonitorizarSistema,
+    DebInstalador,
+    DesinstalarPaquetes,
+    consultaLogs
+)
 from cat_informacion import Informacion
 from cat_redLocal import encontrar_dispositivos_en_red, doble_clic
-from cat_navegadores import LimpiadorNavegadores
-from cat_navegadores import InstalarNavegadores
+from cat_navegadores import LimpiadorNavegadores, InstalarNavegadores
 from cat_perfil import PerfilUsuario
 from cat_editorTexto import EditorTextos
-from tooltip import ToolTip    
+from tooltip import ToolTip
 import preferencias
 
 def informacion_cat(self, mensaje_personalizado):
