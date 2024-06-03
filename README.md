@@ -92,6 +92,7 @@
 - Corrección de errores menores.
 
 ## Actualización Versión 0.5.6
+![editor-texto](https://github.com/sapoclay/manten1d0/assets/6242827/a46abeb2-244f-434e-a1b9-ee8425507cd9)
 - Añadido un editor de texto básico para tomar notas. Permite trabajar con archivos .md y .txt. Se han añadido opciones al menú contextual del ratón dentro del editor básico. El editor cuenta palabras y caracteres. Permite búsqueda, con resaltado de resultados.
 - Corrección de ToolTips.
 - Ahora se muestra la información de la tarjeta gráfica utilzando lspci y lshw. Además se usa nvidia-smi (si está disponible) para calcular la temperatura y la memoria disponible en la tarjeta. Si la tarjeta no es nvidia, los datos no se mostrarán correctamente (es que todas mis tarjetas son nvidia XD )
