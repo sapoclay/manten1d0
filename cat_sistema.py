@@ -2,7 +2,7 @@ import subprocess
 from password import obtener_contrasena
 import threading
 import time
-from tkinter import messagebox, Listbox, Scrollbar, END, simpledialog, Menu
+from tkinter import messagebox, scrolledtext, Listbox, Scrollbar, END, simpledialog, Menu
 import tkinter as tk
 from tkinter import ttk
 import os
@@ -467,7 +467,7 @@ Raises:
         # Botón para eliminar archivos seleccionados
         self.boton_eliminar = tk.Button(self.root, text="Eliminar Seleccionados", command=self.confirmar_eliminar_seleccionados)
         self.boton_eliminar.pack(pady=5)        
-        ToolTip(self.boton_eliminar, "Elimina los archivos seleccionados")
+        ToolTip(self.boton_eliminar, "Elimina los archivos seleccionados. Cuidado!! esta acción no se puede deshacer.")
 
 
         # Configurar el tamaño de las filas después de que la ventana se haya mostrado completamente
@@ -809,28 +809,26 @@ class Repositorios:
             else:
                 messagebox.showerror("Error", f"No se pudo añadir el repositorio {ppa_url}: {error.decode()}")
         ventana_ppa.destroy()
-
     
 class MonitorizarSistema:
-    
     """
-Clase 'MonitorizarSistema'.
+    Clase 'MonitorizarSistema'.
 
-Class:
-    - MonitorizarSistema: Clase para monitorizar el sistema y visualizar estadísticas en una ventana emergente.
+    Class:
+        - MonitorizarSistema: Clase para monitorizar el sistema y visualizar estadísticas en una ventana emergente.
 
-Attributes:
-    - master: El widget principal al que pertenece la ventana.
-
-Methods:
-    - __init__(self, master): Constructor de la clase. Inicializa el widget principal al que pertenece la ventana.
+    Attributes:
         - master: El widget principal al que pertenece la ventana.
-    - monitorizar_sistema(self): Método para monitorizar el sistema y visualizar estadísticas en una ventana emergente.
 
-Raises:
-    - No se especifican excepciones en la clase.
-"""
-    
+    Methods:
+        - __init__(self, master): Constructor de la clase. Inicializa el widget principal al que pertenece la ventana.
+            - master: El widget principal al que pertenece la ventana.
+        - monitorizar_sistema(self): Método para monitorizar el sistema y visualizar estadísticas en una ventana emergente.
+
+    Raises:
+        - No se especifican excepciones en la clase.
+    """
+
     def __init__(self, master):
         self.master = master
 
@@ -846,22 +844,33 @@ Raises:
         red_info = psutil.net_io_counters(pernic=False)
         red_envio = red_info.bytes_sent
         red_recepcion = red_info.bytes_recv
-        temperatura_cpu = psutil.sensors_temperatures().get('cpu_thermal', [None])[0].current if 'cpu_thermal' in psutil.sensors_temperatures() else None
+        temperatura_cpu = psutil.sensors_temperatures().get('cpu-thermal', [None])[0]
+        temperatura_cpu = temperatura_cpu.current if temperatura_cpu else None
         carga_sistema = psutil.getloadavg()[0]
 
         # Crear listas de nombres, valores y colores para los datos
         nombres = ['CPU', 'Memoria', 'Disco', 'Red (enviado)', 'Red (recibido)', 'Temperatura CPU', 'Carga del sistema']
         valores = [cpu_percent, mem_percent, disk_percent, red_envio / 1024 / 1024, red_recepcion / 1024 / 1024, temperatura_cpu, carga_sistema]
         colores = ['blue', 'green', 'red', 'orange', 'purple', 'cyan', 'magenta']
+        unidades = ['%', '%', '%', 'MB', 'MB', '%', '']
 
         # Filtrar los datos que no están disponibles y actualizar las listas
         nombres = [n for n, v in zip(nombres, valores) if v is not None]
         valores = [v for v in valores if v is not None]
         colores = colores[:len(valores)]
+        unidades = [u for u, v in zip(unidades, valores) if v is not None]
 
         # Crear una nueva ventana de Tkinter
         ventana_grafico = tk.Toplevel(self.master)
         ventana_grafico.title("Estadísticas")
+
+        # Crear un frame para contener todo
+        frame_contenedor = ttk.Frame(ventana_grafico)
+        frame_contenedor.pack(fill=tk.BOTH, expand=True)
+
+        # Crear un frame para el gráfico
+        frame_grafico = ttk.Frame(frame_contenedor)
+        frame_grafico.pack(side=tk.TOP, fill=tk.BOTH, expand=True)
 
         # Crear una figura de Matplotlib
         fig, ax = plt.subplots(figsize=(12, 8))
@@ -874,13 +883,26 @@ Raises:
         ax.grid(True)
 
         # Crear un lienzo de Matplotlib para integrarlo en la ventana de Tkinter
-        canvas = FigureCanvasTkAgg(fig, master=ventana_grafico)
+        canvas = FigureCanvasTkAgg(fig, master=frame_grafico)
         canvas.draw()
-        canvas.get_tk_widget().pack()
+        canvas.get_tk_widget().pack(fill=tk.BOTH, expand=True)
+
+        # Crear un frame para los datos numéricos
+        frame_datos = ttk.Frame(frame_contenedor)
+        frame_datos.pack(side=tk.TOP, fill=tk.X, expand=False)
+
+        # Mostrar los datos numéricos en labels
+        for nombre, valor, unidad, color in zip(nombres, valores, unidades, colores):
+            label = ttk.Label(frame_datos, text=f"{nombre}: {valor:.2f} {unidad}", foreground=color)
+            label.pack(anchor=tk.W, padx=10, pady=5)
+
+        def cerrar_ventana():
+            ventana_grafico.destroy()
 
         # Vincular el evento de cierre de la ventana a una función que solo destruya la ventana de gráficos
-        ventana_grafico.protocol("WM_DELETE_WINDOW", ventana_grafico.destroy)
+        ventana_grafico.protocol("WM_DELETE_WINDOW", cerrar_ventana)
         ventana_grafico.mainloop()
+
         
 class DebInstalador:
     """
@@ -1117,3 +1139,109 @@ class DesinstalarPaquetes:
             self.cargar_paquetes_instalados()
         except subprocess.CalledProcessError as e:
             messagebox.showerror("Error", f"Error al desinstalar el paquete: {e}")
+            
+# Clase para consultar los logs del sistema
+
+import tkinter as tk
+from tkinter import scrolledtext, messagebox
+import os
+
+class consultaLogs:
+    def __init__(self, master):
+        self.master = master
+        self.mostrar_logs()
+        self.current_tooltip = None  # Añadimos un atributo para rastrear el tooltip actual
+
+    def mostrar_logs(self):
+        self.master.title("Logs del Sistema")
+        
+        logs_frame = tk.Frame(self.master)
+        logs_frame.pack(side=tk.LEFT, fill=tk.Y)
+
+        logs_text_frame = tk.Frame(self.master)
+        logs_text_frame.pack(side=tk.RIGHT, fill=tk.BOTH, expand=True)
+
+        logs_list = tk.Listbox(logs_frame)
+        logs_list.pack(side=tk.LEFT, fill=tk.Y)
+        
+        scrollbar = tk.Scrollbar(logs_frame, orient="vertical")
+        scrollbar.config(command=logs_list.yview)
+        scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
+        logs_list.config(yscrollcommand=scrollbar.set)
+        
+        log_files = {
+            "syslog": "/var/log/syslog",
+            "auth.log": "/var/log/auth.log",
+            "kern.log": "/var/log/kern.log",
+            "dmesg": "/var/log/dmesg",
+            "boot.log": "/var/log/boot.log",
+            "dpkg.log": "/var/log/dpkg.log",
+            "faillog": "/var/log/faillog",
+            "btmp": "/var/log/btmp",
+            "lastlog": "/var/log/lastlog",
+            "apt history.log": "/var/log/apt/history.log",
+            "apt term.log": "/var/log/apt/term.log",
+            "Xorg.0.log": "/var/log/Xorg.0.log",
+            "ufw.log": "/var/log/ufw.log",
+            "access.log": "/var/log/apache2/access.log",
+            "error.log": "/var/log/apache2/error.log"
+        }
+
+        log_tooltips = {
+            "syslog": "Registra los mensajes del sistema y las aplicaciones.",
+            "auth.log": "Registra los eventos de autenticación.",
+            "kern.log": "Registra los mensajes del núcleo.",
+            "dmesg": "Muestra los mensajes del anillo de buffer del kernel.",
+            "boot.log": "Registra los eventos del sistema durante el arranque.",
+            "dpkg.log": "Registra todas las acciones realizadas por el gestor de paquetes dpkg.",
+            "faillog": "Muestra los intentos de inicio de sesión fallidos.",
+            "btmp": "Registra los intentos de inicio de sesión fallidos.",
+            "lastlog": "Muestra la última vez que cada usuario se conectó.",
+            "apt history.log": "Registra las acciones realizadas por el gestor de paquetes APT.",
+            "apt term.log": "Contiene los registros detallados de las acciones de APT.",
+            "Xorg.0.log": "Contiene los registros del servidor gráfico X.Org.",
+            "ufw.log": "Registra las acciones del cortafuegos UFW.",
+            "access.log": "Registra solicitudes de acceso de un servidor Apache (si está instalado)",
+            "error.log": "Registro de errores producidos en un servidor Apache (si está instalado)"
+        }
+
+        for log in log_files:
+            logs_list.insert(tk.END, log)
+
+        logs_text = scrolledtext.ScrolledText(logs_text_frame, wrap=tk.WORD)
+        logs_text.pack(fill=tk.BOTH, expand=True)
+
+        def mostrar_contenido_log(event):
+            seleccion = logs_list.curselection()
+            if seleccion:
+                log_seleccionado = logs_list.get(seleccion[0])
+                ruta_log = log_files.get(log_seleccionado)
+                if ruta_log:
+                    try:
+                        with open(ruta_log, 'r') as file:
+                            contenido = file.read()
+                            logs_text.delete(1.0, tk.END)
+                            logs_text.insert(tk.INSERT, contenido)
+                    except PermissionError:
+                        messagebox.showerror("Error", f"No se pudo abrir el archivo de log seleccionado: {log_seleccionado}. Permiso denegado.")
+                    except Exception as e:
+                        messagebox.showerror("Error", f"No se pudo abrir el archivo de log seleccionado: {log_seleccionado}. Error: {str(e)}")
+
+        def mostrar_tooltip(event):
+            if self.current_tooltip:  # Si hay un tooltip activo, destrúyelo
+                self.current_tooltip.hide_tooltip()
+            seleccion = logs_list.nearest(event.y)
+            if seleccion >= 0:
+                log_seleccionado = logs_list.get(seleccion)
+                tooltip_text = log_tooltips.get(log_seleccionado, "")
+                self.current_tooltip = ToolTip(logs_list, tooltip_text)
+                self.current_tooltip.show_tooltip(event)
+
+        def ocultar_tooltip(event):
+            if self.current_tooltip:
+                self.current_tooltip.hide_tooltip()
+                self.current_tooltip = None
+
+        logs_list.bind('<<ListboxSelect>>', mostrar_contenido_log)
+        logs_list.bind("<Motion>", mostrar_tooltip)
+        logs_list.bind("<Leave>", ocultar_tooltip)

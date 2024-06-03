@@ -8,6 +8,8 @@ import subprocess
 from cat_archivos import CopiaSeguridad
 from cat_archivos import RestaurarCopiaSeguridad
 from cat_archivos import cifrar_archivo, descifrar_archivo
+from cat_archivos import FileSearchApp
+from cat_archivos import BulkRenameApp
 import time
 from cat_diccionario import abrir_ventana_diccionario, cargar_contenido_html
 from cat_internet import  reiniciar_tarjeta_red
@@ -22,6 +24,7 @@ from cat_sistema import Repositorios
 from cat_sistema import MonitorizarSistema
 from cat_sistema import DebInstalador
 from cat_sistema import DesinstalarPaquetes
+from cat_sistema import consultaLogs
 from cat_informacion import Informacion
 from cat_redLocal import encontrar_dispositivos_en_red, doble_clic
 from cat_navegadores import LimpiadorNavegadores
@@ -262,12 +265,20 @@ Steps:
     # Función para abrir el desinstalador de paquetes 
     def abrir_desinstalar_paquetes():
         ventana_desinstalar = tk.Toplevel(self.area_central)
-        desinstalar = DesinstalarPaquetes(ventana_desinstalar)
-       # desinstalar.DesinstalarPaquetes()
+        DesinstalarPaquetes(ventana_desinstalar)
 
     boton_desinstalar_paquetes = tk.Button(contenedor_botones, text="Desinstalar Paquetes", command=abrir_desinstalar_paquetes)
     boton_desinstalar_paquetes.grid(row=3, column=2, padx=10, pady=10)
     ToolTip(boton_desinstalar_paquetes, "Desinstalar paquetes instalados por el usuario")
+    
+    def abrir_consulta_logs():
+        ventana_logs = tk.Toplevel(self.area_central)
+        consultaLogs(ventana_logs)
+    
+    # Botón para abrir la consulta de logs
+    boton_ver_logs = tk.Button(contenedor_botones, text="Ver logs", command=abrir_consulta_logs)
+    boton_ver_logs.grid(row=4, column=0, padx=10, pady=10)
+    ToolTip(boton_ver_logs, "Consulta los registros más importantes del sistema")
 
     
 # Función para mostrar la categoría INTERNET
@@ -839,6 +850,30 @@ def archivos_cat(self, mensaje_personalizado):
     self.canvas = tk.Canvas(self.area_central, width=500, height=2, bg="lightgrey", highlightthickness=0)
     self.canvas.create_line(0, 1, 500, 1, fill="black")
     self.canvas.pack(pady=10)
+    
+    # Función para abrir la ventana desde la que buscar archivos en el sistema
+    def abrir_ventana_busqueda():
+        ventana_busqueda = tk.Toplevel()
+        FileSearchApp(ventana_busqueda)
+    
+    # Crear un frame para el botón de buscar archivo en el sistema
+    frame_botones_archivos = tk.Frame(self.area_central)
+    frame_botones_archivos.pack()
+
+    # Crearmos el botón para abrir la ventana desde la que buscar archivos en el sistema
+    boton_busqueda = tk.Button(frame_botones_archivos, text="Busca archivos", width=20, command=abrir_ventana_busqueda)
+    boton_busqueda.pack(side=tk.LEFT, padx=5, pady=5)
+    ToolTip(boton_busqueda, "Busca archivos en el sistema")
+    
+    # Función para abrir la ventana desde la que renombrar archivos de forma masiva
+    def abrir_ventana_renombrado():
+        ventana_renombrado = tk.Toplevel()
+        BulkRenameApp(ventana_renombrado)
+
+    # Crearmos el botón para abrir la ventana desde la que buscar archivos en el sistema
+    boton_renombrado = tk.Button(frame_botones_archivos, text="Renombrar archivos", width=20, command=abrir_ventana_renombrado)
+    boton_renombrado.pack(side=tk.LEFT, padx=5, pady=5)
+    ToolTip(boton_renombrado, "Renombrar archivos de forma masiva")
     
 def perfil_cat(self, mensaje_personalizado):
      # Limpiar el área central

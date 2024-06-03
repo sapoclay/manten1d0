@@ -26,12 +26,14 @@ from password import obtener_contrasena
 import os
 import tkinter as tk
 from tkinter import filedialog, messagebox
+import fnmatch
 from password import obtener_contrasena  
 from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
 from cryptography.hazmat.backends import default_backend
 from cryptography.hazmat.primitives import serialization
 from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
+from tooltip import ToolTip
 
 class CopiaSeguridad:
     def __init__(self, origen, destino):
@@ -199,3 +201,151 @@ def descifrar_archivo():
         messagebox.showinfo("Descifrado completado", f"El archivo {archivo_cifrado} ha sido descifrado con éxito.")
     except Exception as e:
         messagebox.showerror("Error", f"Error al descifrar el archivo: {e}")
+        
+        
+# Clase para buscar archivos        
+    
+class FileSearchApp:
+    def __init__(self, master):
+        self.master = master
+        self.master.title("Buscador de archivos en el sistema")
+       # self.master.geometry("800x600")  # Tamaño fijo de la ventana
+        self.master.resizable(False, False)  # La ventana no se puede redimensionar
+        
+        self.create_widgets()
+    
+    def create_widgets(self):
+        self.label_folder = tk.Label(self.master, text="Carpeta de búsqueda:")
+        self.label_folder.grid(row=0, column=0, padx=5, pady=5)
+        
+        self.folder_entry = tk.Entry(self.master, width=50)
+        self.folder_entry.grid(row=0, column=1, padx=5, pady=5)
+        
+        self.folder_button = tk.Button(self.master, text="Seleccionar Carpeta", command=self.select_folder)
+        self.folder_button.grid(row=0, column=2, padx=5, pady=5)
+        ToolTip(self.folder_button, "Seleccionar carpeta de búsqueda")  # Agregar tooltip al botón
+
+        self.label_query = tk.Label(self.master, text="Nombre del archivo:")
+        self.label_query.grid(row=1, column=0, padx=5, pady=5)
+        
+        self.entry = tk.Entry(self.master, width=50)
+        self.entry.grid(row=1, column=1, padx=5, pady=5)
+        
+        self.search_button = tk.Button(self.master, text="Buscar", command=self.search_files)
+        self.search_button.grid(row=1, column=2, padx=1, pady=5)
+        ToolTip(self.search_button, "Iniciar búsqueda")  # Agregar tooltip al botón
+
+        self.results_text = tk.Text(self.master, height=20, width=80)
+        self.results_text.grid(row=2, column=0, columnspan=4, padx=5, pady=5)
+        self.results_text.bind("<Double-Button-1>", self.open_file_folder)
+        
+    def select_folder(self):
+        folder_path = filedialog.askdirectory(initialdir=os.path.expanduser("~"))
+        if folder_path:
+            self.folder_entry.delete(0, tk.END)
+            self.folder_entry.insert(0, folder_path)
+        
+    def search_files(self):
+        folder_path = self.folder_entry.get()
+        query = self.entry.get().lower()  # Convertir la consulta del usuario a minúsculas
+        
+        if not folder_path:
+            messagebox.showerror("Error", "Por favor, selecciona una carpeta de búsqueda.")
+            return
+        
+        if not query:
+            messagebox.showerror("Error", "Por favor, escribe el nombre del archivo a buscar.")
+            return
+        
+        self.results_text.delete(1.0, tk.END)
+        files_found = False
+        
+        for root, dirs, files in os.walk(folder_path):
+            for file in files:
+                # Convertir el nombre del archivo a minúsculas antes de compararlo
+                if fnmatch.fnmatch(file.lower(), f"*{query}*"):  
+                    file_path = os.path.join(root, file)
+                    self.results_text.insert(tk.END, file_path + "\n")
+                    files_found = True
+        
+        if not files_found:
+            messagebox.showinfo("Información", "No se encontraron archivos que coincidan con la búsqueda.")
+
+    
+    def open_file_folder(self, event):
+        selection_indices = self.results_text.tag_ranges(tk.SEL)
+        if selection_indices:
+            selection = self.results_text.get(tk.SEL_FIRST, tk.SEL_LAST).strip()
+            if os.path.isfile(selection):
+                folder_path = os.path.dirname(selection)
+                subprocess.Popen(["nautilus", folder_path])
+            elif os.path.isdir(selection):
+                subprocess.Popen(["nautilus", selection])
+
+
+# Clase para renombrado masivo de archivos
+
+class BulkRenameApp:
+    def __init__(self, master):
+        self.master = master
+        self.master.title("Renombrar archivos masivamente")
+        self.create_widgets()
+
+    def create_widgets(self):
+        self.folder_label = tk.Label(self.master, text="Carpeta de archivos:")
+        self.folder_label.grid(row=0, column=0, padx=5, pady=5)
+
+        self.folder_entry = tk.Entry(self.master, width=50)
+        self.folder_entry.grid(row=0, column=1, padx=5, pady=5)
+
+        self.folder_button = tk.Button(self.master, text="Seleccionar Carpeta", command=self.select_folder)
+        self.folder_button.grid(row=0, column=2, padx=5, pady=5)
+
+        self.prefix_label = tk.Label(self.master, text="Prefijo:")
+        self.prefix_label.grid(row=1, column=0, padx=5, pady=5)
+        ToolTip(self.prefix_label, "Prefijo a aplicar a los archivos renombrados")  # Agregar tooltip al botón
+
+
+        self.prefix_entry = tk.Entry(self.master, width=50)
+        self.prefix_entry.grid(row=1, column=1, padx=5, pady=5)
+
+        self.rename_button = tk.Button(self.master, text="Renombrar", command=self.bulk_rename)
+        self.rename_button.grid(row=1, column=2, padx=5, pady=5)
+        ToolTip(self.rename_button, "Renombrar los archivo utilizando el prefijo indicado. Cuidado!! esta acción no se puede deshacer.")  # Agregar tooltip al botón
+        
+        self.open_folder_button = tk.Button(self.master, text="Abrir Carpeta", command=self.open_folder)
+        self.open_folder_button.grid(row=2, column=1, padx=5, pady=5)
+        ToolTip(self.open_folder_button, "Abrir la carpeta con los archivos renombrados")  # Agregar tooltip al botón
+        
+    def select_folder(self):
+        # Seleccionamos por defecto la carpeta home del usuario
+        folder_path = filedialog.askdirectory(initialdir=os.path.expanduser("~"))
+
+        if folder_path:
+            self.folder_entry.delete(0, tk.END)
+            self.folder_entry.insert(0, folder_path)
+
+    def bulk_rename(self):
+        folder_path = self.folder_entry.get()
+        prefix = self.prefix_entry.get()
+        if not folder_path:
+            tk.messagebox.showerror("Error", "Por favor, selecciona una carpeta.")
+            return
+        if not prefix:
+            tk.messagebox.showerror("Error", "Por favor, ingresa un prefijo para los archivos.")
+            return
+
+        try:
+            for i, filename in enumerate(os.listdir(folder_path)):
+                os.rename(os.path.join(folder_path, filename), os.path.join(folder_path, f"{prefix}_{i+1}.txt"))
+            tk.messagebox.showinfo("Éxito", "Archivos renombrados exitosamente.")
+        except Exception as e:
+            tk.messagebox.showerror("Error", f"Ocurrió un error: {str(e)}")
+
+    def open_folder(self):
+        folder_path = self.folder_entry.get()
+        if not folder_path:
+            tk.messagebox.showerror("Error", "Por favor, selecciona una carpeta.")
+            return
+
+        subprocess.Popen(["nautilus", folder_path])

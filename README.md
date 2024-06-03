@@ -100,6 +100,13 @@
 - Añadidos botones para abrir los navegadores web (Firefox, Chrome o Edge)
 - También se han añadido botones para abrir los navegadores (Firefox, Chrome o Edge) en modo incógnito.
 - En la red local, ahora el programa detecta automáticamente la red local. Ya no tiene por que ser 192.168.x.x. Por el momento la conexión debe realizarse entre equipos con Samba instalado. Se utiliza nautilus para abrir las carpetas compartidas.
+- Añadidos valores numéricos a la monitorización del sistema.
+- Otras correcciones a la hora de gestionar el cierre de la aplicación.
+
+## Actualización Versión 0.5.7
+- Añadida la consulta de logs del sistema a la opción "Sistema".
+- Se ha añadido a la sección "Archivos", la posibilidad de buscar en todo el sistema de manera recursiva archivos. En la lista de archivos encontrados, si se hace doble clic sobre uno de los archivos, se abrirá el gestor de archivos nautilus en la carpeta en la que se encuentre el archivo seleccionado. Además acepta la búsqueda utilizando * o ?.
+- He añadido la opción de renombrado masivo en la sección "Archivos". Con ella bastará con seleccionar la carpeta que incluye los archivos. Después no hay más que escribir el prefijo que se le quiere dar a totos los archivos, y tras pulsar el botón renombrar, se cambiará el nombre a todos los archivos utilizando el prefijo escrito y un número incremental. También nos permitirá ver con nautilus la carpeta que seleccionemos con los archivos a renombrar.
 
 ## Dependencias Imprescindibles 
 

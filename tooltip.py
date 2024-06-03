@@ -42,7 +42,7 @@ class ToolTip:
         Args:
             event: El evento que desencadena la función (opcional).
         """
-        x, y, _, _ = self.widget.bbox("insert")
+        x, y, _, _ = self.widget.bbox("@" + str(event.x) + "," + str(event.y))
         x += self.widget.winfo_rootx() + 25
         y += self.widget.winfo_rooty() + 25
 
