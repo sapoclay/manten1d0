@@ -15,6 +15,8 @@ Function:
 import tkinter as tk
 import os
 import preferencias
+
+import os
 import configparser
 
 def obtener_version_actual():
@@ -27,6 +29,8 @@ def obtener_version_actual():
     config.read(ruta_config)
     return config['Version']['actual']
 
+
+
 def mostrar_about():
      # Obtener la versión actual del programa desde el archivo de configuración
     version_actual = obtener_version_actual()
@@ -35,6 +39,7 @@ def mostrar_about():
     about_window.title("Acerca de")
     about_window.geometry("400x250")
     about_window.resizable(False, False)
+    
     
     # Obtener la ruta absoluta del directorio del script
     dir_actual = os.path.dirname(os.path.realpath(__file__))

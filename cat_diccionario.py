@@ -6,7 +6,7 @@ import markdown2
 import requests
 import subprocess
 
-url = "https://raw.githubusercontent.com/sapoclay/diccionario/main/diccionario.md"  # Coloca la URL del archivo markdown que deseas cargar por defecto
+url = "https://raw.githubusercontent.com/sapoclay/diccionario/main/diccionario.md"  # Coloca la URL del archivo markdown que deseas cargar
 
 
 class VentanaDiccionario(QMainWindow):

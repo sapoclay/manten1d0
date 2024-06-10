@@ -36,8 +36,10 @@ from tkinter import messagebox
 import os
 from cryptography.fernet import Fernet
 import threading
+from subprocess import Popen, PIPE
 import sys
 import subprocess
+import base64
 
 # Verificar y cargar la clave de cifrado
 CLAVE_ARCHIVO = "clave.key" # clave de cifrado

@@ -4,7 +4,8 @@ import subprocess
 import threading
 import time
 from datetime import datetime, timezone
-from tkinter import Tk, messagebox, scrolledtext, Listbox, Scrollbar, END, Menu, filedialog, font, ttk
+import tkinter as tk
+from tkinter import messagebox, scrolledtext, Listbox, Scrollbar, END, Menu, filedialog, font, ttk
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 import psutil
 from password import obtener_contrasena
