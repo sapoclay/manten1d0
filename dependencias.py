@@ -8,7 +8,7 @@ import os
 # Lista de dependencias del sistema junto con sus métodos de instalación
 DEPENDENCIAS_SISTEMA = {
     "samba": ["sudo", "apt", "install", "-y", "samba"],
-    "nmap": ["sudo", "apt", "install", "-y", "python3-nmap"],
+    "nmap": ["sudo", "apt", "install", "-y", "nmap"],
     "net-tools": ["sudo", "apt", "install", "-y", "net-tools"],
     "ethtool": ["sudo", "apt", "install", "-y", "ethtool"],
     "gnome-terminal": ["sudo", "apt", "install", "-y", "gnome-terminal"],
@@ -19,6 +19,7 @@ DEPENDENCIAS_SISTEMA = {
     "python3-tk": ["sudo", "apt", "install", "-y", "python3-tk"],
     "pciutils": ["sudo", "apt", "install", "-y", "pciutils"],
     "lshw": ["sudo", "apt", "install", "-y", "lshw"],
+    "arp-scan": ["sudo", "apt", "install", "-y", "arp-scan"],
 }
 
 def verificar_dependencias_sistema():
