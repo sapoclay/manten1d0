@@ -1,24 +1,21 @@
-import subprocess
-import threading
-import time
-import tkinter as tk
-import webbrowser
-from tkinter import messagebox, ttk
-
 try:
-
+    import subprocess
+    import threading
+    import time
+    import tkinter as tk
+    import webbrowser
+    from tkinter import messagebox, ttk
     import requests
     from about import mostrar_about
     from cat_informacion import Informacion
     from password import limpiar_archivos_configuracion, obtener_contrasena
     from dependencias import instalar_dependencias, verificar_dependencias
     from menuCategorias import archivos_cat, diccionario_cat, informacion_cat, internet_cat, navegadores_cat, perfil_cat, red_local_cat, sistema_cat, notas_cat
-
     import preferencias  # Importar el módulo de preferencias para manejar el cambio de tema
 except ImportError:
     # Instalar python3-tk automáticamente sin mostrar mensaje al usuario
     proceso_instalacion = subprocess.Popen(
-        ["sudo", "apt", "install", "-y", "python3-tk"],
+        ["sudo", "apt", "install", "-y", "python3-tk", "python3-pip"],
         stdin=subprocess.PIPE,
         stderr=subprocess.PIPE,
         universal_newlines=True,
@@ -28,15 +25,19 @@ except ImportError:
     # Verificar si ocurrieron errores durante la instalación
     if proceso_instalacion.returncode == 0:
         # Intentar importar las bibliotecas de tkinter nuevamente
-
+        import subprocess
+        import threading
+        import time
+        import tkinter as tk
+        import webbrowser
+        from tkinter import messagebox, ttk
+        import requests
         from about import mostrar_about
         from cat_informacion import Informacion
         from dependencias import instalar_dependencias, verificar_dependencias
         from menuCategorias import archivos_cat, diccionario_cat, informacion_cat, internet_cat, navegadores_cat, perfil_cat, red_local_cat, sistema_cat, notas_cat
-
         from password import limpiar_archivos_configuracion, obtener_contrasena
-
-        # Importar el módulo de preferencias para manejar el cambio de tema
+        import preferencias  # Importar el módulo de preferencias para manejar el cambio de tema
     else:
         # Salir del programa con código de error 1 si la instalación falla
         exit(1)
@@ -45,48 +46,56 @@ except ImportError:
 def instalar_dependencias_con_progreso():
     root = tk.Tk()
     root.withdraw()  # Ocultar la ventana principal
+
     progress_window = tk.Toplevel(root)
     progress_window.title("Instalando dependencias")
-    progress_window.geometry("300x100")  # Establecer tamaño fijo
-    progress_window.resizable(False, False)  # Hacer que la ventana no sea redimensionable
+    progress_window.geometry("300x100")
+    progress_window.resizable(False, False)
+
     progress_label = tk.Label(progress_window, text="Instalando dependencias...")
     progress_label.pack(pady=5)
+
     progress_bar = ttk.Progressbar(progress_window, length=200, mode="determinate")
     progress_bar.pack(pady=5)
     progress_bar["value"] = 0
     progress_bar["maximum"] = 100
-    instalar_dependencias(progress_bar)
-    progress_window.destroy()  # Cerrar la ventana de progreso
+
+    def update_progress_bar(value):
+        progress_bar["value"] = value
+        if value < 100:
+            root.after(50, update_progress_bar, value + 1)
+        else:
+            progress_window.destroy()  # Cerrar la ventana de progreso
+
+    threading.Thread(target=instalar_dependencias, args=(progress_bar,)).start()
+    update_progress_bar(0)
+    root.mainloop()
 
 def main():
-    # Pedimos la contraseña de usuario al iniciar el programa
     obtener_contrasena()
 
-    # Crear la ventana de progreso
     root = tk.Tk()
     root.title("Comprobando Dependencias")
-    root.resizable(False, False)  # Hacer que la ventana no sea redimensionable
+    root.resizable(False, False)
+
     progress_bar = ttk.Progressbar(root, orient="horizontal", length=200, mode="indeterminate")
     progress_bar.pack(pady=20)
     progress_bar.start()
 
-    # Mostrar mensaje de "Comprobando dependencias..."
     label = tk.Label(root, text="Comprobando dependencias...")
     label.pack()
 
-    # Avanzar la barra de progreso de 0 a 100%
-    update_progress(root, progress_bar, label)
+    def update_progress():
+        progress_bar["value"] = 0
+        for i in range(101):
+            time.sleep(0.05)
+            progress_bar["value"] = i
+            root.update_idletasks()
 
+        root.after(1000, lambda: verificar_dependencias_con_progreso(root, progress_bar, label))
+
+    threading.Thread(target=update_progress).start()
     root.mainloop()
-
-def update_progress(root, progress_bar, label):
-
-    # Simular la comprobación de dependencias durante 5 segundos
-    for i in range(101):
-        progress_bar["value"] = i
-        root.update_idletasks()  # Actualizar la ventana de Tkinter
-        time.sleep(0.05)  # Esperar un momento para simular el proceso
-    root.after(1000, lambda: verificar_dependencias_con_progreso(root, progress_bar, label))  # Llamar a la función de verificación después de un segundo
 
 def verificar_dependencias_con_progreso(root, progress_bar, label):
     # Comprobar dependencias
@@ -127,6 +136,8 @@ def close_progress(root, progress_bar, label):
     VentanaPrincipal(main_window)
     main_window.mainloop()
 
+##############################################################VENTANA PRINCIPAL##############################################################
+
 class VentanaPrincipal:
     def __init__(self, root):
         from tooltip import ToolTip
@@ -141,6 +152,8 @@ class VentanaPrincipal:
 
         # Cambiar el color de fondo de la ventana
         self.root.config(bg="lightgrey")
+        
+##############################################################FUNCIONES PARA MENÚ SUPERIOR##########################################################
 
         # Función para abrir la ventana de Opciones/Personalización
         def abrir_ventana_personalizacion():
@@ -175,79 +188,89 @@ class VentanaPrincipal:
                 # Manejar cualquier excepción que pueda ocurrir al intentar abrir la terminal
                 print(f"No se pudo abrir la terminal: {e}")
 
-        # Crear el menú superior
-        self.menu_superior = tk.Menu(self.root)
-        self.menu_archivo = tk.Menu(self.menu_superior, tearoff=0)
-        self.menu_archivo.add_command(label="Abrir Terminal (Ctrl+Alt+T)", command=abrir_terminal)
-        self.menu_archivo.add_separator()
-        self.menu_archivo.add_command(label="Abrir URL en Navegador", command=abrir_url)
-        self.menu_archivo.add_separator()
-        self.menu_archivo.add_command(label="Salir", command=self.cerrar_ventana_principal)
-        self.menu_superior.add_cascade(label="Archivo", menu=self.menu_archivo)
-        # Crear el menú Preferencias
-        preferencias_menu = tk.Menu(self.root, tearoff=0)
-        preferencias_menu.add_command(label="Repositorio GitHub", command=abrir_url_github)
-        preferencias_menu.add_separator()
-        preferencias_menu.add_command(
-            label="Buscar Actualizaciones", command=abrir_ventana_actualizaciones
-        )
-        preferencias_menu.add_separator()
-        preferencias_menu.add_command(label="Opciones", command=abrir_ventana_personalizacion)
-        # Agregar el menú Preferencias como una cascada en el menú principal
-        self.menu_superior.add_cascade(label="Preferencias", menu=preferencias_menu)
-        # Crear el menú About
-        self.menu_superior.add_command(
-            label="About", command=mostrar_about
-        )  # Llama a mostrar_about cuando se haga clic
-        self.root.config(menu=self.menu_superior)
-
-        # Crear el menú lateral con categorías
-        self.menu_lateral = tk.Frame(self.root, width=200, bg="lightgrey")
-        self.menu_lateral.pack(side="left", fill="y")
-
-        # Categorías para el menú lateral
-        self.categorias = [
-            "Perfil Usuario",
-            "Información",
-            "Sistema",
-            "Archivos",
-            "Internet",
-            "Red Local",
-            "Navegadores",
-            "Diccionario",
-            "Notas",
-        ]
-        self.botones_categorias = []
-        for categoria in self.categorias:
-            boton = tk.Button(
-                self.menu_lateral,
-                text=categoria,
-                width=20,
-                command=lambda c=categoria: self.mostrar_subcategorias(c),
+#################################################### MENÚ SUPERIOR ##############################################################
+        def menu():
+            # Crear el menú superior
+            self.menu_superior = tk.Menu(self.root)
+            self.menu_archivo = tk.Menu(self.menu_superior, tearoff=0)
+            self.menu_archivo.add_command(label="Abrir Terminal (Ctrl+Alt+T)", command=abrir_terminal)
+            self.menu_archivo.add_separator()
+            self.menu_archivo.add_command(label="Abrir URL en Navegador", command=abrir_url)
+            self.menu_archivo.add_separator()
+            self.menu_archivo.add_command(label="Salir", command=self.cerrar_ventana_principal)
+            self.menu_superior.add_cascade(label="Archivo", menu=self.menu_archivo)
+            # Crear el menú Preferencias
+            preferencias_menu = tk.Menu(self.root, tearoff=0)
+            preferencias_menu.add_command(label="Repositorio GitHub", command=abrir_url_github)
+            preferencias_menu.add_separator()
+            preferencias_menu.add_command(
+                label="Buscar Actualizaciones", command=abrir_ventana_actualizaciones
             )
-            boton.pack(pady=5)
-            ToolTip(boton, f"Categoría {categoria}")
-            self.botones_categorias.append(boton)
-        # Dibujar una línea horizontal
-        self.canvas = tk.Canvas(self.menu_lateral, width=50, height=2, bg="lightgrey", highlightthickness=0)
-        self.canvas.create_line(0, 1, 50, 1, fill="black")
-        self.canvas.pack(pady=10)        
-        # Crear indicador de conexión a Internet
-        self.indicador_internet = tk.Label(
-            self.menu_lateral,
-            text="Estado de la conexión",
-            bg="red",
-            fg="white",
-            width=20,
-            height=1,
-        )
+            preferencias_menu.add_separator()
+            preferencias_menu.add_command(label="Opciones", command=abrir_ventana_personalizacion)
+            # Agregar el menú Preferencias como una cascada en el menú principal
+            self.menu_superior.add_cascade(label="Preferencias", menu=preferencias_menu)
+            # Crear el menú About
+            self.menu_superior.add_command(
+                label="About", command=mostrar_about
+            )  # Llama a mostrar_about cuando se haga clic
+            self.root.config(menu=self.menu_superior)
+
+        # Llamamos al menú superior creado con la función menú
+        menu()
         
-        self.indicador_internet.pack(pady=20)
-        ToolTip(self.indicador_internet, "Estado de la conexión a internet del equipo")
+##################################################################################################################################
+##############################################MENÚ LATERAL########################################################################
+        def menu_lateral():
+            # Crear el menú lateral con categorías
+            self.menu_lateral = tk.Frame(self.root, width=200, bg="lightgrey")
+            self.menu_lateral.pack(side="left", fill="y")
 
-        # Iniciar la verificación de conexión a Internet
-        self.check_connection()
+            # Categorías para el menú lateral
+            self.categorias = [
+                "Perfil Usuario",
+                "Información",
+                "Sistema",
+                "Archivos",
+                "Internet",
+                "Red Local",
+                "Navegadores",
+                "Diccionario",
+                "Notas",
+            ]
+            self.botones_categorias = []
+            for categoria in self.categorias:
+                boton = tk.Button(
+                    self.menu_lateral,
+                    text=categoria,
+                    width=20,
+                    command=lambda c=categoria: self.mostrar_subcategorias(c),
+                )
+                boton.pack(pady=5)
+                ToolTip(boton, f"Categoría {categoria}")
+                self.botones_categorias.append(boton)
+            # Dibujar una línea horizontal
+            self.canvas = tk.Canvas(self.menu_lateral, width=50, height=2, bg="lightgrey", highlightthickness=0)
+            self.canvas.create_line(0, 1, 50, 1, fill="black")
+            self.canvas.pack(pady=10)        
+            # Crear indicador de conexión a Internet
+            self.indicador_internet = tk.Label(
+                self.menu_lateral,
+                text="Estado de la conexión",
+                bg="red",
+                fg="white",
+                width=20,
+                height=1,
+            )
+            
+            self.indicador_internet.pack(pady=20)
+            ToolTip(self.indicador_internet, "Estado de la conexión a internet del equipo")
+            # Iniciar la verificación de conexión a Internet
+            self.check_connection()
 
+        menu_lateral()
+############################################################################################################################################        
+        
         # Crear el área central para mostrar subcategorías
         self.area_central = tk.Frame(self.root, bg="lightgrey", borderwidth=0)  # Eliminar el borde
         self.area_central.pack(side="top", fill="both", expand=True)  # Ajustar el área central
@@ -479,20 +502,17 @@ class VentanaPrincipal:
 
     # Función para verificar si la conexión a internet está establecida o no
     def check_connection(self):
-        def verify_connection():
-            while True:
-                try:
-                    requests.get("https://www.google.com", timeout=5)
-                    self.update_indicator("green", "Conectado a Internet")
-                except requests.ConnectionError:
-                    self.update_indicator("red", "Sin conexión")
-                time.sleep(5)
-
-        threading.Thread(target=verify_connection, daemon=True).start()
-
-    def update_indicator(self, color, text):
-        if self.indicador_internet:
-            self.indicador_internet.config(bg=color, text=text)
+        self.internet_status_thread = threading.Thread(target=self.update_internet_status, daemon=True)
+        self.internet_status_thread.start()
+        
+    def update_internet_status(self):
+        while True:
+            try:
+                requests.get("https://www.google.com", timeout=3)
+                self.indicador_internet.config(bg="green", text="Conexión establecida")
+            except requests.RequestException:
+                self.indicador_internet.config(bg="red", text="Sin conexión")
+            time.sleep(10)
 
 if __name__ == "__main__":
     main()

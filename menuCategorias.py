@@ -1,38 +1,40 @@
-import tkinter as tk
-from tkinter import ttk
-from tkinter import messagebox
-from tkinter import filedialog
-from tkinter import messagebox
 import os
 import subprocess
-from cat_archivos import CopiaSeguridad
-from cat_archivos import RestaurarCopiaSeguridad
-from cat_archivos import cifrar_archivo, descifrar_archivo
-from cat_archivos import FileSearchApp
-from cat_archivos import BulkRenameApp
 import time
-from cat_diccionario import abrir_ventana_diccionario, cargar_contenido_html
-from cat_internet import  reiniciar_tarjeta_red
-from cat_internet import hacer_ping
-from cat_internet import RedTools  
-from cat_sistema import actualizar_sistema, limpiar_cache, abrir_gestor_software
-from cat_sistema import AplicacionesAutostart
-from cat_sistema import AdministrarProcesos
-from cat_sistema import AplicacionBuscadorDuplicados
-from cat_sistema import Limpieza 
-from cat_sistema import Repositorios
-from cat_sistema import MonitorizarSistema
-from cat_sistema import DebInstalador
-from cat_sistema import DesinstalarPaquetes
-from cat_sistema import consultaLogs
-from cat_informacion import Informacion
-from cat_redLocal import encontrar_dispositivos_en_red, doble_clic
-from cat_navegadores import LimpiadorNavegadores
-from cat_navegadores import InstalarNavegadores
-from cat_perfil import PerfilUsuario
-from cat_editorTexto import EditorTextos
-from tooltip import ToolTip    
+import tkinter as tk
+from tkinter import filedialog, messagebox, ttk
+
 import preferencias
+from cat_archivos import (
+    BulkRenameApp,
+    CopiaSeguridad,
+    FileSearchApp,
+    RestaurarCopiaSeguridad,
+    cifrar_archivo,
+    descifrar_archivo,
+)
+from cat_diccionario import abrir_ventana_diccionario, cargar_contenido_html
+from cat_editorTexto import EditorTextos
+from cat_informacion import Informacion
+from cat_internet import RedTools, hacer_ping, reiniciar_tarjeta_red
+from cat_navegadores import InstalarNavegadores, LimpiadorNavegadores
+from cat_perfil import PerfilUsuario
+from cat_redLocal import doble_clic, encontrar_dispositivos_en_red
+from cat_sistema import (
+    AdministrarProcesos,
+    AplicacionBuscadorDuplicados,
+    AplicacionesAutostart,
+    DebInstalador,
+    DesinstalarPaquetes,
+    Limpieza,
+    MonitorizarSistema,
+    Repositorios,
+    actualizar_sistema,
+    consultaLogs,
+    limpiar_cache,
+    abrir_gestor_software,
+)
+from tooltip import ToolTip
 
 def informacion_cat(self, mensaje_personalizado):
     """
@@ -91,27 +93,26 @@ Steps:
     self.texto_informacion.pack(expand=True, fill="both", padx=10, pady=(1, 30))  
 
     
-# Función para mostrar la pantalla de la categoría DICCIONARIO
 def diccionario_cat(self, mensaje_personalizado):
     """
-Función diccionario_cat.
+    Muestra la pantalla de la categoría DICCIONARIO en la interfaz gráfica.
 
-Esta función se encarga de mostrar la pantalla de la categoría DICCIONARIO en la interfaz gráfica.
+    Args:
+        self: La instancia de la clase que llama a la función.
+        mensaje_personalizado (str): Mensaje opcional que se mostrará en la interfaz.
 
-Args:
-    self: La instancia de la clase que llama a la función.
-    mensaje_personalizado (str): Mensaje opcional que se mostrará en la interfaz.
-
-Returns:
-    No retorna ningún valor.
-
-Steps:
-    - Oculta todos los elementos en el área central.
-    - Actualiza el mensaje personalizado si existe, mostrándolo en un label y aplicando el tema seleccionado.
-    - Actualiza la interfaz gráfica antes de abrir la ventana del diccionario.
-    - Carga el contenido HTML para el diccionario.
-    - Abre la ventana del diccionario después de actualizar la interfaz.
-"""
+    Returns:
+        No retorna ningún valor.
+    """
+    
+    def aplicar_tema(widget):
+        """Aplica el tema seleccionado a un widget si el tema no es 'Claro'."""
+        if preferencias.tema_seleccionado != "Claro":
+            preferencias.cambiar_tema(widget, preferencias.tema_seleccionado)
+            if isinstance(widget, (tk.Label, tk.Button, tk.Entry, tk.Text, tk.Listbox)):
+                widget.config(bg="black", fg="white")
+            else:
+                widget.config(bg="black")
 
     # Ocultar todos los elementos en el área central
     self.contenedor_texto.pack_forget()
@@ -120,166 +121,100 @@ Steps:
 
     # Actualizar el mensaje personalizado si existe
     if mensaje_personalizado:
-        label_subcategorias = tk.Label(self.area_central, text=mensaje_personalizado, font=("Arial", 16, "bold"), bg="lightgrey", padx=10, pady=20)
+        label_subcategorias = tk.Label(
+            self.area_central, text=mensaje_personalizado,
+            font=("Arial", 16, "bold"), bg="lightgrey", padx=10, pady=20
+        )
+        aplicar_tema(label_subcategorias)
         label_subcategorias.pack()
-        # Dibujar una línea horizontal
-        self.canvas = tk.Canvas(self.area_central, width=500, height=2, bg="lightgrey", highlightthickness=0)
-        self.canvas.create_line(0, 1, 500, 1, fill="black")
-        self.canvas.pack(pady=10)
-        # Aplicar el tema seleccionado a la nueva ventana
-        preferencias.cambiar_tema(self.area_central, preferencias.tema_seleccionado)
 
+        # Dibujar una línea horizontal
+        canvas_linea = tk.Canvas(self.area_central, width=500, height=2, bg="lightgrey", highlightthickness=0)
+        canvas_linea.create_line(0, 1, 500, 1, fill="black")
+        canvas_linea.pack(pady=10)
+    
+    aplicar_tema(self.area_central)
+    
     self.root.update_idletasks()  # Actualizar la interfaz gráfica antes de abrir la ventana del diccionario
 
     # Cargar el contenido HTML
     contenido_html = cargar_contenido_html()
     abrir_ventana_diccionario(contenido_html)  # Abrir la ventana del diccionario después de actualizar la interfaz
 
-# Función para realizar tareas en el SISTEMA
 def sistema_cat(self, mensaje_personalizado):
-    
     """
-Función sistema_cat.
+    Función sistema_cat.
 
-Esta función se encarga de realizar diversas tareas en el sistema operativo a través de la interfaz gráfica.
+    Esta función se encarga de realizar diversas tareas en el sistema operativo a través de la interfaz gráfica.
 
-Args:
-    self: La instancia de la clase que llama a la función.
-    mensaje_personalizado (str): Mensaje opcional que se mostrará en la interfaz.
+    Args:
+        self: La instancia de la clase que llama a la función.
+        mensaje_personalizado (str): Mensaje opcional que se mostrará en la interfaz.
 
-Returns:
-    No retorna ningún valor.
+    Returns:
+        No retorna ningún valor.
 
-Steps:
-    - Oculta el contenedor de texto y destruye los elementos en el área central.
-    - Crea un label con el mensaje personalizado o uno predeterminado si no se proporciona.
-    - Crea botones para realizar distintas tareas como actualizar el sistema, limpiar la caché, abrir el gestor de software, gestionar aplicaciones de inicio, eliminar archivos, vaciar la papelera, administrar procesos, buscar archivos duplicados, gestionar repositorios y monitorizar el sistema.
-    - Cada botón tiene asociada una función para ejecutar la tarea correspondiente.
-"""
-    
+    Steps:
+        - Oculta el contenedor de texto y destruye los elementos en el área central.
+        - Crea un label con el mensaje personalizado o uno predeterminado si no se proporciona.
+        - Crea botones para realizar distintas tareas del sistema.
+    """
+
+    def aplicar_tema(widget):
+        """Aplica el tema seleccionado a un widget si el tema no es 'Claro'."""
+        if preferencias.tema_seleccionado != "Claro":
+            preferencias.cambiar_tema(widget, preferencias.tema_seleccionado)
+            if isinstance(widget, (tk.Label, tk.Button, tk.Entry, tk.Text, tk.Listbox)):
+                widget.config(bg="black", fg="white")
+            else:
+                widget.config(bg="black")
+
+    def crear_boton(contenedor, texto, comando, fila, columna, tooltip):
+        boton = tk.Button(contenedor, text=texto, command=comando)
+        boton.grid(row=fila, column=columna, padx=10, pady=10)
+        ToolTip(boton, tooltip)
+        aplicar_tema(boton)
+        return boton
+
     self.contenedor_texto.pack_forget()
     # Ocultar la etiqueta en la que se muestra la información del sistema
     for widget in self.area_central.winfo_children():
         widget.destroy()
-    
+
     # Crear el label con el mensaje personalizado o un mensaje predeterminado si no se encuentra el mensaje personalizado
     if mensaje_personalizado:
         label_subcategorias = tk.Label(self.area_central, text=mensaje_personalizado, font=("Arial", 16, "bold"), bg="lightgrey", padx=10, pady=20)
-        label_subcategorias.pack()
-        # Dibujar una línea horizontal
-        self.canvas = tk.Canvas(self.area_central, width=500, height=2, bg="lightgrey", highlightthickness=0)
-        self.canvas.create_line(0, 1, 500, 1, fill="black")
-        self.canvas.pack(pady=10)
     else:
         label_subcategorias = tk.Label(self.area_central, text="SISTEMA OPERATIVO", font=("Arial", 12))
-        label_subcategorias.pack()
-        # Dibujar una línea horizontal
-        self.canvas = tk.Canvas(self.area_central, width=500, height=2, bg="lightgrey", highlightthickness=0)
-        self.canvas.create_line(0, 1, 500, 1, fill="black")
-        self.canvas.pack(pady=10)
+
+    aplicar_tema(label_subcategorias)
+    label_subcategorias.pack()
+
+    # Dibujar una línea horizontal
+    canvas_linea = tk.Canvas(self.area_central, width=500, height=2, bg="lightgrey", highlightthickness=0)
+    canvas_linea.create_line(0, 1, 500, 1, fill="black")
+    canvas_linea.pack(pady=10)
 
     contenedor_botones = tk.Frame(self.area_central, bg="lightgrey")
     contenedor_botones.pack()
 
-    boton_actualizar = tk.Button(contenedor_botones, text="Actualizar Sistema", command=lambda: actualizar_sistema(self.root))
-    boton_actualizar.grid(row=0, column=0, padx=10, pady=10)
-    ToolTip(boton_actualizar, "Instala todos las actualizaciones disponibles para la versión de tu sistema operativo")
+    # Creación de botones con sus respectivas funciones y tooltips
+    crear_boton(contenedor_botones, "Actualizar Sistema", lambda: actualizar_sistema(self.root), 0, 0, "Instala todas las actualizaciones disponibles para la versión de tu sistema operativo")
+    crear_boton(contenedor_botones, "Limpiar Caché", lambda: limpiar_cache(self.root), 0, 1, "Limpia la caché del sistema operativo")
+    crear_boton(contenedor_botones, "Abrir Gestor Software", abrir_gestor_software, 0, 2, "Instala o desinstala paquetes snap desde el gestor de software de Ubuntu")
 
-    boton_limpiar_cache = tk.Button(contenedor_botones, text="Limpiar Caché", command=lambda: limpiar_cache(self.root))
-    boton_limpiar_cache.grid(row=0, column=1, padx=10, pady=10)
-    ToolTip(boton_limpiar_cache, "Limpia la caché del sistema operativo")
+    crear_boton(contenedor_botones, "Aplicaciones Inicio", lambda: AplicacionesAutostart(tk.Toplevel(self.area_central)), 1, 0, "Añade o elimina aplicaciones que se ejecuten al arrancar el equipo. Permite archivos .desktop")
+    crear_boton(contenedor_botones, "Eliminar Archivo/s", Limpieza.eliminar_elemento, 1, 1, "Eliminar permanentemente archivos o carpetas del equipo")
+    crear_boton(contenedor_botones, "Vaciar Papelera", Limpieza.vaciar_papelera, 1, 2, "Vacía la papelera de reciclaje del equipo")
 
-    boton_abrir_software = tk.Button(contenedor_botones, text="Abrir Gestor Software", command=abrir_gestor_software)
-    boton_abrir_software.grid(row=0, column=2, padx=10, pady=10)
-    ToolTip(boton_abrir_software, "Instala o desinstala paquetes snap desde el gestor de software de Ubuntu")
-    
-    
+    crear_boton(contenedor_botones, "Administrar Procesos", lambda: AdministrarProcesos(tk.Toplevel(self.area_central)), 2, 0, "Abre una ventana para administrar los procesos del sistema")
+    crear_boton(contenedor_botones, "Buscar Archivos Duplicados", lambda: AplicacionBuscadorDuplicados(tk.Toplevel(self.area_central)), 2, 1, "Abre una ventana buscar archivos duplicados en el sistema")
+    crear_boton(contenedor_botones, "Gestiona Repositorios", lambda: Repositorios(tk.Toplevel(self.area_central)), 2, 2, "Gestiona los repositorios del sistema")
 
-    def abrir_ventana_aplicaciones_autostart():
-        if self.area_central.winfo_exists():
-            ventana_aplicaciones_autostart = tk.Toplevel(self.area_central)
-            aplicaciones_autostart = AplicacionesAutostart(ventana_aplicaciones_autostart)
-        else:
-            messagebox.showinfo("ERROR!!", "La ventana principal ha sido destruida")
-
-    boton_app_inicio = tk.Button(contenedor_botones, text="Aplicaciones Inicio", command=abrir_ventana_aplicaciones_autostart)
-    boton_app_inicio.grid(row=1, column=0, padx=10, pady=10)
-    ToolTip(boton_app_inicio, "Añade o elimina aplicaciones que se ejecuten al arrancar el equipo. Permite archivos .desktop")
-    
-    boton_eliminar_archivo = tk.Button(contenedor_botones, text="Eliminar Archivo/s", command=Limpieza.eliminar_elemento)
-    boton_eliminar_archivo.grid(row=1, column=1, padx=10, pady=10)
-    ToolTip(boton_eliminar_archivo, "Eliminar permanentemente archivos o carpetas del equipo")
-    
-    boton_vaciar_papelera = tk.Button(contenedor_botones, text="Vaciar Papelera", command=Limpieza.vaciar_papelera)
-    boton_vaciar_papelera.grid(row=1, column=2, padx=10, pady=10)
-    ToolTip(boton_vaciar_papelera, "Vacía la papelera de reciclaje del equipo")
-    
-    def abrir_ventana_administrar_procesos():
-        ventana_procesos = tk.Toplevel(self.area_central)
-        administrar_procesos = AdministrarProcesos(ventana_procesos)
-    
-    # Botón para abrir la ventana Administrar Procesos
-    boton_administrar_procesos = tk.Button(contenedor_botones, text="Administrar Procesos", command=abrir_ventana_administrar_procesos)
-    boton_administrar_procesos.grid(row=2, column=0, padx=10, pady=10)
-    ToolTip(boton_administrar_procesos, "Abre una ventana para administrar los procesos del sistema")
-
-    def abrir_ventana_archivos_duplicados():
-        ventana_archivos_duplicados = tk.Toplevel(self.area_central)
-        buscar_archivos_duplicados = AplicacionBuscadorDuplicados(ventana_archivos_duplicados)
-    
-    # Botón para abrir la ventana en la que buscar archivos duplicados del sistema
-    boton_archivos_duplicados = tk.Button(contenedor_botones, text="Buscar Archivos Duplicados", command=abrir_ventana_archivos_duplicados)
-    boton_archivos_duplicados.grid(row=2, column=1, padx=10, pady=10)
-    ToolTip(boton_archivos_duplicados, "Abre una ventana buscar archivos duplicados en el sistema")
-    
-    def abrir_ventana_gestion_repositorios():
-        ventana_gestion_repositorios = tk.Toplevel(self.area_central)
-        gestion_repositorios = Repositorios(ventana_gestion_repositorios)
-
-    # Botón para abrir la ventana para la gestión de repositorios
-    boton_gestion_repositorios = tk.Button(contenedor_botones, text="Gestiona Repositorios", command=abrir_ventana_gestion_repositorios)
-    boton_gestion_repositorios.grid(row=2, column=2, padx=10, pady=10)
-    ToolTip(boton_gestion_repositorios, "Gestiona los repositorios del sistema")
-        
-
-    # Llamada a la función
-    def abrir_ventana_monitorizar_sistema():
-        ventana_monitorizar = tk.Toplevel(self.area_central)
-        monitorizacion = MonitorizarSistema(ventana_monitorizar)
-        monitorizacion.monitorizar_sistema()
-
-    boton_monitorizar = tk.Button(contenedor_botones, text="Monitorizar", command=abrir_ventana_monitorizar_sistema)
-    boton_monitorizar.grid(row=3, column=0, padx=10, pady=10)
-    ToolTip(boton_monitorizar, "Genera un gráfico de los recursos del sistema en el momento actual")
-    
-    # Función para abrir el instalador de .deb
-    def abrir_instalador_deb():
-        instalador = DebInstalador()
-        instalador.seleccionar_archivo()
-        instalador.instalar_deb()
-
-    boton_instalar_deb = tk.Button(contenedor_botones, text="Instalar .deb", command=abrir_instalador_deb)
-    boton_instalar_deb.grid(row=3, column=1, padx=10, pady=10)
-    ToolTip(boton_instalar_deb, "Selecciona e instala un paquete .deb usando dpkg")
-    
-    # Función para abrir el desinstalador de paquetes 
-    def abrir_desinstalar_paquetes():
-        ventana_desinstalar = tk.Toplevel(self.area_central)
-        DesinstalarPaquetes(ventana_desinstalar)
-
-    boton_desinstalar_paquetes = tk.Button(contenedor_botones, text="Desinstalar Paquetes", command=abrir_desinstalar_paquetes)
-    boton_desinstalar_paquetes.grid(row=3, column=2, padx=10, pady=10)
-    ToolTip(boton_desinstalar_paquetes, "Desinstalar paquetes instalados por el usuario")
-    
-    def abrir_consulta_logs():
-        ventana_logs = tk.Toplevel(self.area_central)
-        consultaLogs(ventana_logs)
-    
-    # Botón para abrir la consulta de logs
-    boton_ver_logs = tk.Button(contenedor_botones, text="Ver logs", command=abrir_consulta_logs)
-    boton_ver_logs.grid(row=4, column=0, padx=10, pady=10)
-    ToolTip(boton_ver_logs, "Consulta los registros más importantes del sistema")
-
+    crear_boton(contenedor_botones, "Monitorizar", lambda: MonitorizarSistema(tk.Toplevel(self.area_central)).monitorizar_sistema(), 3, 0, "Genera un gráfico de los recursos del sistema en el momento actual")
+    crear_boton(contenedor_botones, "Instalar .deb", lambda: DebInstalador().seleccionar_archivo().instalar_deb(), 3, 1, "Selecciona e instala un paquete .deb usando dpkg")
+    crear_boton(contenedor_botones, "Desinstalar Paquetes", lambda: DesinstalarPaquetes(tk.Toplevel(self.area_central)), 3, 2, "Desinstalar paquetes instalados por el usuario")
+    crear_boton(contenedor_botones, "Ver logs", lambda: consultaLogs(tk.Toplevel(self.area_central)), 4, 0, "Consulta los registros más importantes del sistema")
     
 # Función para mostrar la categoría INTERNET
 def internet_cat(self, mensaje_personalizado, entry_url=None):
@@ -876,43 +811,73 @@ def archivos_cat(self, mensaje_personalizado):
     ToolTip(boton_renombrado, "Renombrar archivos de forma masiva")
     
 def perfil_cat(self, mensaje_personalizado):
-     # Limpiar el área central
+    """
+    Función perfil_cat.
+
+    Esta función se encarga de mostrar la pantalla de perfil de usuario en la interfaz gráfica.
+
+    Args:
+        self: La instancia de la clase que llama a la función.
+        mensaje_personalizado (str): Mensaje opcional que se mostrará en la interfaz.
+
+    Returns:
+        No retorna ningún valor.
+
+    Steps:
+        - Oculta el contenedor de texto y destruye los elementos en el área central.
+        - Crea un label con el mensaje personalizado o uno predeterminado si no se proporciona.
+        - Crea un botón para modificar el perfil de usuario.
+        - Aplica el tema seleccionado a los elementos creados.
+    """
+
+    def aplicar_tema(widget):
+        """Aplica el tema seleccionado a un widget si el tema no es 'Claro'."""
+        if preferencias.tema_seleccionado != "Claro":
+            preferencias.cambiar_tema(widget, preferencias.tema_seleccionado)
+            if isinstance(widget, (tk.Label, tk.Button, tk.Entry, tk.Text, tk.Listbox)):
+                widget.config(bg="black", fg="white")
+            else:
+                widget.config(bg="black")
+
+    def crear_label_y_linea(mensaje, font_size, padding):
+        """Crea un label con un mensaje y dibuja una línea horizontal."""
+        label = tk.Label(self.area_central, text=mensaje, font=("Arial", font_size, "bold"), bg="lightgrey", padx=10, pady=padding)
+        aplicar_tema(label)
+        label.pack()
+        
+        canvas_linea = tk.Canvas(self.area_central, width=500, height=2, bg="lightgrey", highlightthickness=0)
+        canvas_linea.create_line(0, 1, 500, 1, fill="black")
+        aplicar_tema(canvas_linea)
+        canvas_linea.pack(pady=10)
+
+    def abrir_ventana_perfil():
+        ventana_perfil = tk.Toplevel(self.area_central)
+        PerfilUsuario(ventana_perfil)
+        aplicar_tema(ventana_perfil)
+
+    # Limpiar el área central
     self.contenedor_texto.pack_forget()
     for widget in self.area_central.winfo_children():
         widget.destroy()
-    
+
     # Crear el label con el mensaje personalizado o un mensaje predeterminado
     if mensaje_personalizado:
-        label_subcategorias = tk.Label(self.area_central, text=mensaje_personalizado, font=("Arial", 16, "bold"), bg="lightgrey", padx=10, pady=20)
-        label_subcategorias.pack()
-        # Dibujar una línea horizontal
-        self.canvas = tk.Canvas(self.area_central, width=500, height=2, bg="lightgrey", highlightthickness=0)
-        self.canvas.create_line(0, 1, 500, 1, fill="black")
-        self.canvas.pack(pady=10)
+        crear_label_y_linea(mensaje_personalizado, 16, 20)
     else:
-        label_subcategorias = tk.Label(self.area_central, text="PERFIL USUARIO", font=("Arial", 12))
-        label_subcategorias.pack()
-        # Dibujar una línea horizontal
-        self.canvas = tk.Canvas(self.area_central, width=500, height=2, bg="lightgrey", highlightthickness=0)
-        self.canvas.create_line(0, 1, 500, 1, fill="black")
-        self.canvas.pack(pady=10)
-        
-    # Función para abrir la ventana desde la que modificar el perfil de usuario
-    def abrir_ventana_perfil():
-        ventana_perfil = tk.Toplevel()
-        PerfilUsuario(ventana_perfil)
-    
+        crear_label_y_linea("PERFIL USUARIO", 12, 0)
+
     # Crear un frame para los botones relacionados con el perfil de usuario
-    frame_botones_perfil = tk.Frame(self.area_central)
+    frame_botones_perfil = tk.Frame(self.area_central, bg="lightgrey")
+    aplicar_tema(frame_botones_perfil)
     frame_botones_perfil.pack()
 
-    # Crearmos el botón para abrir la ventana desde la que modificar el perfil de usuario
+    # Crear el botón para abrir la ventana desde la que modificar el perfil de usuario
     boton_perfil = tk.Button(frame_botones_perfil, text="Modificar Perfil Usuario", width=20, command=abrir_ventana_perfil)
+    aplicar_tema(boton_perfil)
     boton_perfil.pack(side=tk.LEFT, padx=5, pady=5)
     ToolTip(boton_perfil, "Modifica tu perfil de usuario")
     
 def notas_cat(self, mensaje_personalizado):
-    
     """
     Función notas_cat.
 
@@ -929,40 +894,51 @@ def notas_cat(self, mensaje_personalizado):
         - Limpia el área central de la interfaz gráfica.
         - Crea un label con el mensaje personalizado o uno predeterminado si no se proporciona, seguido de una línea horizontal.
         - Crea un botón para lanzar el editor de texto desde cat_editorTexto.py
-        """
-    
+    """
+
+    def aplicar_tema(widget):
+        """Aplica el tema seleccionado a un widget si el tema no es 'Claro'."""
+        if preferencias.tema_seleccionado != "Claro":
+            preferencias.cambiar_tema(widget, preferencias.tema_seleccionado)
+            if isinstance(widget, (tk.Label, tk.Button, tk.Entry, tk.Text, tk.Listbox)):
+                widget.config(bg="black", fg="white")
+            else:
+                widget.config(bg="black")
+
+    def crear_label_y_linea(mensaje, font_size, padding):
+        """Crea un label con un mensaje y dibuja una línea horizontal."""
+        label = tk.Label(self.area_central, text=mensaje, font=("Arial", font_size, "bold"), bg="lightgrey", padx=10, pady=padding)
+        aplicar_tema(label)
+        label.pack()
+        
+        canvas_linea = tk.Canvas(self.area_central, width=500, height=2, bg="lightgrey", highlightthickness=0)
+        canvas_linea.create_line(0, 1, 500, 1, fill="black")
+        aplicar_tema(canvas_linea)
+        canvas_linea.pack(pady=10)
+
+    def abrir_ventana_toma_notas():
+        ventana_notas = tk.Toplevel(self.area_central)
+        toma_notas = EditorTextos(ventana_notas)
+
     # Limpiar el área central
     self.contenedor_texto.pack_forget()
     for widget in self.area_central.winfo_children():
         widget.destroy()
-    
+
     # Crear el label con el mensaje personalizado o un mensaje predeterminado
     if mensaje_personalizado:
-        label_subcategorias = tk.Label(self.area_central, text=mensaje_personalizado, font=("Arial", 16, "bold"), bg="lightgrey", padx=10, pady=20)
-        label_subcategorias.pack()
-        # Dibujar una línea horizontal
-        self.canvas = tk.Canvas(self.area_central, width=500, height=2, bg="lightgrey", highlightthickness=0)
-        self.canvas.create_line(0, 1, 500, 1, fill="black")
-        self.canvas.pack(pady=10)
+        crear_label_y_linea(mensaje_personalizado, 16, 20)
     else:
-        label_subcategorias = tk.Label(self.area_central, text="TOMA NOTAS", font=("Arial", 12))
-        label_subcategorias.pack()
-        # Dibujar una línea horizontal
-        self.canvas = tk.Canvas(self.area_central, width=500, height=2, bg="lightgrey", highlightthickness=0)
-        self.canvas.create_line(0, 1, 500, 1, fill="black")
-        self.canvas.pack(pady=10)
-        
+        crear_label_y_linea("TOMA NOTAS", 12, 0)
+
     # Crear un frame para los botones
     frame_botones_notas = tk.Frame(self.area_central)
+    aplicar_tema(frame_botones_notas)
     frame_botones_notas.pack()
-    
-    def abrir_ventana_toma_notas():
-        ventana_notas = tk.Toplevel(self.area_central)
-        toma_notas = EditorTextos(ventana_notas)
-        
+
     # Botón para abrir la ventana para la toma de notas
     boton_tomar_notas = tk.Button(frame_botones_notas, text="Abrir Editor Texto", command=abrir_ventana_toma_notas)
-    boton_tomar_notas.grid(row=2, column=2, padx=10, pady=10)
+    aplicar_tema(boton_tomar_notas)
+    boton_tomar_notas.pack(padx=10, pady=10)
     ToolTip(boton_tomar_notas, "Abrir el Editor de Texto para tomar Notas")
-    
     
